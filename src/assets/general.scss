@@ -78,14 +78,13 @@ h1,h2,h3,h4,h5,h6{
   padding: 2rem 5rem;
   border-radius: 2rem 2rem 0 0;
   @media (max-width: 1400px) {
-    padding: 1rem;
-    padding: 2rem 2rem;
+    padding: 2rem;
   }
   @media (max-width: 1200px) {
     padding: 1rem;
   }
   @media (max-width: 400px) {
-    padding: 0;
+    padding: 1rem 5px;
   }
 }
 
@@ -103,6 +102,9 @@ h1,h2,h3,h4,h5,h6{
 
 .shadow-element{
   box-shadow: 0px 12px 48px 6px rgba($octopus-primary-color, 0.2) !important;
+  @media (max-width: 500px){
+    box-shadow:0px 6px 20px 3px rgba($octopus-primary-color, 0.2) !important
+  }
 }
 
 .link-info{
@@ -135,13 +137,12 @@ a.linkHover:hover{
 
 .alert-text{
   color: $octopus-alert-text;
-  .icon{
-    margin-right: 5px;
-    margin-bottom: 5px;
-  }
 }
 .flex-grow{
   flex-grow: 1;
+}
+.flex-super-grow{
+  flex-grow: 2;
 }
 .flex-shrink{
   flex-shrink: 0;
@@ -265,12 +266,17 @@ a.linkHover:hover{
     right: 0;
     width: 70%;
     height: 1rem;
-    background: linear-gradient(to right, transparent, $octopus-background 50%);
+    background: linear-gradient(to right, rgba(255,255,255,0), $octopus-background 50%);
+  }
+}
+@media (max-width: 655px) {
+  .description-fade-hid{
+    display: none;
   }
 }
 
 @media (max-width: 960px) {
-  .d-flex{
+  .d-flex:not(.flex-column){
     flex-wrap: wrap;
     flex-grow: 1;
     &.img-box{

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-100" :class="{'multiselect-hide-arrow' : !displayArrow }" :style="{ width: width }">
+  <div class="default-multiselect-width" :class="{'multiselect-hide-arrow' : !displayArrow }" :style="{ width: width }">
     <Multiselect
       v-model="emission"
       id="ajax"
@@ -58,6 +58,9 @@
 </template>
 
 <style lang="scss">
+.default-multiselect-width{
+  width: 100%;
+}
 </style>
 <script>
 import Multiselect from "vue-multiselect";

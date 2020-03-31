@@ -3,15 +3,14 @@
     <div class="page-box" v-if="loaded && !error">
       <h1 v-if="!isOuestFrance">{{ $t('Episode') }}</h1>
       <div class="d-flex">
-        <div class="d-flex flex-column flex-grow">
+        <div class="d-flex flex-column flex-super-grow">
           <EditBox :podcast="podcast" v-if="editRight && isEditBox"></EditBox>
           <div class="module-box">
-            <h2 class="text-uppercase font-weight-bold title-podcast" v-if="!isOuestFrance">{{ this.podcast.title }}</h2>
+            <h2 class="text-uppercase font-weight-bold title-page-podcast" v-if="!isOuestFrance">{{ this.podcast.title }}</h2>
             <router-link v-bind:to="'/main/pub/emission/' + this.podcast.emission.emissionId" v-else>
               <h1>{{ this.podcast.emission.name }}</h1>
             </router-link>
             <div class="mb-5 d-flex">
-              
               <div>
               <PodcastImage
                 :class="isOuestFrance? '':'shadow-element'"
@@ -21,11 +20,11 @@
                 :playingPodcast='playingPodcast' 
                 @playPodcast='playPodcast' />
                 <h3 v-if="isOuestFrance">{{ this.podcast.title }}</h3>
-                <div class="d-flex align-items-left flex-wrap text-secondary mb-3">
+                <div class="date-text-zone">
                   <div class="mr-5" v-if="!isOuestFrance">{{ date }}</div>
                   <div><span class="saooti-clock3" v-if="isOuestFrance"></span>{{ $t('Duration', { duration: duration }) }}</div>
                 </div>
-                <div class="descriptionText">{{ this.podcast.description }}</div>
+                <div class="descriptionText" v-html="this.podcast.description">{{ this.podcast.description }}</div>
                 <div class="mt-3 mb-3">
                   <div class="comma">{{ $t('Animated by : ') }}
                     <router-link
@@ -65,31 +64,26 @@
                       v-if="podcast.annotations && podcast.annotations.RSS"
                     >{{ $t('From RSS') }}</div>
                       <div class="alert-text" v-if="!podcast.availability.visibility">
-                        <img src="/img/caution.png" class="icon"/>
+                        <img src="/img/caution.png" class="icon-caution"/>
                         {{ $t('Podcast is not visible for listeners') }}
                       </div>
                   </div>
-                  <div class="d-flex mt-4" v-if="isDownloadButton">
-                    <a class="btn btn-bigRound" :title="$t('Downloading')" :href="podcast.audioUrl" target="_blank">
-                      <div class="saooti-download-bounty"></div>
-                    </a>
-                  </div>
+                  <ShareButtons :podcastId="podcastId" :bigRound='true' :audioUrl="podcast.audioUrl" v-if="isDownloadButton"></ShareButtons>
                 </div>
               </div>
             </div>
             <TagList v-if="isTagList" :tagList='podcast.tags'/>
           </div>
         </div>
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-column flex-grow">
           <SharePlayer
             :podcast="podcast"
             :emissionId="podcast.emission.emissionId"
-            
             :exclusive="exclusive"
             :organisationId='organisationId'
             v-if="isSharePlayer"
           ></SharePlayer>
-          <ShareButtons :podcastId="podcastId" class="box-share" v-if="isShareButtons"></ShareButtons>
+          <ShareButtons :podcastId="podcastId" v-if="isShareButtons"></ShareButtons>
         </div>
       </div>
       <template v-if="!isOuestFrance">
@@ -111,7 +105,7 @@
     </div>
     <div class="d-flex justify-content-center" v-if="!loaded">
       <div class="spinner-border mr-3"></div>
-      <h3 class="loading-title">{{ $t('Loading content ...') }}</h3>
+      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
     </div>
     <div class="text-center" v-if="error">
       <h3>{{ $t("Podcast doesn't exist") }}</h3>
@@ -119,8 +113,18 @@
   </div>
 </template>
 <style lang="scss">
-.title-podcast {
+.title-page-podcast {
   font-size: 0.9rem;
+}
+
+.date-text-zone{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  margin-bottom:1rem;
+  @media (max-width: 600px) {
+    display: initial;
+  }
 }
 </style>
 <script>
@@ -263,6 +267,7 @@ export default {
         .fetchPodcast(podcastId)
         .then(data => {
           this.podcast = data;
+          this.$emit('podcastTitle', this.podcast.title);
           if (
             this.podcast.emission.annotations &&
             this.podcast.emission.annotations.exclusive

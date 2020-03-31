@@ -2,13 +2,21 @@
   <div class="d-flex flex-column align-items-center">
     <div class="d-flex justify-content-center" v-if="loading">
       <div class="spinner-border mr-3"></div>
-      <h3 class="loading-title">{{ $t('Loading emissions ...') }}</h3>
+      <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
     </div>
-    <ul class="emission-list" :class="smallItems? 'threeEmissions': 'twoEmissions'" v-show="loaded">
+    <ul class="emission-list" :class="smallItems? 'threeEmissions': 'twoEmissions'" v-show="loaded" v-if="!itemPlayer">
       <EmissionItem
         v-bind:emission="e"
         v-for="e in emissions"
         v-bind:key="e.emissionId"
+      />
+    </ul>
+    <ul class="d-flex flex-wrap justify-content-around" v-show="loaded" v-else>
+      <EmissionPlayerItem
+        v-bind:emission="e"
+        v-for="e in emissions"
+        v-bind:key="e.emissionId"
+        class="m-3 flex-shrink"
       />
     </ul>
     <a
@@ -61,6 +69,7 @@
 <script>
 import octopusApi from "@saooti/octopus-api";
 import EmissionItem from './EmissionItem.vue';
+import EmissionPlayerItem from './EmissionPlayerItem.vue';
 import {state} from "../../../store/paramStore.js";
 
 export default {
@@ -70,6 +79,7 @@ export default {
 
   components: {
     EmissionItem,
+    EmissionPlayerItem
   },
 
   mounted() {
@@ -96,6 +106,9 @@ export default {
     },
     smallItems(){
       return state.emissionsPage.smallItems;
+    },
+    itemPlayer(){
+      return state.emissionsPage.itemPlayer;
     }
   },
 

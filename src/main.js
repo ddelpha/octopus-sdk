@@ -33,6 +33,7 @@ paramStore.initialize({
   player:{},
   organisation : {},
   octopusApi : {},
+  footer:{},
 }).then(()=>{
   new Vue({
     i18n,

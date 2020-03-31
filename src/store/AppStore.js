@@ -13,6 +13,9 @@ export default new Vuex.Store({
       elapsed: 0, //From 0 to 1
       total: 0,
     },
+    authentication:{
+      isAuthenticated : true,
+    }
   },
 
   getters: {},

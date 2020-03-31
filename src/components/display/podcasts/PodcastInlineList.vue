@@ -14,6 +14,7 @@
           :class="{ 'active': !popularSort }"
         >{{ $t('Last added') }}</button>
       </div>
+      <div v-else></div>
       <div class="hide-phone" v-if="!isArrow">
         <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }">
           <div class="saooti-arrow-left2"></div>
@@ -25,12 +26,12 @@
     </div>
     <div class="d-flex justify-content-center" v-if="loading">
       <div class="spinner-border mr-3"></div>
-      <h3 class="loading-title">{{ $t('Loading podcasts ...') }}</h3>
+      <h3 class="mt-2">{{ $t('Loading podcasts ...') }}</h3>
     </div>
     <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" v-show="loaded">
-      <PodcastItem class="flex-shrink" v-bind:podcast="p" v-for="p in podcasts" v-bind:key="p.podcastId" />
+      <PodcastItem class="flex-shrink item-phone-margin" v-bind:podcast="p" v-for="p in podcasts" v-bind:key="p.podcastId" />
     </transition-group>
-    <a class="btn btn-link" :class="buttonPlus? 'btn-linkPlus': ''" v-bind:href="href">{{buttonText}}<div class="saooti-plus" v-if="buttonPlus"></div></a>
+    <router-link class="btn btn-link" :class="buttonPlus? 'btn-linkPlus': ''" v-bind:to="href">{{buttonText}}<div class="saooti-plus" v-if="buttonPlus"></div></router-link>
   </div>
 </template>
 
@@ -92,8 +93,11 @@
     overflow-y: scroll;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
-    padding: 2rem 0px;
+    padding-bottom:1rem;
     width: 100%;
+    .item-phone-margin{
+      margin: 0 0.5rem !important
+    }
   }
 }
 </style>
@@ -126,7 +130,7 @@ export default {
 
   created() {
     if(this.requirePopularSort !== undefined){
-      this.popularSort = this.requirePopularSort
+      this.popularSort = this.requirePopularSort;
     }
     if(this.isArrow !== undefined){
       this.isArrow = true;
@@ -218,11 +222,11 @@ export default {
 
     handleResize() {
       if (this.$el) {
-        const width = this.$el.offsetWidth;
-        if (width <= PHONE_WIDTH - 255) {
+        if (window.innerWidth <= PHONE_WIDTH) {
           this.size = 10;
         } else {
-          const sixteen = domHelper.convertRemToPixels(16);
+          const width = this.$el.offsetWidth;
+          const sixteen = domHelper.convertRemToPixels(13.7);
           this.size = Math.floor(width / sixteen);
         }
       }

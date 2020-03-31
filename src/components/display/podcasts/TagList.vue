@@ -11,15 +11,18 @@
 
 .tagListElement{
   display: flex;
-  margin: 0.5rem;
-  padding: 1rem;
+  margin: 0.4rem;
+  padding: 0.8rem;
   border: 1px solid #999;
   cursor: pointer;
 }
 .tagListLink{
-  font-weight: bold;
-  font-size: 1.5rem;
+  font-weight: 700;
+  font-size: 1.2rem;
   color: #666;
+  &:hover{
+    color: #666;
+  }
 }
 	
 </style>

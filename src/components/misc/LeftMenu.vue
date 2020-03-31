@@ -27,7 +27,7 @@
         to="/main/pub/participants"
         >{{ $t('Speakers') }}</router-link
       >
-      <hr class="show-phone" />
+      <hr class="divided-line show-phone" />
       <router-link @click.native="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone"
         v-for="category in categories"
@@ -72,10 +72,10 @@
       overflow-y: scroll;
       height: 100%;
     }
-    hr {
-      margin: 0.5rem 0;
-      border-top: 1px solid lightgray;
-    }
+  }
+  .divided-line {
+    margin: 0.5rem 0;
+    border-top: 1px solid lightgray;
   }
 }
 @media (max-width: 450px) {
@@ -102,7 +102,11 @@ export default {
   computed: {
     categories(){
       return state.generalParameters.allCategories.filter(c => {
-          return c.podcastCount;
+          if(this.isPodcastmaker){
+            return c.podcastOrganisationCount;
+          } else{
+            return c.podcastCount;
+          }
         });
     },
      isPodcastmaker(){

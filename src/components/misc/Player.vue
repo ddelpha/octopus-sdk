@@ -5,7 +5,7 @@
       v-bind:style="{ height: playerHeight }"
       @transitionend="onHidden"
     >
-       <div class="progress secondary-bg c-hand" @mouseup="seekTo" v-if="isBarTop">
+      <div class="progress secondary-bg c-hand" @mouseup="seekTo" v-if="isBarTop">
           <div 
           class="progress-bar primary-bg" 
           role="progressbar" 
@@ -22,18 +22,18 @@
         v-bind:src="podcastAudioURL"
         autoplay
         @timeupdate="onTimeUpdate"
-        @play="onPlay"
-        @pause="onPause"
         @ended="onFinished"
         @playing="onPlay"
         @durationChange="onTimeUpdate"
       />
-      <img
-        v-bind:src="podcastImage"
-        :alt="$t('Podcast image')"
-        class="player-image"
-        v-if="isImage"
-      />
+      <router-link :to=podcastShareUrl v-if="isImage">
+        <img
+          v-bind:src="podcastImage"
+          :alt="$t('Podcast image')"
+          class="player-image c-hand"
+        />
+      </router-link>
+      
       <div
         class="play-button-box"
         v-bind:class="{
@@ -46,13 +46,13 @@
           class="text-light"
           v-bind:class="{
             saooti: status == 'PLAYING' || status == 'PAUSED',
-            'saooti-play3': status == 'PAUSED',
-            'saooti-pause22': status == 'PLAYING',
+            'saooti-play2-bounty': status == 'PAUSED',
+            'saooti-pause-bounty': status == 'PLAYING',
             loading: status == 'LOADING',
           }"
         ></div>
       </div>
-      <div class="flex-grow d-flex flex-column text-light">
+      <div class="text-light player-grow-content">
         <div class="d-flex">
           <div class="flex-grow player-title">{{ podcastTitle }}</div>
           <div v-if="!isBarTop" class="hide-phone">{{ playedTime }} / {{ totalTime }}</div>
@@ -75,6 +75,18 @@
 <style lang="scss">
 @import '../../sass/_variables.scss';
 
+.play-button-box {
+    height: 2.5rem;
+    width: 2.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 0.5rem;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    cursor: pointer;
+}
 .player-container {
   position: fixed;
   overflow: hidden;
@@ -93,19 +105,6 @@
     height: 2.4rem;
     width: 2.4rem;
   }
-
-  .play-button-box {
-    height: 2.5rem;
-    width: 2.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0.5rem;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
   .player-progress-border{
     height: 10px;
     width: 3px;
@@ -117,6 +116,18 @@
   }
   .progress-bar{
     height: 4px;
+  }
+  .player-title, .hide-phone {
+    font-size: 0.8rem;
+    margin: 0 0 5px 0;
+  }
+  .player-grow-content{
+    display : flex;
+    flex-grow: 1;
+    flex-direction: column;
+    flex-shrink: 1;
+    flex-basis: 20px;
+    overflow: hidden;
   }
   .player-title {
     font-size: 0.8rem;
@@ -133,7 +144,7 @@
   .player-container{
     .d-flex{
       @media (max-width: 960px) {
-        flex-wrap: nowrap;
+        flex-wrap: nowrap !important;
       }
     }
     .player-title{
@@ -150,6 +161,7 @@
 import { mapState } from 'vuex';
 import {state} from "../../store/paramStore.js";
 import DurationHelper from '../../helper/duration';
+import octopusApi from "@saooti/octopus-api";
 const moment = require('moment');
 
 export default {
@@ -159,6 +171,12 @@ export default {
     return {
       forceHide: false,
       actualTime: '',
+      listenTime: 0,
+      notListenTime: 0,
+      lastSend:0,
+      downloadId: undefined,
+      new : true,
+      saveCookie : undefined,
     };
   },
   mounted(){
@@ -168,6 +186,15 @@ export default {
         this.actualTime = moment(new Date()).format("HH:mm:ss");
       }, 1000)
     }
+    window.addEventListener('beforeunload', this.endListeningProgress);
+    this.$store.watch((state) => state.player.status, (newValue) => {
+      const audioPlayer = document.querySelector('#audio-player');
+      if(newValue === 'PAUSED'){
+        audioPlayer.pause();
+      } else{
+        audioPlayer.play();
+      }
+    })
   },
 
   computed: {
@@ -207,6 +234,7 @@ export default {
       podcastAudioURL: state => {
         if (state.player.podcast) {
           let parameters = '?origin=octopus';
+          parameters += "&cookieName=player_"+state.player.podcast.podcastId
           parameters +=
             state.authentication && state.authentication.organisationId
               ? '&distributorId=' + state.authentication.organisationId
@@ -273,9 +301,9 @@ export default {
     switchPausePlay() {
       const audioPlayer = document.querySelector('#audio-player');
       if (audioPlayer.paused) {
-        audioPlayer.play();
+        this.onPlay();
       } else {
-        audioPlayer.pause();
+        this.onPause();
       }
     },
 
@@ -288,10 +316,16 @@ export default {
       const percentPosition = x / barWidth;
       const seekTime = this.$store.state.player.total * percentPosition;
 
+      this.notListenTime = seekTime - this.listenTime;
       audioPlayer.currentTime = seekTime;
     },
 
     onTimeUpdate(event) {
+      if(this.new){
+        this.new = false;
+        this.startListeningProgress();
+      }
+      this.listenTime = event.currentTarget.currentTime - this.notListenTime;
       const duration = event.currentTarget.duration;
       const currentTime = event.currentTarget.currentTime;
       if (duration && currentTime) {
@@ -307,6 +341,7 @@ export default {
     },
 
     onFinished() {
+      this.endListeningProgress();
       this.$data.forceHide = true;
     },
 
@@ -316,11 +351,55 @@ export default {
         this.$data.forceHide = false;
       }
     },
+
+    startListeningProgress(){
+      if(this.downloadId){
+        this.endListeningProgress();
+      }
+      this.loadDownloadId(0);
+      ///Localhost/////////
+      /* this.downloadId = "test"; */
+      //////
+    },
+
+    loadDownloadId(index) {
+      if(index < 5){
+        setTimeout(()=>{
+          let cookiestring = RegExp("player_"+ this.$store.state.player.podcast.podcastId +"=[^;]+").exec(document.cookie);
+          if(cookiestring !== null){
+            this.downloadId = decodeURIComponent(cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+          } else{
+            this.loadDownloadId(index + 1);
+          }
+        }, 500);
+      }
+    },
+
+    endListeningProgress(){
+      if(this.downloadId){
+        octopusApi.updatePlayerTime(this.downloadId, Math.round(this.listenTime));
+        this.downloadId = undefined;
+        this.notListenTime = 0;
+        this.lastSend = 0;
+        this.listenTime = 0;
+      }
+    }
   },
   watch: {
     playerHeight(newVal){
       this.$emit('hide', newVal=== 0? true : false);
-    }
+    },
+    podcastAudioURL(newVal){
+      if(newVal !== ""){
+        this.new = true;
+      }
+    },
+    listenTime(newVal){
+      if(newVal - this.lastSend >= 10 && this.downloadId){
+        this.lastSend = newVal;
+        octopusApi.updatePlayerTime(this.downloadId, Math.round(newVal));
+      }
+    },
   }
 }; 
 </script>

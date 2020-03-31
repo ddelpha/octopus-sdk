@@ -12,7 +12,7 @@ import Category from "./src/components/pages/Category.vue";
 import Footer from "./src/components/misc/Footer.vue";
 import LeftMenu from "./src/components/misc/LeftMenu.vue";
 import Player from "./src/components/misc/Player.vue";
-/* import Snackbar from "./src/components/misc/Snackbar.vue"; */
+import Snackbar from "./src/components/misc/Snackbar.vue";
 import TopBar from "./src/components/misc/TopBar.vue";
 //Display
 import CategoryChooser from "./src/components/display/categories/CategoryChooser.vue";
@@ -30,11 +30,12 @@ import AnimatorsItem from "./src/components/display/podcasts/AnimatorsItem.vue";
 import PodcastFilterList from "./src/components/display/podcasts/PodcastFilterList.vue";
 /*import PodcastImage from "./src/components/display/podcasts/PodcastImage.vue";*/
 import PodcastInlineList from "./src/components/display/podcasts/PodcastInlineList.vue";
-/*import PodcastItem from "./src/components/display/podcasts/PodcastItem.vue";
-import PodcastList from "./src/components/display/podcasts/PodcastList.vue";*/
+/*import PodcastItem from "./src/components/display/podcasts/PodcastItem.vue";*/
+import PodcastList from "./src/components/display/podcasts/PodcastList.vue";
 import ShareButtons from "./src/components/display/sharing/ShareButtons.vue";
 /*import ShareDistribution from "./src/components/display/sharing/ShareDistribution.vue";
 import SharePlayer from "./src/components/display/sharing/SharePlayer.vue"; */
+import EmissionInlineList from "./src/components/display/emission/EmissionInlineList.vue";
 
 const components = {
     Podcast,
@@ -58,6 +59,9 @@ const components = {
     OrganisationChooser,
     PodcastFilterList,
     ShareButtons,
+    PodcastList,
+    EmissionInlineList,
+    Snackbar
 }
 
 export default components;
@@ -84,4 +88,7 @@ export {
     OrganisationChooser,
     PodcastFilterList,
     ShareButtons,
+    PodcastList,
+    EmissionInlineList,
+    Snackbar
 };

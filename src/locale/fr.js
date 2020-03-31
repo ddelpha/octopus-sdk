@@ -60,7 +60,7 @@ export default {
       'Une erreur est survenue lors de la sauvegarde des nouvelles informations de votre profil',
     'Upload new podcast': 'Téléverser un épisode',
     'Count more elements matched your query, please make a more specific search.':
-      'Plus {count} emissions correspondant à votre recherche.',
+      'Encore {count} élément(s) correspondant à votre recherche. Veuillez effectuer une recherche plus spécifique.',
     ' or ': ' ou ',
     'Add a new animator choosing it from existing ':
       'Choisir un animateur existant',
@@ -386,5 +386,8 @@ export default {
     'Emission version':'Version émission',
     'Large emission version':'Version large émission',
     'Large suggestion version':'Version large suggestion',
+    'Embed link':'Player intégré',
+    'Embedly link':'Lien player',
+    'Direct link': 'Lien audio',
   };
   

@@ -6,7 +6,7 @@
     <router-link v-bind:to="'/main/pub/participant/' + participant.participantId" class="text-dark mt-3">
       <div class="participant-name">
       <img src="/img/caution.png" class="icon-caution" v-if="!activeParticipant && !isPodcastmaker" :title="$t('Participant have not podcasts')"/>{{ name }}</div>
-      <div class="description-fade">{{ description }}</div>
+      <div class="description-fade" :class="description? '': 'description-fade-hid'" v-html="description">{{ description }}</div>
     </router-link>
     <router-link v-bind:to="'/main/pub/productor/' + participant.orga.id" class="text-dark participant-producer" v-if="!isPodcastmaker">
       <div class="participant-producer primary-color">© {{ participant.orga.name }}</div>
@@ -21,16 +21,20 @@
   display: flex;
   flex-direction: column;
   margin: 1rem 0;
-  align-items: flex-start;
+  align-items: center;
 
   .participant-name{
     font-size: 0.9rem;
     font-weight: 600;
+    text-align: center;
   }
  
   .participant-producer {
     font-weight: 300;
     font-size: 0.6rem;
+  }
+  @media (max-width: 960px) {
+    margin: 0;
   }
 }
 </style>

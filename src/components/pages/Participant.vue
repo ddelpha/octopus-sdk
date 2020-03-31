@@ -5,7 +5,7 @@
       <div class="d-flex w-100 flex-column align-items-center justify-content-center">
         <div class="img-box-circle mb-3" :style="{'background-image': 'url(\'' + participant.imageUrl + '\')', }"></div>
         <h2 class="text-capitalize">{{ name }}</h2>
-        <div class="h6">{{ description }}</div>
+        <div class="h6" v-html="description">{{ description }}</div>
         <div class="d-flex justify-content-center" v-if="isRssButton">
           <a class="btn btn-bigRound" :title="$t('Subscribe to this participant')" :href="rssUrl" target="_blank">
             <div class="saooti-rss-bounty"></div>
@@ -20,13 +20,14 @@
         :participantId="participantId"
         :name="name"
         :categoryFilter="true"
+        :reload="reload"
         v-if="!lightStyle"
       />
-      <PodcastList :first="0" :size="15" :participantId="participantId" v-else/>
+      <PodcastList :first="0" :size="15" :participantId="participantId" :reload="reload" v-else/>
     </div>
     <div class="d-flex justify-content-center" v-if="!loaded">
       <div class="spinner-border mr-3"></div>
-      <h3 class="loading-title">{{ $t('Loading content ...') }}</h3>
+      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
     </div>
     <div class="text-center" v-if="error">
       <h3>{{ $t("Animator doesn't exist") }}</h3>
@@ -66,6 +67,7 @@ export default {
       loaded: false,
       participant: undefined,
       error: false,
+      reload: false,
     };
   },
 
@@ -130,6 +132,7 @@ export default {
     getParticipantDetails() {
       octopusApi.fetchParticipant(this.participantId).then(data => {
         this.participant = data;
+        this.$emit('participantTitle', this.name);
         this.loaded = true;
       })
       .catch(() =>{
@@ -138,5 +141,10 @@ export default {
       });
     },
   },
+  watch:{
+    participant(){
+      this.reload = !this.reload;
+    }
+  }
 };
 </script>

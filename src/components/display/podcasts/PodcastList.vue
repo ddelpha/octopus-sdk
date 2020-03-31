@@ -2,7 +2,7 @@
   <div class="d-flex flex-column align-items-center">
     <div class="d-flex justify-content-center" v-if="loading">
       <div class="spinner-border mr-3"></div>
-      <h3 class="loading-title">{{ $t('Loading podcasts ...') }}</h3>
+      <h3 class="mt-2">{{ $t('Loading podcasts ...') }}</h3>
     </div>
     <div v-if="loaded && !podcasts.length">
       <p>{{ $t('No podcast match your query') }}</p>
@@ -17,7 +17,7 @@
     <a
       class="btn"
       v-bind:href="'/main/pub/podcasts?first=' + dfirst + '&size=' + dsize"
-      :class="buttonPlus? 'btn-linkPlus': 'btn-more'"
+      :class="buttonPlus? 'btn-linkPlus mt-3': 'btn-more'"
       @click="displayMore"
       v-show="!allFetched && loaded"
     >
@@ -28,7 +28,6 @@
 </template>
 
 <style lang="scss">
-
 .podcast-list {
   align-self: stretch;
   flex-grow: 1;
@@ -62,16 +61,18 @@ import {state} from "../../../store/paramStore.js";
 export default {
   name: 'PodcastList',
 
-  props: [
-    'first',
-    'size',
-    'organisationId',
-    'emissionId',
-    'iabId',
-    'participantId',
-    'query',
-    'monetization',
-  ],
+  props:  {
+    first: { default: 0 },
+    size: { default: 5 },
+    organisationId: { default: undefined },
+    emissionId: { default: undefined },
+    iabId: { default: undefined },
+    participantId: { default: undefined },
+    query: { default: undefined },
+    monetization: { default: undefined },
+    popularSort: { default: false },
+    reload : {default: false}
+  },
 
   components: {
     PodcastItem,
@@ -119,6 +120,7 @@ export default {
           participantId: this.participantId,
           query: this.query,
           monetisable: this.monetization,
+          sort: this.popularSort ? "POPULARITY" : "DATE"
         })
         .then((data)=> {
           if (reset) {
@@ -177,6 +179,11 @@ export default {
         this.fetchContent(true);
       },
     },
+    reload: {
+      handler() {
+        this.fetchContent(true);
+      },
+    }
   },
 };
 </script>

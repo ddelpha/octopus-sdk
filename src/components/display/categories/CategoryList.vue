@@ -83,9 +83,16 @@ export default {
   },
 
   computed: {
+     isPodcastmaker(){
+      return state.generalParameters.podcastmaker;
+    },
     categories() {
       return state.generalParameters.allCategories.filter(c => {
-        return c.podcastCount;
+        if(this.isPodcastmaker){
+          return c.podcastOrganisationCount;
+        } else{
+          return c.podcastCount;
+        }
       });
     }
   },

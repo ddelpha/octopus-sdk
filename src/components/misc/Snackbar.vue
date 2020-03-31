@@ -22,7 +22,7 @@ const getStyle = (baseSize, position) => {
       position: 'fixed',
       left: 0,
       [pos]: c(0.05),
-      zIndex: 1000,
+      zIndex: 9999,
       width: '100%',
       padding: `0 ${c(0.2)}`,
       pointerEvents: 'none',

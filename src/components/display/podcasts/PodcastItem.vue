@@ -8,7 +8,7 @@
       @hideDescription="hideDescription"
       @showDescription="showDescription"
     />
-    <div class='description-podcast-item' v-if="hover && description">{{description}}</div>
+    <div class='description-podcast-item' v-if="hover && description" v-html="description">{{description}}</div>
     <div class='d-contents' @mouseenter="showDescription" @mouseleave="hideDescription">
       <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
         <div class="mr-3 small-Text">{{ date }}</div>
@@ -43,11 +43,10 @@
   flex-direction: column;
   text-align: left;
   background: #fff;
-  margin: 1rem;
   flex-shrink: 0;
    .text-secondary {
     margin: 0.5rem !important;
-}
+  }
 
   .title-podcast-item {
     font-weight: 700;
@@ -76,6 +75,10 @@
     margin: 0.2rem 0.5rem 0.5rem;
     font-size: 0.55rem;
     color: #666;
+  }
+
+  @media (max-width: 960px) {
+    margin: 0.5rem !important;
   }
 }
 </style>

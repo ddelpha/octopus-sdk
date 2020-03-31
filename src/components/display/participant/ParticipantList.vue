@@ -2,7 +2,7 @@
   <div class="d-flex flex-column align-items-center">
     <div class="d-flex justify-content-center" v-if="loading">
       <div class="spinner-border mr-3"></div>
-      <h3 class="loading-title">{{ $t('Loading participants ...') }}</h3>
+      <h3 class="mt-2">{{ $t('Loading participants ...') }}</h3>
     </div>
     <ul class="participant-list" v-show="loaded">
       <ParticipantItem
@@ -39,7 +39,7 @@
   justify-content: space-between; /* 4 */
 }
 /** PHONES*/
-@media (max-width: 960px) {
+@media (max-width: 655px) {
   .participant-list {
     align-self: auto;
     grid-gap: 0;

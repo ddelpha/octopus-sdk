@@ -5,6 +5,7 @@
     <ProductorSearch 
       :organisationId='organisationId' 
       :searchPattern='searchPattern'
+      type='emission'
       @updateOrganisationId='updateOrganisationId'
       @updateSearchPattern='updateSearchPattern'
       v-if="isProductorSearch"/>

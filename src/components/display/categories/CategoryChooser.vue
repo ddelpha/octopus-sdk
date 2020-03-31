@@ -74,7 +74,7 @@ export default {
 
   computed: {
     allCategories(){
-      return state.generalParameters.allCategories;
+      return state.generalParameters.allCategories.sort((a,b) => (a.name > b.name) ? 1 : -1);
     }
   },
 

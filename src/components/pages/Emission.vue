@@ -13,18 +13,14 @@
                 :src="imageUrl" 
                 :alt="$t('Emission name image', { name: name })" 
                 class="img-box shadow-element float-left mr-3 mb-3"
-                v-if="!isOuestFrance" />{{description}}
+                v-if="!isOuestFrance" v-html="description"/>{{description}}
             </div>
-            <div class="d-flex justify-content-center" v-if="isRssButton">
-              <a class="btn btn-bigRound" :title="$t('Subscribe to this emission')" :href="rssUrl" target="_blank">
-                <div class="saooti-rss-bounty"></div>
-              </a>
-            </div>
+            <ShareButtons :emission="emission" :bigRound='true' v-if="isRssButton"></ShareButtons>
           </div>
         </div>
         <div class="d-flex flex-column">
           <SharePlayer :emissionId="emissionId" :exclusive="exclusive" :organisationId='organisationId' v-if="isSharePlayer"></SharePlayer>
-          <ShareButtons :emissionId="emissionId" v-if="isShareButtons"></ShareButtons>
+          <ShareButtons :emission="emission" v-if="isShareButtons"></ShareButtons>
         </div>
       </div>
       <div v-if="editRight">
@@ -35,7 +31,7 @@
     </div>
     <div class="d-flex justify-content-center" v-if="!loaded">
       <div class="spinner-border mr-3"></div>
-      <h3 class="loading-title">{{ $t('Loading content ...') }}</h3>
+      <h3 class="mt-2">{{ $t('Loading content ...') }}</h3>
     </div>
     <div class="text-center" v-if="error">
       <h3>{{ $t("Emission doesn't exist") }}</h3>
@@ -150,6 +146,7 @@ export default {
         .fetchEmission(emissionId)
         .then(data => {
           this.emission = data;
+          this.$emit('emissionTitle', this.name);
           this.loaded = true;
           if (this.emission.annotations) {
             if (this.emission.annotations.RSS) {

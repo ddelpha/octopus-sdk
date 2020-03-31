@@ -14,8 +14,8 @@
           :height="iFrameHeight"
         ></iframe>
         <div class="d-flex flex-column">
-          <button class="btn btn-copy" @click="onCopyCode">
-            {{ $t('Copy code') }}
+          <button class="btn mb-3" @click="isShareModal = true;">
+            {{ $t('Share') }}
           </button>
           <select v-model="iFrameModel" class="frame-select">
             <option value="default">{{$t('Default version')}}</option>
@@ -44,7 +44,13 @@
         {{ $t('Only authenticated members can share the content') }}
       </div>
     </div>
-    <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
+    <ShareModal 
+      v-if="isShareModal" 
+      @close='isShareModal=false;'
+      :embedLink='iFrame'
+      :embedlyLink='iFrameSrc'
+      :directLink='podcast'
+    ></ShareModal>
   </div>
 </template>
 
@@ -58,9 +64,6 @@
     margin: 0 1rem;
     width: 100px;
   }
-}
-.btn-copy {
-  margin: 0 0 1em 0;
 }
 .sticker{
   align-self:center;
@@ -80,20 +83,21 @@
 </style>
 
 <script>
-import Snackbar from '../../misc/Snackbar.vue';
+import ShareModal from '../../misc/modal/ShareModal.vue';
 import {state} from "../../../store/paramStore.js";
 
 export default {
   props: ['podcast', 'emissionId', "organisationId", 'exclusive'],
 
   components:{
-    Snackbar
+    ShareModal
   },
 
   data() {
     return {
       iFrameModel:'default',
-      iFrameNumberPriv: '1',
+      iFrameNumberPriv: '3',
+      isShareModal: false,
     };
   },
   computed: {
@@ -108,23 +112,24 @@ export default {
     authenticated(){
       return state.generalParameters.authenticated;
     },
-
     iFrameSrc() {
+      let url = "";
       if(!this.podcast){
         if(this.iFrameModel === 'default'){
-          return `${state.podcastPage.MiniplayerUri}miniplayer/emission/${this.emissionId}/${this.iFrameNumberPriv}`;
+          url =  `${state.podcastPage.MiniplayerUri}miniplayer/emission/${this.emissionId}/${this.iFrameNumberPriv}`;
         } else{
-          return `${state.podcastPage.MiniplayerUri}miniplayer/emissionLarge/${this.emissionId}/${this.iFrameNumberPriv}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/emissionLarge/${this.emissionId}/${this.iFrameNumberPriv}`;
         }
       }else {
         if (this.iFrameModel === 'emission' || this.iFrameModel === 'largeEmission') {
-            return `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.emissionId}/${this.iFrameNumberPriv}/${this.podcast.podcastId}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.emissionId}/${this.iFrameNumberPriv}/${this.podcast.podcastId}`;
         } else if(this.iFrameModel === 'largeSuggestion'){
-            return `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}/${this.iFrameNumberPriv}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}/${this.iFrameNumberPriv}`;
         }else {
-          return `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`;
         }
       }
+      return url + '?distributorId=' + this.organisationId;
     },
 
     iFrameNumber: {
@@ -140,50 +145,52 @@ export default {
     },
 
     iFrameWidth() {
-      switch (this.iFrameModel) {
-        case 'large':
-        case 'largeEmission':
-        case 'largeSuggestion':
-          if(this.podcast){
-            return '730px';
-          } else{
-            return '550px';
-          }
-        default:
-          return '355px';
-      }
+      return '100%';
     },
 
     iFrameHeight() {
       switch (this.iFrameModel) {
         case 'large':
           if(this.podcast){
-            return '165px';
+            return '180px';
           } else{
-            return '450px';
+            switch(this.iFrameNumberPriv){
+              case "1": return '185px';
+              case "2": return '240px';
+              case "3": return '290px';
+              case "4": return '345px';
+              case "5": return '390px';
+              default: return '435px';
+            }
           }
         case 'largeEmission':
         case 'largeSuggestion':
-          return '490px';
+          switch(this.iFrameNumberPriv){
+            case "1": return '260px';
+            case "2": return '315px';
+            case "3": return '365px';
+            case "4": return '420px';
+            case "5": return '465px';
+            default: return '510px';
+          }
         case 'emission':
           return '530px';
         default:
           if(this.podcast){
-            return '494px';
+            return '520px';
           } else{
             return '530px';
           }
 
       }
     },
+
+    iFrame(){
+      return `<iframe src="${this.iFrameSrc}" width="${this.iFrameWidth}" height="${this.iFrameHeight}" scrolling="no" frameborder="0"></iframe>`;
+    }
   },
 
   methods: {
-    async onCopyCode() {
-      const iFrame = `<iframe src="${this.iFrameSrc}" width="${this.iFrameWidth}" height="${this.iFrameHeight}" scrolling="no" frameborder="0"></iframe>`;
-      await navigator.clipboard.writeText(iFrame);
-      this.$refs.snackbar.open(this.$t('Link in clipboard'));
-    },
   },
 };
 </script>

@@ -22,6 +22,7 @@
         :participantId="participantId"
         :emissionId="emissionId"
         :organisationId="productorId"
+        :reload="reloadList"
       />
   </div>
 </template>
@@ -30,10 +31,12 @@
 
 .categories-filter {
   .multiselect {
-  width: 75%;
+    width: 75%;
+    @media (max-width: 600px) {
+      width: 100%;
+    }
   }
 }
-
 .list-episodes {
   padding: 2rem 0rem 1rem !important;
   h2 {
@@ -79,6 +82,7 @@ export default {
     'emissionId',
     'categoryFilter',
     'productorId',
+    'reload'
   ],
 
   data() {
@@ -87,6 +91,7 @@ export default {
       size: undefined,
       searchPattern: '',
       iabId: undefined,
+      reloadList: false,
     };
   },
 
@@ -109,5 +114,11 @@ export default {
       }
     },
   },
+
+  watch:{
+    reload(){
+      this.reloadList = !this.reloadList;
+    }
+  }
 };
 </script>

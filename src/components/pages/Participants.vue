@@ -4,6 +4,7 @@
     <ProductorSearch 
       :organisationId='organisationId'
       :searchPattern='searchPattern'
+      type='participant'
       @updateOrganisationId='updateOrganisationId'
       @updateSearchPattern='updateSearchPattern' />
     <ParticipantList

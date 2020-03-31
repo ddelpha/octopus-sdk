@@ -47,14 +47,9 @@
     margin: 0 0.3em 0 0;
     &.saooti-tunin {
       font-size: 2.5em;
-      color: #36b4a7;
     }
     &.saooti-radioline {
       font-size: 2em;
-      color: #2273b9;
-    }
-    &.saooti-tootak {
-      color: #ff4d53;
     }
   }
   @media (max-width: 960px) {
