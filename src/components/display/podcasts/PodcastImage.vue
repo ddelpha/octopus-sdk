@@ -1,7 +1,7 @@
 <template>
   <div
     class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink float-left"
-    :style="{ 'background-image': 'url(\'' + podcast.imageUrl + '\')' }"
+    :style="{ 'background-image': 'url(\'' + podcast.imageUrl +'?'+Date().now+  '\')' }"
     v-if="podcast"
   >
   <template v-if="podcast && podcast.availability.visibility">
