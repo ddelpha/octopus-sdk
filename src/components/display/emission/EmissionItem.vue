@@ -1,7 +1,7 @@
 <template>
   <li class="mt-3" :class="lightItems? 'noList emission-light-max-size':'emission-item-container shadow-element'">
     <router-link v-bind:to="'/main/pub/emission/' + emission.emissionId" class="text-dark">
-      <div class="img-box" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'?'+Date().now+  '\')' }" v-if="!lightItems"></div>
+      <div class="img-box" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'?dummy='+dummyParam+  '\')' }" v-if="!lightItems"></div>
       <div class="d-flex" v-else>
         <div class="img-box-light flex-shrink" :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"></div>
         <div class="emission-light-title">{{ name }}</div>
@@ -114,6 +114,7 @@ export default {
   data() {
     return {
       activeEmission: true,
+      dummyParam : new Date().getTime().toString(),
     };
   },
 

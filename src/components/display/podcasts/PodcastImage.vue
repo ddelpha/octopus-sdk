@@ -1,7 +1,7 @@
 <template>
   <div
     class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink float-left"
-    :style="{ 'background-image': 'url(\'' + podcast.imageUrl +'?'+Date().now+  '\')' }"
+    :style="{ 'background-image': 'url(\'' + podcast.imageUrl +'?dummy='+dummyParam+  '\')' }"
     v-if="podcast"
   >
   <template v-if="podcast && podcast.availability.visibility">
@@ -166,6 +166,7 @@ export default {
   data() {
     return {
       isDescription : false,
+      dummyParam : new Date().getTime().toString(),
     };
   },
 
