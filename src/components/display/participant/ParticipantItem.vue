@@ -1,7 +1,7 @@
 <template>
   <li class="participant-item-container">
     <router-link v-bind:to="'/main/pub/participant/' + participant.participantId" class="mt-3" >
-      <div class="img-box-circle" :style="{ 'background-image': 'url(\'' + participant.imageUrl + '\')' }"></div>
+      <div class="img-box-circle" :style="{ 'background-image': 'url(\'' + participant.imageUrl +'?dummy='+dummyParam+ '\')' }"></div>
     </router-link>
     <router-link v-bind:to="'/main/pub/participant/' + participant.participantId" class="text-dark mt-3">
       <div class="participant-name">
@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       activeParticipant: true,
+      dummyParam : new Date().getTime().toString(),
     };
   },
 

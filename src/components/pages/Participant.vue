@@ -3,7 +3,7 @@
     <div class="page-box" v-if="loaded && !error">
       <h1 v-if="!lightStyle">{{ $t('Animator') }}</h1>
       <div class="d-flex w-100 flex-column align-items-center justify-content-center">
-        <div class="img-box-circle mb-3" :style="{'background-image': 'url(\'' + participant.imageUrl + '\')', }"></div>
+        <div class="img-box-circle mb-3" :style="{'background-image': 'url(\'' + participant.imageUrl +'?dummy='+dummyParam+ '\')', }"></div>
         <h2 class="text-capitalize">{{ name }}</h2>
         <div class="h6" v-html="description">{{ description }}</div>
         <div class="d-flex justify-content-center" v-if="isRssButton">
@@ -68,6 +68,7 @@ export default {
       participant: undefined,
       error: false,
       reload: false,
+      dummyParam : new Date().getTime().toString(),
     };
   },
 
