@@ -1,6 +1,6 @@
 <template>
 	<div class="d-flex align-items-center">
-			<div class="filter-organisation-chooser" v-if="!isPodcastmaker">
+			<div class="filter-organisation-chooser" v-if="!isPodcastmaker && !filterOrga">
 			<OrganisationChooser
 					:defaultanswer="$t('No organisation filter')"
 					@selected="onOrganisationSelected"
@@ -13,8 +13,9 @@
 			<div class="filter-speech-bubble" v-if="showBubble">{{$t('check this box if you want to keep this filter for the rest of your visit')}}</div>
 			</div>
 			<div class="d-flex align-items-center flex-grow">
-			
+			<label for="search" class="d-inline" :aria-label="$t('Search')"></label>
 			<input
+        id="search"
         class='filter-search-input input-no-outline'
 				:placeholder="searchText"
 				:value="searchPattern"
@@ -98,7 +99,7 @@ export default {
 
   created() {
     if (this.organisationId) {
-      state.filter.organisationId = this.organisationId;
+      this.$store.commit('filterOrga', {orgaId: this.organisationId});
       this.keepOrganisation = true;
       if(!this.$route.query.productor){
         this.$router.replace({query: {productor: this.organisationId}});
@@ -116,6 +117,7 @@ export default {
     return {
       keepOrganisation: false,
       showBubble: false,
+      imgUrl: undefined,
     };
   },
 
@@ -131,6 +133,9 @@ export default {
       } else{
         return this.$t('Look for podcast name');
       }
+    },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
     }
   },
 
@@ -139,7 +144,8 @@ export default {
       if(this.$route.query.productor){
         this.$router.push({query: {productor: undefined}});
       }
-      state.filter.organisationId = this.organisationId;
+      this.imgUrl = organisation.imageUrl;
+      this.$store.commit('filterOrga', {orgaId: undefined, imgUrl: this.imgUrl});
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
         this.showBubble=true;
@@ -156,14 +162,24 @@ export default {
         if(this.$route.query.productor !== this.organisationId){
           this.$router.push({query: {productor: this.organisationId}});
         }
-        state.filter.organisationId = this.organisationId;
+        this.$store.commit('filterOrga', {orgaId: this.organisationId, imgUrl: this.imgUrl});
       }else {
         if(this.$route.query.productor){
           this.$router.push({query: {productor: undefined}});
         }
-        state.filter.organisationId = this.organisationId;
+        this.$store.commit('filterOrga', {orgaId: undefined});
       }
     }
+  },
+  watch:{
+    filterOrga(){
+      if(this.filterOrga){
+        this.keepOrganisation=true;
+        this.$emit('updateOrganisationId', this.filterOrga);
+      } else{
+        this.keepOrganisation=false;
+      }
+    },
   }
 };
 </script>

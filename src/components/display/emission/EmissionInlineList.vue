@@ -2,10 +2,10 @@
   <div class="d-flex flex-column p-3 list-episode">
     <div class="d-flex justify-content-end">
       <div class="hide-phone">
-        <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }">
+        <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }" :aria-label="$t('Display previous')">
           <div class="saooti-arrow-left2"></div>
         </button>
-        <button class="btn btn-arrow" @click="displayNext()" :class="{ disabled: !nextAvailable }">
+        <button class="btn btn-arrow" @click="displayNext()" :class="{ disabled: !nextAvailable }" :aria-label="$t('Display next')">
           <div class="saooti-arrow-right2"></div>
         </button>
       </div>
@@ -14,8 +14,9 @@
       <div class="spinner-border mr-3"></div>
       <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
     </div>
-    <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" v-show="loaded" :class="[alignLeft? 'justify-content-start':'']">
-      <EmissionPlayerItem class="flex-shrink item-phone-margin" :emission='e'  v-for="e in emissions" v-bind:key="e.emissionId" :class="[alignLeft? 'mr-3':'']" />
+    <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" 
+    v-show="(displayRubriquage && rubriques) || !(displayRubriquage &&loaded)" :class="[alignLeft? 'justify-content-start':'']">
+      <EmissionPlayerItem class="flex-shrink item-phone-margin" :emission='e'  v-for="e in emissions" v-bind:key="e.emissionId" :class="[alignLeft? 'mr-3':'', mainRubriquage(e.rubriqueIds[0])]" :nbPodcasts="nbPodcasts" :rubriqueName="rubriquesId(e)"/>
     </transition-group>
     <router-link v-bind:to="href" class="btn btn-link">{{buttonText}}</router-link>
   </div>
@@ -28,6 +29,7 @@
 import octopusApi from "@saooti/octopus-api";
 import domHelper from "../../../helper/dom";
 import EmissionPlayerItem from "./EmissionPlayerItem.vue";
+import {state} from "../../../store/paramStore.js";
 
 const PHONE_WIDTH = 960;
 
@@ -39,7 +41,9 @@ export default {
     "href",
     "buttonText",
     "rubriqueId",
-    "rubriquageId"
+    "rubriquageId",
+    "nbPodcasts",
+    'itemSize',
   ],
 
   components: {
@@ -57,6 +61,9 @@ export default {
   mounted() {
     this.handleResize();
     this.fetchNext();
+    if(this.displayRubriquage){
+      this.fetchRubriques();
+    }
   },
 
   data() {
@@ -71,6 +78,7 @@ export default {
       allEmissions: [],
       direction: 1,
       alignLeft : false,
+      rubriques:undefined,
     };
   },
 
@@ -84,6 +92,9 @@ export default {
     },
     nextAvailable() {
       return this.index + this.size < this.totalCount;
+    },
+    displayRubriquage(){
+      return state.emissionsPage.rubriquage;
     },
     transitionName: ({ direction }) =>
       direction > 0 ? "out-left" : "out-right"
@@ -103,6 +114,15 @@ export default {
           this.loading = false;
           this.loaded = true;
           this.totalCount = data.count;
+          if(this.first === 0 && this.displayRubriquage && state.emissionsPage.mainRubrique){
+            data.result.sort((a, b)=>{
+              if (a.rubriqueIds[0] === state.emissionsPage.mainRubrique)
+                return 1;
+              if (b.rubriqueIds[0] === state.emissionsPage.mainRubrique)
+                return -1;
+              return 0;
+            });
+          }
           if (this.allEmissions.length + data.result.length < this.totalCount) {
             let nexEl = data.result.pop();
             this.preloadImage(nexEl.imageUrl);
@@ -141,12 +161,14 @@ export default {
           this.size = 10;
         } else {
           const width = this.$el.offsetWidth;
-          const sixteen = domHelper.convertRemToPixels(13.7);
+          let sixteen = domHelper.convertRemToPixels(13.7);
+          if(this.itemSize){
+            sixteen = domHelper.convertRemToPixels(this.itemSize + .7);
+          }
           this.size = Math.floor(width / sixteen);
         }
       }
     },
-
 
     reset() {
       this.loading = true;
@@ -160,7 +182,27 @@ export default {
     preloadImage(url) {
       let img = new Image();
       img.src = url;
-    }
+    },
+    fetchRubriques(){
+      octopusApi.fetchTopic(this.displayRubriquage).then((data)=>{
+        this.rubriques = data.rubriques; 
+      });
+    },
+    rubriquesId(emission){
+      if(this.displayRubriquage && emission.rubriqueIds && emission.rubriqueIds.length !== 0 && this.rubriques && this.rubriques.length){
+        let rubrique = this.rubriques.find(element => element.rubriqueId === emission.rubriqueIds[0]);
+        return rubrique.name;
+      }else{
+        return undefined;
+      }
+    },
+    mainRubriquage(rubriqueId){
+      if(rubriqueId === state.emissionsPage.mainRubrique){
+        return "partenaireRubrique";
+      }else{
+        return "";
+      }
+    },
   },
 };
 </script>

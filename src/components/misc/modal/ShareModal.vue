@@ -1,40 +1,28 @@
 <template>
-  <div name="modal">
-    <div class="modal-mask">
-      <div class="modal-wrapper">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title h5">{{ $t('Share') }}</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close"  @click="closePopup">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <b-tabs content-class="p-2 share-modal-border">
-                <b-tab :title="$t('Embed link')" class="tab-pane" active>
-                  <p>{{embedLink}}</p>
-                  <div class='saooti-copy' @click="onCopyCode(embedLink)"></div>
-                </b-tab>
-                <b-tab :title="$t('Embedly link')" class="tab-pane">
-                  <p>{{embedlyLink}}</p>
-                  <div class='saooti-copy' @click="onCopyCode(embedlyLink)"></div>
-                </b-tab>
-                <b-tab :title="$t('Direct link')" class="tab-pane" v-if="directLink">
-                  <p>{{directLink.audioUrl}}</p>
-                  <div class='saooti-copy' @click="onCopyCode(directLink.audioUrl)"></div>
-                </b-tab>
-              </b-tabs>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-primary m-1" @click="closePopup">
-                {{ $t('Close') }}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div>
+    <b-modal id="share-modal" @close="closePopup" @hide="closePopup"  @cancel="closePopup"  :title="$t('Share player')">
+      <template v-slot:default>
+        <b-tabs content-class="p-2 share-modal-border">
+          <b-tab :title="$t('Embed link')" class="tab-pane" active>
+            <p>{{embedLink}}</p>
+            <div class='saooti-copy' @click="onCopyCode(embedLink)"></div>
+          </b-tab>
+          <b-tab :title="$t('Embedly link')" class="tab-pane">
+            <p>{{embedlyLink}}</p>
+            <div class='saooti-copy' @click="onCopyCode(embedlyLink)"></div>
+          </b-tab>
+          <b-tab :title="$t('Direct link')" class="tab-pane" v-if="directLink">
+            <p>{{directLink.audioUrl}}</p>
+            <div class='saooti-copy' @click="onCopyCode(directLink.audioUrl)"></div>
+          </b-tab>
+        </b-tabs>
+      </template>
+      <template v-slot:modal-footer>
+        <button class="btn btn-primary m-1" @click="closePopup">
+          {{ $t('Close') }}
+        </button>
+      </template>
+    </b-modal>
     <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
   </div>
 </template>
@@ -89,6 +77,10 @@ export default {
 
   components:{
     Snackbar, 
+  },
+
+  mounted(){
+    this.$bvModal.show('share-modal');
   },
 
   methods: {

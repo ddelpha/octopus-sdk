@@ -3,7 +3,7 @@
 	<div class="d-flex justify-content-center mb-3" @click="showFilters = !showFilters">
 		<div class="text-secondary c-hand">{{$t('Advanced filters')}}</div>
 		<div class="text-secondary c-hand align-self-center large-font-size" :class="{'arrow-transform':showFilters}">
-			<div class="saooti-arrow_drop_down"></div>
+			<div class="saooti-arrow_down saooti-arrow_down-margin"></div>
 		</div>
 	</div>
   <div class="advanced-search-container" v-show="showFilters" >
@@ -73,23 +73,11 @@
 					:i18n="lang"
 				/>
 			</div>
-			<div class="d-flex flex-column mt-3" v-if="organisationRight && !isEmission && !isPodcastmaker">
-				<div class="checkbox-saooti flex-shrink" v-show="false">  
-					<input type="checkbox" class="custom-control-input" id="search-visible-checkbox" v-model="isVisible" :disabled='true || lastCheckbox(isVisible)'>  
-					<label class="custom-control-label" for="search-visible-checkbox">{{ $t('Visible') }}</label>  
-				</div>
-				<!-- <div class="checkbox-saooti flex-shrink">  
-					<input type="checkbox" class="custom-control-input" id="search-inCreate-checkbox" v-model="isInCreate" :disabled='lastCheckbox(isInCreate)'>  
-					<label class="custom-control-label" for="search-inCreate-checkbox">{{ $t('In creation') }}</label>  
-				</div> -->
+			<div class="d-flex flex-column mt-3" v-if="organisation && organisationRight && !isPodcastmaker">
 				<div class="checkbox-saooti flex-shrink">  
-					<input type="checkbox" class="custom-control-input" id="search-future-checkbox" v-model="isFuture" :disabled='lastCheckbox(isFuture)'>  
-					<label class="custom-control-label" for="search-future-checkbox">{{ $t('Publish in future') }}</label>  
+					<input type="checkbox" class="custom-control-input" id="search-future-checkbox" v-model="isNotVisible">  
+					<label class="custom-control-label" for="search-future-checkbox">{{ textNotVisible }}</label>  
 				</div>
-				<!-- <div class="checkbox-saooti flex-shrink">  
-					<input type="checkbox" class="custom-control-input" id="search-error-checkbox" v-model="isError" :disabled='lastCheckbox(isError)'>  
-					<label class="custom-control-label" for="search-error-checkbox">{{ $t('In error') }}</label>  
-				</div> -->
 			</div>
 		</div>
 		<div class="d-flex flex-column ml-3" v-if="isEmission">
@@ -106,6 +94,9 @@
 </div>
 </template>
 <style lang="scss">
+.saooti-arrow_down-margin {
+	margin: 3px 0 0;
+}
 .padding-left-custom-radio{
 	padding-left: 1.5rem;
 }
@@ -120,11 +111,16 @@
   border-radius: 0.8rem;
 	display: flex;
   width: 100%;
-	padding: 1rem;
+	padding: 1rem 2rem;
 	margin-bottom: 1rem;
 	label.wrap { 
 		position: relative;
 		margin:0;
+	}
+	input:not(#rubriqueChooser){
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 0.2em 0.5em;
 	}
 	select{       
 		-webkit-appearance: none;
@@ -146,7 +142,7 @@ import { Datetime } from 'vue-datetime';
 import {state} from "../../../store/paramStore.js";
 import octopusApi from "@saooti/octopus-api";
 const moment = require('moment');
-
+ 
 export default {
   components: {
 		MonetizableFilter,
@@ -161,10 +157,8 @@ export default {
 	},
 	
 	mounted(){
-		if(this.organisationRight){
-			this.isInCreate = true;
-			this.isFuture = true;
-			this.isError = true;
+		if(this.organisation && this.organisationRight && !this.isEmission){
+				this.isNotVisible = true;
 		}
 	},
 
@@ -182,10 +176,7 @@ export default {
 			},
 			fromDate: moment().subtract(10, "days").toISOString(),
 			toDate: moment().toISOString(),
-			isVisible: true,
-			isInCreate: false,
-			isFuture: false,
-			isError: false,
+			isNotVisible: false,
 			showFilters : false,
 			reset: false,
 			emissionSort: 'SCORE',
@@ -228,36 +219,29 @@ export default {
 		},
 		isPodcastmaker(){
       return state.generalParameters.podcastmaker;
+		},
+		filterOrga(){
+      return this.$store.state.filter.organisationId;
     },
+    organisation(){
+      if(this.organisationId){
+        return this.organisationId;
+      }else if(this.filterOrga){
+        return this.filterOrga;
+      }else {
+        return undefined;
+      }
+		},
+		textNotVisible(){
+			if(this.isEmission){
+				return this.$t('Consider podcasts no visible');
+			} else{
+				return this.$t('See podcasts no visible');
+			}
+		}
   },
 
   methods:{
-		lastCheckbox(value){
-			if(this.organisationId === undefined){
-				this.isFuture = false;
-				return true;
-			} else{
-				if(value){
-					let i = 0;
-					if(!this.isVisible){
-						i++;
-					}
-					/* if(!this.isInCreate){
-						i++;
-					}
-					if(!this.isError){
-						i++;
-					} */
-					if(!this.isFuture){
-						i++;
-					}
-					/* return i === 3; */
-					return i === 1;
-				}else{
-					return false;
-				}
-			}
-		},
 		updateFromDate(){
 			if(moment(this.fromDate).startOf('minute').toISOString() !== moment().subtract(10, "days").startOf('minute').toISOString()){
 				if(this.isFrom){
@@ -301,8 +285,8 @@ export default {
       this.$emit('updateMonetization', value);
 		},
 		fetchTopics(){
-			if(this.organisationId){
-				octopusApi.fetchTopics(this.organisationId).then((data)=>{
+			if(this.organisation){
+				octopusApi.fetchTopics(this.organisation).then((data)=>{
 					this.rubriquageData = data;
 					if(data.length !== 0){
 						for (let index = 0; index < this.rubriquageData.length; index++) {
@@ -317,7 +301,12 @@ export default {
 		},
 	},
 	watch:{
-		organisationId(){
+		organisation(){
+			if(this.organisation && this.organisationRight && !this.isEmission){
+				this.isNotVisible = true;
+			}else{
+				this.isNotVisible = false;
+			}
 			this.fetchTopics();
 		},
 		isFrom(newVal){
@@ -348,10 +337,7 @@ export default {
 		resetRubriquage(){
 			this.isRubriquage = false;
 		},
-		isVisible(){
-			//emit quelqueChose
-		},
-		isFuture(newVal){
+		isNotVisible(newVal){
 			this.$emit('includeHidden', newVal);
 		}
 	}

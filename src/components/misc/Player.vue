@@ -25,6 +25,7 @@
         @ended="onFinished"
         @playing="onPlay"
         @durationChange="onTimeUpdate"
+        @error="onError"
       />
       <router-link :to=podcastShareUrl v-if="isImage && podcastImage">
         <img
@@ -35,6 +36,7 @@
       </router-link>
       
       <div
+        v-if='!playerError'
         class="play-button-box"
         v-bind:class="{
           'primary-bg': status != 'LOADING',
@@ -44,6 +46,7 @@
       >
         <div
           class="text-light"
+          :aria-label="$t('Play')"
           v-bind:class="{
             saooti: status == 'PLAYING' || status == 'PAUSED',
             'saooti-play2-bounty': status == 'PAUSED',
@@ -54,14 +57,15 @@
       </div>
       <div class="text-light player-grow-content">
         <div class="d-flex">
+          <div class="text-warning player-title ml-2 mr-2" v-if='playerError'>{{ $t('Podcast play error') + " - "}}</div>
           <div class="flex-grow player-title">{{ podcastTitle }}</div>
-          <div v-if="!isBarTop" class="hide-phone">{{ playedTime }} / {{ totalTime }}</div>
+          <div v-if="!playerError" v-show="!isBarTop" class="hide-phone">{{ playedTime }} / {{ totalTime }}</div>
         </div>
-        <div class="progress c-hand" @mouseup="seekTo" style="height: 3px;" v-if="!isBarTop">
+        <div class="progress c-hand" @mouseup="seekTo" style="height: 3px;" v-if="!playerError" v-show="!isBarTop">
           <div class="progress-bar primary-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" :style="'width: '+ percentProgress + '%'"></div>
         </div>
       </div>
-      <router-link :to=podcastShareUrl class="text-light hide-phone" v-if='podcastShareUrl !== ""'>
+      <router-link :to=podcastShareUrl class="text-light hide-phone" v-if='podcastShareUrl !== ""' :aria-label="$t('Podcast')">
         <div class="saooti-export-bounty c-hand m-2" ></div>
       </router-link>
       <div class="d-flex text-light align-items-center hide-phone" v-if="isClock">
@@ -177,6 +181,7 @@ export default {
       downloadId: undefined,
       new : true,
       saveCookie : undefined,
+      playerError: false,
     };
   },
   mounted(){
@@ -252,14 +257,6 @@ export default {
         }
       },
 
-      podcastShareUrl: state => {
-        if (state.player.podcast) {
-          return "/main/pub/podcast/"+state.player.podcast.podcastId;
-        } else {
-          return '';
-        }
-      },
-
       playedTime: state => {
         if (state.player.elapsed > 0 && state.player.total > 0) {
           return DurationHelper.formatDuration(
@@ -282,6 +279,14 @@ export default {
         }
       },
     }),
+
+    podcastShareUrl(){
+      if (this.podcast) {
+        return { name: 'podcast', params: {podcastId : this.podcast.podcastId}, query:{productor: this.$store.state.filter.organisationId}};
+      } else {
+        return '';
+      }
+    },
 
     podcastTitle(){
       if (this.podcast) {
@@ -307,6 +312,11 @@ export default {
   },
 
   methods: {
+    onError(){
+      if(this.podcast || this.media){
+        this.playerError = true;
+      }
+    },
     switchPausePlay() {
       const audioPlayer = document.querySelector('#audio-player');
       if (audioPlayer.paused) {
@@ -407,6 +417,7 @@ export default {
     podcastAudioURL(newVal){
       if(this.podcast && newVal !== ""){
         this.new = true;
+        this.playerError=false;
       }
     },
     listenTime(newVal){

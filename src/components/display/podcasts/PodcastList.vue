@@ -21,6 +21,7 @@
       :class="buttonPlus? 'btn-linkPlus mt-3': 'btn-more'"
       @click="displayMore"
       v-show="!allFetched && loaded"
+      :aria-label="$t('See more')"
     >
       <template v-if="buttonPlus">{{$t('See more')}}</template>
       <div class="saooti-plus"></div>
@@ -110,10 +111,22 @@ export default {
       return state.generalParameters.buttonPlus;
     },
     changed(){
-      return `${this.first}|${this.size}|${this.organisationId}|${this.emissionId}|
+      return `${this.first}|${this.size}|${this.organisation}|${this.emissionId}|
       ${this.iabId}|${this.participantId}|${this.query}|${this.monetization}|${this.popularSort}|
       ${this.rubriqueId}|${this.rubriquageId}|${this.before}|${this.after}|${this.includeHidden}|${this.noRubrique}`;
-    }
+    },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
+    },
+    organisation(){
+      if(this.organisationId){
+        return this.organisationId;
+      }else if(this.filterOrga){
+        return this.filterOrga;
+      }else {
+        return undefined;
+      }
+    },
   },
 
   methods: {
@@ -127,7 +140,7 @@ export default {
       let param = {
         first: this.dfirst,
         size: this.dsize,
-        organisationId: this.organisationId,
+        organisationId: this.organisation,
         emissionId: this.emissionId,
         iabId: this.iabId,
         participantId: this.participantId,
@@ -168,6 +181,7 @@ export default {
       this.podcasts = this.podcasts.concat(data.result).filter((p)=>{
         return p!== null;
       });
+      this.$emit('fetch', this.podcasts);
       this.dfirst += this.dsize;
       this.totalCount = data.count;
       if(this.podcasts.length === 0){

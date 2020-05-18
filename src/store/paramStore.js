@@ -41,6 +41,7 @@ var initialize = function initialize(initObject){
       state.generalParameters.isIE11 = (typeof param.isIE11 !== "undefined") ? param.isIE11 : false;
       state.generalParameters.podcastmaker =(typeof param.podcastmaker !== "undefined") ? param.podcastmaker : false;
       state.generalParameters.buttonPlus =(typeof param.buttonPlus !== "undefined") ? param.buttonPlus : true;
+      state.generalParameters.allCategories =(typeof param.allCategories !== "undefined") ? param.allCategories : [];
     }
     if(initObject.podcastPage){
       let param = initObject.podcastPage;
@@ -68,6 +69,8 @@ var initialize = function initialize(initObject){
       state.emissionsPage.lightItems = (typeof param.lightItems !== "undefined") ? param.lightItems : false;
       state.emissionsPage.titlePage = (typeof param.titlePage !== "undefined") ? param.titlePage : undefined;
       state.emissionsPage.itemPlayer = (typeof param.itemPlayer !== "undefined") ? param.itemPlayer : false;
+      state.emissionsPage.rubriquage = (typeof param.rubriquage !== "undefined") ? param.rubriquage : undefined;
+      state.emissionsPage.mainRubrique = (typeof param.mainRubrique !== "undefined") ? param.mainRubrique : undefined;
     }
     if(initObject.emissionPage){
       let param = initObject.emissionPage;
@@ -110,11 +113,13 @@ var initialize = function initialize(initObject){
       let error = octopusApi.initialize(state.octopusApi);
       if(error){
         reject();
-      } else{
+      } else if(state.generalParameters.allCategories.length === 0){
         octopusApi.fetchCategories({ lang: 'fr' }).then((data)=>{
           state.generalParameters.allCategories = data;
           resolve();
         });
+      }else{
+        resolve();
       }
     }else{
       reject();

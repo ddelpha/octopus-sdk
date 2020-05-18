@@ -1,8 +1,9 @@
 <template>
-  <div class="w-100" :style="{ width: width }" :class="{'multiselect-hide-arrow' : !displayArrow }">
+  <div class="default-multiselect-width" :style="{ width: width }" :class="{'multiselect-hide-arrow' : !displayArrow }" v-if='!value ||init'>
+    <label for="organisationChooser" class="d-inline" aria-label="select productor"></label>
     <Multiselect
       v-model="organisation"
-      id="ajax"
+      id="organisationChooser"
       label="name"
       track-by="organisationId"
       :placeholder="$t('Type string to filter by organisation')"
@@ -34,11 +35,12 @@
       <template slot="singleLabel" slot-scope="props">
         <div class="multiselect-octopus-proposition">
           <img
+            v-if="!light"
             class="option__image"
             :src="props.option.imageUrl"
             :alt="props.option.name"
           />
-          <span class="option__title">
+          <span class="option__title" :class="{'descriptionText' : light}">
             {{ props.option.name }}
           </span>
         </div>
@@ -46,11 +48,14 @@
       <template slot="option" slot-scope="props">
         <div class="multiselect-octopus-proposition">
           <img
+            v-if="!light"
             class="option__image"
             :src="props.option.imageUrl"
             :alt="props.option.name"
           />
-          <span class="option__title">{{ props.option.name }}</span>
+          <span class="option__title" :class="{'descriptionText' : light}">
+            {{ props.option.name }}
+          </span>
         </div>
       </template>
       <span slot="noResult">
@@ -67,7 +72,7 @@
         </div>
       </template>
       <template slot="noOptions">{{ $t('List is empty') }}</template>
-      <span class="saooti-arrow_down octopus-arrow-down-2" :class="{'octopus-arrow-down-top' : stats}" slot="caret"></span>
+      <span v-if='!light' class="saooti-arrow_down octopus-arrow-down-2" :class="{'octopus-arrow-down-top' : stats}" slot="caret"></span>
     </Multiselect>
   </div>
 </template>
@@ -99,7 +104,7 @@ export default {
   },
 
   created() {
-    if(this.authenticated && state.organisation.imageUrl === undefined){
+    if(this.authenticated && this.$store.state.organisation.imageUrl === undefined){
       octopusApi.fetchOrganisation(this.organisationId)
       .then(data => {
           this.myImage = data.imageUrl;
@@ -115,7 +120,9 @@ export default {
     defaultanswer: { default: false }, 
     stats : {default: false},
     displayArrow: { default: true },
-    value: { default: null }
+    value: { default: null },
+    light: {default: false},
+    reset: {default:false},
     },
 
   data() {
@@ -208,10 +215,13 @@ export default {
     },
 
     fetchOrganisation(){
-      this.init = true;
+      if(this.organisations.length ===0){
+        this.onSearchOrganisation();
+      }
       octopusApi.fetchOrganisation(this.value)
       .then(data => {
           this.organisation = data;
+          this.init = true;
       })
     },
 
@@ -222,10 +232,15 @@ export default {
   },
 
   watch:{
-    value(){
-      if(!this.init){
+    value(newVal){
+      if(!this.init || newVal){
         this.fetchOrganisation();
       }
+    },
+    reset(){
+      this.organisation = this.defaultanswer
+        ? getDefaultOrganistion(this.defaultanswer)
+        : '';
     }
   }
 };

@@ -4,10 +4,12 @@
       <h1 v-if="!isOuestFrance">{{ $t('Episode') }}</h1>
       <div class="d-flex">
         <div class="d-flex flex-column flex-super-grow">
-          <EditBox :podcast="podcast" v-if="editRight && isEditBox"></EditBox>
+          <EditBox :podcast="podcast" v-if="editRight && isEditBox" :isReady='isReady'></EditBox>
           <div class="module-box">
             <h2 class="text-uppercase font-weight-bold title-page-podcast" v-if="!isOuestFrance">{{ this.podcast.title }}</h2>
-            <router-link v-bind:to="'/main/pub/emission/' + this.podcast.emission.emissionId" v-else>
+            <router-link 
+            :to="{ name: 'emission', params: {emissionId:podcast.emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
+            v-else>
               <h1>{{ this.podcast.emission.name }}</h1>
             </router-link>
             <div class="mb-5 d-flex">
@@ -26,36 +28,33 @@
                 </div>
                 <div class="descriptionText" v-html="this.podcast.description">{{ this.podcast.description }}</div>
                 <div class="mt-3 mb-3">
-                  <div class="comma">{{ $t('Animated by : ') }}
+                  <div class="comma" v-if="podcast.animators">{{ $t('Animated by : ') }}
                     <router-link
+                      :aria-label="$t('Participant')"
                       class="link-info"
-                      v-bind:to="
-                        '/main/pub/participant/' + animator.participantId
-                      "
                       v-for="animator in podcast.animators"
                       v-bind:key="animator.participantId"
+                      :to="{ name: 'participant', params: {participantId: animator.participantId}, query:{productor: $store.state.filter.organisationId}}"
                     >{{ getName(animator) }}</router-link>
                   </div>
                   <div v-if="!isOuestFrance">{{ $t('Emission') + ' : ' }}
                     <router-link
                       class="link-info"
-                      v-bind:to="
-                        '/main/pub/emission/' + this.podcast.emission.emissionId
-                      "
+                      :to="{ name: 'emission', params: {emissionId:podcast.emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
                     >{{ this.podcast.emission.name }}</router-link>
                   </div>
                   <div v-if="!isPodcastmaker">{{ $t('Producted by : ') }}
                     <router-link
                       class="link-info"
-                      v-bind:to="'/main/pub/productor/' + podcast.organisation.id"
+                      :to="{ name: 'productor', params: {productorId:podcast.organisation.id}, query:{productor: $store.state.filter.organisationId}}"
                     >{{ this.podcast.organisation.name }}</router-link>
                   </div>
                   <div class="comma" v-if="podcast.guests">{{ $t('Guests') + ' : ' }}
                     <router-link
                       class="link-info"
-                      v-bind:to="'/main/pub/participant/' + guest.participantId"
                       v-for="guest in podcast.guests"
                       v-bind:key="guest.participantId"
+                      :to="{ name: 'participant', params: {participantId:guest.participantId}, query:{productor: $store.state.filter.organisationId}}"
                     >{{ getName(guest) }}</router-link>
                   </div>
                   <div v-if="editRight && !isPodcastmaker">
@@ -75,13 +74,13 @@
             <TagList v-if="isTagList" :tagList='podcast.tags'/>
           </div>
         </div>
-        <div class="d-flex flex-column flex-grow">
+        <div class="d-flex flex-column share-container" :class="authenticated?'flex-grow':''">
           <SharePlayer
             :podcast="podcast"
-            :emissionId="podcast.emission.emissionId"
+            :emission="podcast.emission"
             :exclusive="exclusive"
             :organisationId='organisationId'
-            v-if="isSharePlayer"
+            v-if="isSharePlayer && authenticated"
           ></SharePlayer>
           <ShareButtons :podcastId="podcastId" v-if="isShareButtons"></ShareButtons>
         </div>
@@ -125,6 +124,11 @@
   @media (max-width: 600px) {
     display: initial;
   }
+}
+.share-container{
+   @media (max-width: 960px) {
+     flex-grow: 1;
+   }
 }
 </style>
 <script>
@@ -216,7 +220,7 @@ export default {
       if (typeof this.podcast !== "undefined") {
         return this.allCategories
           .filter(item => {
-            return this.podcast.emission.iabIds.indexOf(item.id) !== -1;
+            return  this.podcast.emission.iabIds && this.podcast.emission.iabIds.indexOf(item.id) !== -1;
           })
           .sort((a, b) => {
             if (a.id === this.emissionMainCategory) return -1;
@@ -255,6 +259,14 @@ export default {
         }
       }
       return false;
+    },
+    isReady(){
+      /* if(this.podcast && this.podcast.processingStatus !== "PLANNED" && this.podcast.processingStatus !== "PROCESSING"){
+        return true;
+      }else{
+        return false;
+      } */
+      return true;
     }
   },
 

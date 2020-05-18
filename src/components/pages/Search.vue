@@ -5,6 +5,7 @@
     <h1 v-else>{{$t('Search - no results', {query: this.rawQuery})}}</h1>
     <div class="position-relative champs-searchPage w-75" v-if="!hideBar">
       <input
+        id="search"
         type="text"
         ref="search"
         v-model="rawQuery"
@@ -13,6 +14,7 @@
         @change="onSearchBegin"
         autofocus
       />
+      <label for="search" class="d-inline" :aria-label="$t('Search')"></label>
       <div class="saooti-search-bounty search-icon-container" v-if="!rawQuery"></div>
       <div class="saooti-cross search-icon-container c-hand" @click="rawQuery =''" v-else></div>
     </div>

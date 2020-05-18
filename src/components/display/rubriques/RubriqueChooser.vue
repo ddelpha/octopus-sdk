@@ -1,8 +1,9 @@
 <template>
   <div class="default-multiselect-width" :style="{ width: width }">
+    <label for="rubriqueChooser" class="d-inline" aria-label="select rubrique"></label>
     <Multiselect
       v-model="rubrique"
-      id="ajax"
+      id="rubriqueChooser"
       label="name"
       track-by="rubriqueId"
       :placeholder="$t('Type string to filter by rubrics')"

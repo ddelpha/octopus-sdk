@@ -68,8 +68,8 @@ export default {
     }
     if (this.$route.query.productor) {
       this.$data.organisationId = this.$route.query.productor;
-    } else if (state.filter.organisationId) {
-      this.$data.organisationId = state.filter.organisationId;
+    } else if (this.$store.state.filter.organisationId) {
+      this.$data.organisationId = this.$store.state.filter.organisationId;
     }
   },
 

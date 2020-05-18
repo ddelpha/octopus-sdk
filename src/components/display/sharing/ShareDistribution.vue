@@ -3,7 +3,7 @@
   <h3>{{$t('Distribute')}}</h3>
     <p class="sharing-distribution-container">{{$t('Rss feed:')}}
       <span class="primary-color">{{rss}}</span>
-      <input type="button" :value="$t('Copy')" class="btn btn-primary" @click="onCopyRSSURL()" />
+      <input type="button" :value="$t('Copy')" class="btn btn-primary" @click="onCopyRSSURL()" :aria-label="$t('Copy')" />
     </p>
     <div class="sharing-distribution-container">
       <router-link v-bind:to="'/main/priv/distribution/deezer/' + emissionId" class="text-dark">

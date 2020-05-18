@@ -10,7 +10,6 @@
 			</select>
 			<div class="saooti-arrow_down octopus-arrow-down-2 classic-select"></div>
 		</label>
-		
 	</div>
 </template>
 <style lang="scss">

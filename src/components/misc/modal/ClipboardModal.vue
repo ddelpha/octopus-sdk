@@ -12,7 +12,7 @@
           <p class="d-flex justify-content-between">
             {{$t('Rss feed:')}}
             <span id="LINK">{{link}}</span>
-            <input type="button" value="Copier" class="btn btn-primary" @click="onCopyLINK()" />
+            <input type="button" value="Copier" class="btn btn-primary" @click="onCopyLINK()" :aria-label="$t('Copy')" />
           </p>
         </div>
         <div class="modal-footer" v-if="validatetext">

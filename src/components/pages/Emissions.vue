@@ -3,7 +3,7 @@
     <h1 v-if="titlePage === undefined">{{ $t('All emissions') }}</h1>
     <h1 v-else>{{ titlePage }}</h1>
     <ProductorSearch 
-      :organisationId='organisationId' 
+      :organisationId.sync='organisationId' 
       :searchPattern='searchPattern'
       type='emission'
       @updateOrganisationId='updateOrganisationId'
@@ -18,6 +18,7 @@
       @updateFromDate='updateFromDate'
       @updateToDate='updateToDate'
       @updateSortEmission='updateSortEmission'
+      @includeHidden='updateHidden'
       :organisationId='organisationId'/>
     <EmissionList
       :showCount="true"
@@ -32,6 +33,7 @@
       :after='fromDate'
       :sort='sortEmission'
       :noRubrique='noRubrique'
+      :includeHidden='includeHidden'
     />
   </div>
 </template>
@@ -62,10 +64,8 @@ export default {
     } else {
       this.$data.size = 12;
     }
-     if (this.$route.query.productor) {
+    if (this.$route.query.productor) {
       this.$data.organisationId = this.$route.query.productor;
-    } else if (state.filter.organisationId) {
-      this.$data.organisationId = state.filter.organisationId;
     }
   },
 
@@ -82,6 +82,7 @@ export default {
       fromDate: undefined,
       toDate: undefined,
       resetRubriquage: false,
+      includeHidden : false,
       sortEmission : 'SCORE',
       noRubrique: false,
     };
@@ -100,6 +101,9 @@ export default {
   },
 
   methods:{
+    updateHidden(value){
+      this.includeHidden = value;
+    },
     updateSortEmission(value){
       this.sortEmission = value;
     },
@@ -139,6 +143,6 @@ export default {
     updateMonetization(value){
       this.monetization = value;
     }
-  }
+  },
 };
 </script>

@@ -7,7 +7,7 @@
         <h2 class="text-capitalize">{{ name }}</h2>
         <div class="h6" v-html="description">{{ description }}</div>
         <div class="d-flex justify-content-center" v-if="isRssButton">
-          <a class="btn btn-bigRound" :title="$t('Subscribe to this participant')" :href="rssUrl" target="_blank">
+          <a class="btn btn-bigRound" :title="$t('Subscribe to this participant')" :aria-label="$t('Subscribe to this participant')" :href="rssUrl" target="_blank">
             <div class="saooti-rss-bounty"></div>
           </a>
         </div>

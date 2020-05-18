@@ -1,20 +1,27 @@
 <template>
   <li class="mt-3" :class="lightItems? 'noList emission-light-max-size':'emission-item-container shadow-element'">
-    <router-link v-bind:to="'/main/pub/emission/' + emission.emissionId" class="text-dark">
-      <div class="img-box" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'?dummy='+dummyParam+  '\')' }" v-if="!lightItems"></div>
+    <router-link 
+    :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
+    :aria-label="$t('Emission')"
+    class="text-dark">
+      <div class="img-box" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'?dummy='+dummyParam+ '\')' }" v-if="!lightItems"></div>
       <div class="d-flex" v-else>
         <div class="img-box-light flex-shrink" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'?dummy='+dummyParam+  '\')' }"></div>
         <div class="emission-light-title">{{ name }}</div>
       </div>
     </router-link>
     <div class="emission-item-text" :class="lightItems?'p-0':''">
-      <router-link v-bind:to="'/main/pub/emission/' + emission.emissionId" class="text-dark">
+      <router-link 
+      :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
+      class="text-dark">
         <div class="emission-name" v-if="!lightItems">
         <img class="icon-caution" src="/img/caution.png" v-if="!activeEmission && !isPodcastmaker" :title="$t('Emission have not podcasts')"/>{{ name }}</div>
         <div class="emission-description" :class="lightItems?'emission-small-description':''" v-html="description">{{ description }}</div>
       </router-link>
       <div class="flex-grow"></div>
-      <router-link v-bind:to="'/main/pub/productor/' + emission.orga.id" class="text-dark" v-if="!isPodcastmaker">
+      <router-link 
+      :to="{ name: 'productor', params: {productorId:emission.orga.id}, query:{productor: $store.state.filter.organisationId}}"
+      class="text-dark" v-if="!isPodcastmaker">
         <div class="emission-producer primary-color">© {{ emission.orga.name }}</div>
       </router-link>
     </div>

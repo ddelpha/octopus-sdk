@@ -107,3 +107,58 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.14.31 Mise à jour Vignette non prises en compte lors édition épisode
  * 0.14.32 Mise à jour Vignette non prises en compte lors édition épisode
  * 0.14.33 Mise à jour Vignette non prises en compte lors édition épisode
+
+ * 0.15.0 Nouveau sprint
+ * 0.15.1 Erreur de merge
+ * 0.15.2 Nouvelle version api
+ * 0.15.3 Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus
+ * 0.15.4 Recherche avancée - status de processing
+ * 0.15.5 Recherche avancée - status de processing
+ * 0.15.6 Merge de staging
+ * 0.15.7 Merge de staging
+ * 0.15.8 Norme d'accessibilité
+ * 0.15.9 Merge de staging
+ * 0.15.10 Merge de Samuel
+ * 0.15.11 Merge de staging
+ * 0.15.12 Merge de staging
+ * 0.15.13 Recherche d'emissions et podcast cachés
+ * 0.15.14 Merge de Samuel + ajout d'un fichier profile.js 
+ * 0.15.15 Customisation du player
+ * 0.15.16 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.17 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.18 la date dans le calendrier et le filtre ne sont pas les mêmes
+ * 0.15.19 Merge dev-fabien
+ * 0.15.20 Merge dev-fabien + ajout responsive
+ * 0.15.22 Mise à jour api 
+ * 0.15.23 Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus
+ * 0.15.24 merge de staging
+ * 0.15.25 Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus
+ * 0.15.26 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.27 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.28 Design mini player Octopus 
+ * 0.15.29 Erreur customisation de player (pour émission)
+ * 0.15.30 Design mini player Octopus 
+ * 0.15.31 Pouvoir choisir le code hexa, de la couleur customs du player
+ * 0.15.32 Ne pas afficher 0 seconde lors de l'indication d'un épisode en cours de traitement 
+ * 0.15.33 Privatisation : Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus.
+ * 0.15.34 Selenium couleurs hexa
+ * 0.15.35 Privatisation : Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus.
+ * 0.15.36 Podcastmaker SudPresse
+ * 0.15.37 Podcastmaker SudPresse
+ * 0.15.38 Podcastmaker SudPresse
+ * 0.15.39 Responsive topbar
+ * 0.15.40 Player avec url invalide 
+ * 0.15.41 Suppression d'un podcast en processing
+ * 0.15.42 Ne pas afficher 0 seconde lors de l'indication d'un épisode en cours de traitement 
+ * 0.15.43 Player avec url invalide
+ * 0.15.44 Podcastmaker SudPresse
+ * 0.15.45 Recherche avancée dans octopus (rajout de la partie processing en cours)
+ * 0.15.46 Suppression d'un podcast en processing (revert pour emission)
+ * 0.15.47 Partage Réseaux Sociaux : page d'épisode spécifique
+ * 0.15.48 Partage Réseaux Sociaux : page d'épisode spécifique
+ * 0.15.49 Partage Réseaux Sociaux : page d'épisode spécifique
+ * 0.15.50 Suppression d'un podcast en processing (revert pour episode)
+ * 0.15.52 Responsive
+ * 0.15.53 Intervertir menu "Intervenants" et menu "Producteurs"
+
+

@@ -17,6 +17,7 @@
       v-bind:href="'/main/pub/participants?first=' + dfirst + '&size=' + dsize"
       @click="displayMore"
       v-show="!allFetched && loaded"
+      :aria-label="$t('See more')"
     >
       <div class="saooti-plus"></div>
     </a>
@@ -80,6 +81,18 @@ export default {
     allFetched() {
       return this.dfirst >= this.totalCount;
     },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
+    },
+    organisation(){
+      if(this.organisationId){
+        return this.organisationId;
+      }else if(this.filterOrga){
+        return this.filterOrga;
+      }else {
+        return undefined;
+      }
+    },
   },
 
   methods: {
@@ -96,7 +109,7 @@ export default {
           first: self.dfirst,
           size: self.dsize,
           query: self.query,
-          organisationId: self.organisationId,
+          organisationId: self.organisation,
         })
         .then(function(data) {
           self.$data.loading = false;
@@ -121,7 +134,7 @@ export default {
         this.fetchContent(true);
       },
     },
-    organisationId: {
+    organisation: {
       handler() {
         this.fetchContent(true);
       },
