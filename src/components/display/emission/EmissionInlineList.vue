@@ -16,7 +16,7 @@
     </div>
     <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" 
     v-show="(displayRubriquage && rubriques) || !(displayRubriquage &&loaded)" :class="[alignLeft? 'justify-content-start':'', overflowScroll ? 'overflowScroll': '']">
-      <EmissionPlayerItem class="flex-shrink item-phone-margin" :emission='e'  v-for="e in emissions" v-bind:key="e.emissionId" :class="[alignLeft? 'mr-3':'', mainRubriquage(e.rubriqueIds[0])]" :nbPodcasts="nbPodcasts" :rubriqueName="rubriquesId(e)"/>
+      <EmissionPlayerItem class="flex-shrink item-phone-margin" :emission='e'  v-for="e in emissions" v-bind:key="e.emissionId" :class="[alignLeft? 'mr-3':'', mainRubriquage(e)]" :nbPodcasts="nbPodcasts" :rubriqueName="rubriquesId(e)"/>
     </transition-group>
     <router-link v-bind:to="href" class="btn btn-link" v-if="!overflowScroll">{{buttonText}}</router-link>
   </div>
@@ -220,8 +220,8 @@ export default {
         return undefined;
       }
     },
-    mainRubriquage(rubriqueId){
-      if(rubriqueId === state.emissionsPage.mainRubrique){
+    mainRubriquage(emission){
+      if(emission.rubriqueIds && emission.rubriqueIds[0] === state.emissionsPage.mainRubrique){
         return "partenaireRubrique";
       }else{
         return "";

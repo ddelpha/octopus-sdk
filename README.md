@@ -163,6 +163,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.54 Partage Réseaux Sociaux : page d'épisode spécifique
  * 0.15.55 Podcastmaker SudPresse
  * 0.15.56 Un petit peu de margin siouplait !
+ * 0.15.57 Correction podcastmaker
 
 
 
