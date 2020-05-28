@@ -1,6 +1,6 @@
 <template>
   <div class="d-flex flex-column p-3 list-episode">
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end" v-if="!overflowScroll">
       <div class="hide-phone">
         <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }" :aria-label="$t('Display previous')">
           <div class="saooti-arrow-left2"></div>
@@ -15,14 +15,34 @@
       <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
     </div>
     <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" 
-    v-show="(displayRubriquage && rubriques) || !(displayRubriquage &&loaded)" :class="[alignLeft? 'justify-content-start':'']">
+    v-show="(displayRubriquage && rubriques) || !(displayRubriquage &&loaded)" :class="[alignLeft? 'justify-content-start':'', overflowScroll ? 'overflowScroll': '']">
       <EmissionPlayerItem class="flex-shrink item-phone-margin" :emission='e'  v-for="e in emissions" v-bind:key="e.emissionId" :class="[alignLeft? 'mr-3':'', mainRubriquage(e.rubriqueIds[0])]" :nbPodcasts="nbPodcasts" :rubriqueName="rubriquesId(e)"/>
     </transition-group>
-    <router-link v-bind:to="href" class="btn btn-link">{{buttonText}}</router-link>
+    <router-link v-bind:to="href" class="btn btn-link" v-if="!overflowScroll">{{buttonText}}</router-link>
   </div>
 </template>
 
 <style lang="scss">
+  .podcast-list-inline.overflowScroll{
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding-bottom:1rem;
+    width: 100%;
+    .item-phone-margin{
+      margin: 0 0.5rem !important;
+      &:first-of-type{
+        margin-left: auto !important;
+      }
+      &:last-of-type{
+        margin-right: auto !important;
+      }
+    }
+  }
+
 </style>
 
 <script>
@@ -86,7 +106,9 @@ export default {
     emissions() {
       return this.allEmissions.slice(this.index, this.index + this.size);
     },
-
+    overflowScroll(){
+      return state.emissionsPage.overflowScroll;
+    },
     previousAvailable() {
       return this.index > 0;
     },
@@ -114,7 +136,7 @@ export default {
           this.loading = false;
           this.loaded = true;
           this.totalCount = data.count;
-          if(this.first === 0 && this.displayRubriquage && state.emissionsPage.mainRubrique){
+          /* if(this.first === 0 && this.displayRubriquage && state.emissionsPage.mainRubrique){
             data.result.sort((a, b)=>{
               if (a.rubriqueIds[0] === state.emissionsPage.mainRubrique)
                 return 1;
@@ -122,7 +144,7 @@ export default {
                 return -1;
               return 0;
             });
-          }
+          } */
           if (this.allEmissions.length + data.result.length < this.totalCount) {
             let nexEl = data.result.pop();
             this.preloadImage(nexEl.imageUrl);
@@ -159,7 +181,9 @@ export default {
       if (this.$el) {
         if (window.innerWidth <= PHONE_WIDTH) {
           this.size = 10;
-        } else {
+        } else if(this.overflowScroll) {
+          this.size = 20;
+        } else{
           const width = this.$el.offsetWidth;
           let sixteen = domHelper.convertRemToPixels(13.7);
           if(this.itemSize){

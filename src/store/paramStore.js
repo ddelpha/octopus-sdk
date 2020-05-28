@@ -71,6 +71,8 @@ var initialize = function initialize(initObject){
       state.emissionsPage.itemPlayer = (typeof param.itemPlayer !== "undefined") ? param.itemPlayer : false;
       state.emissionsPage.rubriquage = (typeof param.rubriquage !== "undefined") ? param.rubriquage : undefined;
       state.emissionsPage.mainRubrique = (typeof param.mainRubrique !== "undefined") ? param.mainRubrique : undefined;
+      state.emissionsPage.buttonMore = (typeof param.buttonMore !== "undefined") ? param.buttonMore : false;
+      state.emissionsPage.overflowScroll = (typeof param.overflowScroll !== "undefined") ? param.overflowScroll : false;
     }
     if(initObject.emissionPage){
       let param = initObject.emissionPage;
