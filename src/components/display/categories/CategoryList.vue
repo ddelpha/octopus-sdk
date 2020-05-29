@@ -3,7 +3,7 @@
     <div class="category-list-container" id="category-list-container">
       <router-link
         :id="'category'+category.id"
-        v-bind:to="'/main/pub/category/' + category.id"
+        :to="{ name: 'category', params: {iabId:category.id}, query:{productor: filterOrga}}"
         class="category-item text-dark secondary-bg"
         v-for="category in categories"
         v-bind:key="category.id"
@@ -14,13 +14,14 @@
       right
       toggle-class="text-decoration-none text-dark category-item category-item-plus"
       no-caret
+      :aria-label="$t('See more')"
     >
       <template v-slot:button-content>
         <i class="saooti-plus"></i>
       </template>
       <template>
         <b-dropdown-item
-          :to="'/main/pub/category/' + category.id"
+          :to="{ name: 'category', params: {iabId:category.id}, query:{productor: filterOrga}}"
           v-for="category in hidenCategories"
           v-bind:key="category.id"
           class="mr-3"
@@ -51,6 +52,9 @@
   justify-content: center;
   white-space: nowrap;
   flex-shrink: 0;
+  .router-link-active {
+    background: #ddd !important;
+  }
   &:hover {
     background: #ddd !important;
   }
@@ -66,6 +70,7 @@
 }
 </style>
 <script>
+import octopusApi from "@saooti/octopus-api";
 import { state } from "../../../store/paramStore.js";
 
 export default {
@@ -74,6 +79,9 @@ export default {
   mounted() {
     window.addEventListener("resize", this.resizeWindow);
     this.resizeWindow();
+    if(this.filterOrga){
+      this.fetchCategories(this.filterOrga);
+    }
   },
 
   data() {
@@ -87,13 +95,20 @@ export default {
       return state.generalParameters.podcastmaker;
     },
     categories() {
-      return state.generalParameters.allCategories.filter(c => {
-        if(this.isPodcastmaker){
-          return c.podcastOrganisationCount;
-        } else{
-          return c.podcastCount;
-        }
-      });
+      if(this.filterOrga){
+        return this.$store.state.categoriesOrga.filter(c => {return c.podcastOrganisationCount;});
+      }else{
+        return state.generalParameters.allCategories.filter(c => {
+          if(this.isPodcastmaker){
+            return c.podcastOrganisationCount;
+          } else{
+            return c.podcastCount;
+          }
+        });
+      }
+    },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
     }
   },
 
@@ -121,6 +136,11 @@ export default {
           "category-list-container"
         ).style.justifyContent = "center";
       }
+    },
+    fetchCategories(organisationId){
+      octopusApi.fetchCategoriesOrga(organisationId, { lang: 'fr'}).then((data)=>{
+        this.$store.commit('categoriesOrgaSet', data);
+      });
     }
   },
 
@@ -133,6 +153,11 @@ export default {
       this.$nextTick(() => {
         this.resizeWindow();
       });
+    },
+    filterOrga(newVal){
+      if(newVal){
+        this.fetchCategories(newVal);
+      }
     }
   }
 };

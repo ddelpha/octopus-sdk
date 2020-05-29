@@ -4,7 +4,6 @@
       v-for="c in categories"
       :key="c.id"
       :iabId="c.id"
-      :href="'/main/pub/category/' + c.id"
       :title="c.name"
       :buttonText="$t('All podcast button', { name: c.name })"
     />

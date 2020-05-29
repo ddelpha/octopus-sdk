@@ -1,6 +1,6 @@
 <template>
 	<div class="d-flex align-items-center">
-			<div class="filter-organisation-chooser" v-if="!isPodcastmaker">
+			<div class="filter-organisation-chooser" v-if="!isPodcastmaker && !filterOrga">
 			<OrganisationChooser
 					:defaultanswer="$t('No organisation filter')"
 					@selected="onOrganisationSelected"
@@ -9,15 +9,17 @@
       <div class="checkbox-saooti m-3" v-if="!!organisationId">  
         <input type="checkbox" class="custom-control-input" id="orgaCheck" v-model="keepOrganisation" @click="onKeepOrganisation">  
         <label class="custom-control-label" for="orgaCheck"></label>  
-    </div>
+      </div>
 			<div class="filter-speech-bubble" v-if="showBubble">{{$t('check this box if you want to keep this filter for the rest of your visit')}}</div>
 			</div>
 			<div class="d-flex align-items-center flex-grow">
-			
+			<label for="search" class="d-inline" :aria-label="$t('Search')"></label>
 			<input
+        id="search"
         class='filter-search-input input-no-outline'
 				:placeholder="searchText"
 				:value="searchPattern"
+        ref="search"
         v-on:input="(event)=> this.$emit('updateSearchPattern', event.target.value)"
 			/>
 			</div>
@@ -97,7 +99,7 @@ export default {
 
   created() {
     if (this.organisationId) {
-      state.filter.organisationId = this.organisationId;
+      this.$store.commit('filterOrga', {orgaId: this.organisationId});
       this.keepOrganisation = true;
       if(!this.$route.query.productor){
         this.$router.replace({query: {productor: this.organisationId}});
@@ -105,10 +107,17 @@ export default {
     }
   },
 
+  mounted(){
+    if(this.$refs.search){
+      this.$refs.search.focus();
+    }
+  },
+
   data() {
     return {
       keepOrganisation: false,
       showBubble: false,
+      imgUrl: undefined,
     };
   },
 
@@ -124,13 +133,19 @@ export default {
       } else{
         return this.$t('Look for podcast name');
       }
+    },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
     }
   },
 
   methods:{
     onOrganisationSelected(organisation) {
-      this.$router.push({query: {productor: undefined}});
-      state.filter.organisationId = this.organisationId;
+      if(this.$route.query.productor){
+        this.$router.push({query: {productor: undefined}});
+      }
+      this.imgUrl = organisation.imageUrl;
+      this.$store.commit('filterOrga', {orgaId: undefined, imgUrl: this.imgUrl});
       this.keepOrganisation = false;
       if (organisation && organisation.id) {
         this.showBubble=true;
@@ -144,13 +159,27 @@ export default {
     },
     onKeepOrganisation(){
       if(!this.keepOrganisation){
-        this.$router.push({query: {productor: this.organisationId}});
-        state.filter.organisationId = this.organisationId;
+        if(this.$route.query.productor !== this.organisationId){
+          this.$router.push({query: {productor: this.organisationId}});
+        }
+        this.$store.commit('filterOrga', {orgaId: this.organisationId, imgUrl: this.imgUrl});
       }else {
-        this.$router.push({query: {productor: undefined}});
-        state.filter.organisationId = this.organisationId;
+        if(this.$route.query.productor){
+          this.$router.push({query: {productor: undefined}});
+        }
+        this.$store.commit('filterOrga', {orgaId: undefined});
       }
     }
+  },
+  watch:{
+    filterOrga(){
+      if(this.filterOrga){
+        this.keepOrganisation=true;
+        this.$emit('updateOrganisationId', this.filterOrga);
+      } else{
+        this.keepOrganisation=false;
+      }
+    },
   }
 };
 </script>

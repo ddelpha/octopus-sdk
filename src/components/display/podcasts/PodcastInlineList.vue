@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex flex-column p-3 list-episode">
+  <div class="d-flex flex-column p-3 list-episode" v-if="loading ||(!loading && allPodcasts.length !== 0)">
     <h2>{{ title }}</h2>
     <div class="d-flex justify-content-between">
       <div class="d-flex" v-if="requirePopularSort === undefined">
@@ -16,10 +16,10 @@
       </div>
       <div v-else></div>
       <div class="hide-phone" v-if="!isArrow">
-        <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }">
+        <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }" :aria-label="$t('Display previous')">
           <div class="saooti-arrow-left2"></div>
         </button>
-        <button class="btn btn-arrow" @click="displayNext()" :class="{ disabled: !nextAvailable }">
+        <button class="btn btn-arrow" @click="displayNext()" :class="{ disabled: !nextAvailable }" :aria-label="$t('Display next')">
           <div class="saooti-arrow-right2"></div>
         </button>
       </div>
@@ -28,10 +28,10 @@
       <div class="spinner-border mr-3"></div>
       <h3 class="mt-2">{{ $t('Loading podcasts ...') }}</h3>
     </div>
-    <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" v-show="loaded">
-      <PodcastItem class="flex-shrink item-phone-margin" v-bind:podcast="p" v-for="p in podcasts" v-bind:key="p.podcastId" />
+    <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" v-show="loaded" :class="[alignLeft? 'justify-content-start':'']">
+      <PodcastItem class="flex-shrink item-phone-margin" v-bind:podcast="p" v-for="p in podcasts" v-bind:key="p.podcastId" :class="[alignLeft? 'mr-3':'']"/>
     </transition-group>
-    <router-link class="btn btn-link" :class="buttonPlus? 'btn-linkPlus': ''" v-bind:to="href">{{buttonText}}<div class="saooti-plus" v-if="buttonPlus"></div></router-link>
+    <router-link class="btn btn-link" :class="buttonPlus? 'btn-linkPlus': ''" :to="refTo">{{buttonText}}<div class="saooti-plus" v-if="buttonPlus"></div></router-link>
   </div>
 </template>
 
@@ -44,7 +44,7 @@
   }
 }
 
-  .podcast-list-inline {
+.podcast-list-inline {
   align-self: stretch;
   flex-grow: 1;
   margin: 0;
@@ -56,34 +56,34 @@
   grid-auto-flow: column;
   grid-gap: 1rem;
   grid-row: 1;
-  }
-  .out-left-enter-active,
-  .out-left-leave-active,
-  .out-right-enter-active,
-  .out-right-leave-active {
-    transition: all 0.3s ease;
-  }
+}
+.out-left-enter-active,
+.out-left-leave-active,
+.out-right-enter-active,
+.out-right-leave-active {
+  transition: all 0.3s ease;
+}
 
-  .out-left-leave-to,
-  .out-right-enter {
-    transform: translateX(-110%);
-    opacity: 0;
-  }
+.out-left-leave-to,
+.out-right-enter {
+  transform: translateX(-110%);
+  opacity: 0;
+}
 
-  .out-left-enter,
-  .out-right-leave-to {
-    transform: translateX(110%);
-    opacity: 0;
-  }
+.out-left-enter,
+.out-right-leave-to {
+  transform: translateX(110%);
+  opacity: 0;
+}
 
-  .out-left-leave-to,
-  .out-right-leave-to {
-    position: absolute;
-  }
-  .out-right-leave-to {
-    right: 5rem;
-    z-index: -1;
-  }
+.out-left-leave-to,
+.out-right-leave-to {
+  position: absolute;
+}
+.out-right-leave-to {
+  right: 5rem;
+  z-index: -1;
+}
 /** PHONES*/
 @media (max-width: 960px) {
   .podcast-list-inline{
@@ -120,7 +120,9 @@ export default {
     "buttonText",
     "requirePopularSort",
     "isArrow",
-    "buttonPlus"
+    "buttonPlus",
+    "rubriqueId",
+    "rubriquageId"
   ],
 
   components: {
@@ -156,7 +158,8 @@ export default {
       totalCount: 0,
       popularSort: true,
       allPodcasts: [],
-      direction: 1
+      direction: 1,
+      alignLeft : false,
     };
   },
 
@@ -164,7 +167,25 @@ export default {
     podcasts() {
       return this.allPodcasts.slice(this.index, this.index + this.size);
     },
-
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
+    },
+    organisation(){
+      if(this.organisationId){
+        return this.organisationId;
+      }else if(this.filterOrga){
+        return this.filterOrga;
+      }else {
+        return undefined;
+      }
+    },
+    refTo(){
+      if(this.href){
+        return this.href;
+      }else{
+        return { name: 'category', params: {iabId:this.iabId}, query:{productor: this.$store.state.filter.organisationId }};
+      }
+    },
     previousAvailable() {
       return this.index > 0;
     },
@@ -181,9 +202,11 @@ export default {
         .fetchPodcasts({
           first: this.first,
           size: this.size + 1,
-          organisationId: this.organisationId,
+          organisationId: this.organisation,
           emissionId: this.emissionId,
           iabId: this.iabId,
+          rubriqueId: this.rubriqueId,
+          rubriquageId: this.rubriquageId,
           sort: this.popularSort ? "POPULARITY" : "DATE"
         })
         .then(data => {
@@ -195,6 +218,11 @@ export default {
             this.preloadImage(nexEl.imageUrl);
           }
           this.allPodcasts = this.allPodcasts.concat(data.result);
+          if(this.allPodcasts.length <= 3){
+            this.alignLeft = true;
+          }else{
+            this.alignLeft = false;
+          }
           this.first += this.size;
         });
     },
@@ -265,19 +293,40 @@ export default {
   watch: {
     emissionId: {
       handler() {
-        this.fetchContent(true);
+        this.reset();
+        this.fetchNext();
       }
     },
     organisationId: {
       handler() {
-        this.fetchContent(true);
+        this.reset();
+        this.fetchNext();
+      }
+    },
+    filterOrga: {
+      handler() {
+        this.reset();
+        this.fetchNext();
       }
     },
     iabId: {
       handler() {
-        this.fetchContent(true);
+        this.reset();
+        this.fetchNext();
       }
-    }
+    },
+    rubriqueId: {
+      handler() {
+        this.reset();
+        this.fetchNext();
+      },
+    },
+    rubriquageId: {
+      handler() {
+        this.reset();
+        this.fetchNext();
+      },
+    },
   }
 };
 </script>

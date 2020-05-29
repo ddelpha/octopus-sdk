@@ -8,7 +8,6 @@
   
   background: $octopus-light-secondary-color ;
   border: 0;
-  border-bottom: 2px solid transparent;
   border-radius: 50px;
   font-size: 0.8rem;
   cursor: pointer;
@@ -30,7 +29,6 @@
   }
   &:hover{
     background: rgba($octopus-primary-color, 0.3) ;
-    border-bottom: 2px solid $octopus-primary-color;
   }
 
   &[disabled],
@@ -201,8 +199,8 @@
 
 .share-btn {
   font-size: 1.3rem;
-  width: 3rem;
-  height: 3rem !important;
+  width: 2.5rem;
+  height: 2.5rem !important;
   padding: 0.5rem;
   display: inline-flex;
   align-items: center;

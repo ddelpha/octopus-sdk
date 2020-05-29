@@ -36,6 +36,7 @@ import ShareButtons from "./src/components/display/sharing/ShareButtons.vue";
 /*import ShareDistribution from "./src/components/display/sharing/ShareDistribution.vue";
 import SharePlayer from "./src/components/display/sharing/SharePlayer.vue"; */
 import EmissionInlineList from "./src/components/display/emission/EmissionInlineList.vue";
+import RubriqueChooser from "./src/components/display/rubriques/RubriqueChooser.vue";
 
 const components = {
     Podcast,
@@ -61,6 +62,7 @@ const components = {
     ShareButtons,
     PodcastList,
     EmissionInlineList,
+    RubriqueChooser,
     Snackbar
 }
 
@@ -90,5 +92,6 @@ export {
     ShareButtons,
     PodcastList,
     EmissionInlineList,
+    RubriqueChooser,
     Snackbar
 };

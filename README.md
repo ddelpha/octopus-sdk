@@ -69,3 +69,102 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.13.28 Taux de complétion d'écoute sur Octopus incorrect
  * 0.13.29 Style popup
  * 0.13.30 Merge staging-fabien
+ * 0.13.31 Amélioration list inline
+
+
+
+ * 0.14.0 Nouveau sprint
+ * 0.14.1 Merge de staging
+ * 0.14.2 Lists inline paramètre de tri par rubrique
+ * 0.14.3 Lists paramètre de tri par rubrique
+ * 0.14.4 Recherche avancée dans octopus
+ * 0.14.5 Exposition du composant RubriqueChooser
+ * 0.14.6 merge
+ * 0.14.7 merge et filtrage avancé
+ * 0.14.8 merge et filtrage avancé par dates
+ * 0.14.9 amélioration filtrage
+ * 0.14.10 Adaptation du player pour standalone Media
+ * 0.14.11 Nouvelle version du tri
+ * 0.14.12 Pétouilles recherche avancée
+ * 0.14.13 Customization de player, trac 8513
+ * 0.14.14 Recherche avancée
+ * 0.14.15 Amélioration recherche avancée
+ * 0.14.16 Mise à jour de l'image de la topbar
+ * 0.14.17 Merge dev-fabien
+ * 0.14.18 Sticker invisible
+ * 0.14.19 Sticker invisible
+ * 0.14.20 Merge de staging
+ * 0.14.21 Erreur de merge
+ * 0.14.22 Filtrage avancé : simplification vocabulaire
+ * 0.14.23 Affichage du nombre d'éléments affichable en haut des pages Episodes, Emissions, Intervenants, Producteurs
+ * 0.14.24 Pré Choix d'enchainer les épisodes ou pas
+ * 0.14.25 Lecture épisode invisibles
+ * 0.14.26 Affichage et date d'un épisode non disponible pour les auditeurs
+ * 0.14.27 Pouvoir filtrer sur les épisodes ou émissions "non rubriquées" ou "sans rubriquage"
+ * 0.14.28 Affichage et date d'un épisode non disponible pour les auditeurs
+ * 0.14.29 la date dans le calendrier et le filtre ne sont pas les mêmes
+ * 0.14.30 Ajout de données pour les tests automatiques
+ * 0.14.31 Mise à jour Vignette non prises en compte lors édition épisode
+ * 0.14.32 Mise à jour Vignette non prises en compte lors édition épisode
+ * 0.14.33 Mise à jour Vignette non prises en compte lors édition épisode
+
+ * 0.15.0 Nouveau sprint
+ * 0.15.1 Erreur de merge
+ * 0.15.2 Nouvelle version api
+ * 0.15.3 Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus
+ * 0.15.4 Recherche avancée - status de processing
+ * 0.15.5 Recherche avancée - status de processing
+ * 0.15.6 Merge de staging
+ * 0.15.7 Merge de staging
+ * 0.15.8 Norme d'accessibilité
+ * 0.15.9 Merge de staging
+ * 0.15.10 Merge de Samuel
+ * 0.15.11 Merge de staging
+ * 0.15.12 Merge de staging
+ * 0.15.13 Recherche d'emissions et podcast cachés
+ * 0.15.14 Merge de Samuel + ajout d'un fichier profile.js 
+ * 0.15.15 Customisation du player
+ * 0.15.16 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.17 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.18 la date dans le calendrier et le filtre ne sont pas les mêmes
+ * 0.15.19 Merge dev-fabien
+ * 0.15.20 Merge dev-fabien + ajout responsive
+ * 0.15.22 Mise à jour api 
+ * 0.15.23 Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus
+ * 0.15.24 merge de staging
+ * 0.15.25 Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus
+ * 0.15.26 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.27 Bouton "Téléverser" + Bouton "Mon Espace"
+ * 0.15.28 Design mini player Octopus 
+ * 0.15.29 Erreur customisation de player (pour émission)
+ * 0.15.30 Design mini player Octopus 
+ * 0.15.31 Pouvoir choisir le code hexa, de la couleur customs du player
+ * 0.15.32 Ne pas afficher 0 seconde lors de l'indication d'un épisode en cours de traitement 
+ * 0.15.33 Privatisation : Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus.
+ * 0.15.34 Selenium couleurs hexa
+ * 0.15.35 Privatisation : Mettre en place une version d’octopus dans laquelle l’utilisateur ne voit que ses contenus.
+ * 0.15.36 Podcastmaker SudPresse
+ * 0.15.37 Podcastmaker SudPresse
+ * 0.15.38 Podcastmaker SudPresse
+ * 0.15.39 Responsive topbar
+ * 0.15.40 Player avec url invalide 
+ * 0.15.41 Suppression d'un podcast en processing
+ * 0.15.42 Ne pas afficher 0 seconde lors de l'indication d'un épisode en cours de traitement 
+ * 0.15.43 Player avec url invalide
+ * 0.15.44 Podcastmaker SudPresse
+ * 0.15.45 Recherche avancée dans octopus (rajout de la partie processing en cours)
+ * 0.15.46 Suppression d'un podcast en processing (revert pour emission)
+ * 0.15.47 Partage Réseaux Sociaux : page d'épisode spécifique
+ * 0.15.48 Partage Réseaux Sociaux : page d'épisode spécifique
+ * 0.15.49 Partage Réseaux Sociaux : page d'épisode spécifique
+ * 0.15.50 Suppression d'un podcast en processing (revert pour episode)
+ * 0.15.52 Responsive
+ * 0.15.53 Intervertir menu "Intervenants" et menu "Producteurs"
+ * 0.15.54 Partage Réseaux Sociaux : page d'épisode spécifique
+ * 0.15.55 Podcastmaker SudPresse
+ * 0.15.56 Un petit peu de margin siouplait !
+ * 0.15.57 Correction podcastmaker
+ * 0.15.58 Padding modal
+
+
+

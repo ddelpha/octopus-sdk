@@ -1,6 +1,9 @@
 <template>
   <li class="emission-player-container shadow-element">
-    <router-link v-bind:to="'/main/pub/emission/' + emission.emissionId" class="d-flex flex-column text-dark">
+    <router-link 
+    :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
+    class="d-flex flex-column text-dark">
+      <div class="emissionPlayerItem-info" v-if="rubriqueName">{{rubriqueName}}</div>
       <div class="img-box no-border-round" :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }"></div>
       <div class="d-flex flex-column p-2">
           <div class="font-weight-bold text-uppercase text-ellipsis">{{emission.name}}</div>
@@ -9,17 +12,24 @@
     </router-link>
     <div class="border-top emission-item-border-color p-2 secondary-bg d-flex" v-for="p in podcasts" :key="p.podcastId">
         <div class="d-flex justify-content-between flex-grow">
-            <router-link v-bind:to="'/main/pub/podcast/' + p.podcastId" class="d-flex flex-column define-width text-dark">
+            <router-link 
+            :to="{ name: 'podcast', params: {podcastId:p.podcastId}, query:{productor: $store.state.filter.organisationId}}"
+            class="d-flex flex-column define-width text-dark">
             <div class="font-weight-bold text-ellipsis">{{p.title}}</div>
             <div class="two-line-clamp" v-html="p.description">{{p.description}}</div>
             </router-link>
             <div class="play-button-box bg-secondary" @click="play(p)" v-if="$store.state.player.podcast !== p ||($store.state.player.podcast === p && $store.state.player.status === 'PAUSED')">
-                <div class="text-light saooti-play2-bounty"></div>
+                <div class="text-light saooti-play2-bounty" :aria-label="$t('Play')"></div>
             </div>
             <div class="play-button-box bg-secondary" @click="pause(p)" v-else>
-                <div class="text-light saooti-pause-bounty"></div>
+                <div class="text-light saooti-pause-bounty" :aria-label="$t('Pause')"></div>
             </div>
         </div>
+    </div>
+    <div class="border-top emission-item-border-color p-2 secondary-bg d-flex justify-content-center" v-if="buttonMore && podcasts.length === nbPodcasts">
+      <router-link 
+      :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
+      class="btn btn-secondary">{{$t('More episodes')}}</router-link>
     </div>
   </li>
 </template>
@@ -70,10 +80,11 @@
 
 <script>
 import octopusApi from "@saooti/octopus-api";
+import {state} from "../../../store/paramStore.js";
 export default {
   name: 'EmissionPlayerItem',
 
-  props: ['emission'],
+  props: ['emission', "nbPodcasts", "rubriqueName"],
 
   created(){
     this.loadPodcasts();
@@ -87,22 +98,25 @@ export default {
   },
 
   computed: {
-
+    buttonMore(){
+      return state.emissionsPage.buttonMore;
+    },
   },
 
    methods:{
     loadPodcasts(){
-        octopusApi
-        .fetchPodcasts({
-            emissionId: this.emission.emissionId,
-            size: 2
-        })
-        .then((data) => {
-            if(data.count === 0 && this.editRight){
-                this.activeEmission = false;
-            }
-            this.podcasts=data.result;
-        });
+      let nb = this.nbPodcasts? this.nbPodcasts: 2;
+      octopusApi
+      .fetchPodcasts({
+        emissionId: this.emission.emissionId,
+        size: nb
+      })
+      .then((data) => {
+        if(data.count === 0 && this.editRight){
+          this.activeEmission = false;
+        }
+        this.podcasts=data.result;
+      });
     },
     play(podcast){
       if(podcast === this.$store.state.player.podcast){
@@ -113,7 +127,7 @@ export default {
     },
     pause(){
       this.$store.commit('playerPause', true);
-    }
+    },
   },
 };
 </script>

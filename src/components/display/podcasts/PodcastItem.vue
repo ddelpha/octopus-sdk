@@ -1,5 +1,5 @@
 <template>
-  <li class="podcast-item-container m-0" :class="[podcastShadow? 'shadow-element':'', podcastBorderBottom? 'border-bottom':'']">
+  <li class="podcast-item-container m-0" :class="[podcastShadow? 'shadow-element':'', podcastBorderBottom? 'border-bottom':'']" :data-pubdate="displayDate" :data-count="podcast.downloadCount">
     <PodcastImage 
       v-bind:podcast="podcast" 
       :hidePlay='!hover || !description' 
@@ -12,18 +12,18 @@
     <div class='d-contents' @mouseenter="showDescription" @mouseleave="hideDescription">
       <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
         <div class="mr-3 small-Text">{{ date }}</div>
-        <div class="small-Text"><span class="saooti-clock3"></span>{{ duration }}</div>
+        <div class="small-Text" v-if="duration.length !== 0"><span class="saooti-clock3"></span>{{ duration }}</div>
       </div>
-      <AnimatorsItem v-bind:animators="podcast.animators" />
+      <AnimatorsItem v-bind:animators="podcast.animators"/>
       <router-link
-        v-bind:to="'/main/pub/podcast/' + podcast.podcastId"
+        :to="{ name: 'podcast', params: {podcastId:podcast.podcastId}, query:{productor: $store.state.filter.organisationId}}"
         class="text-dark d-flex flex-column flex-grow"
       >
         <div class="title-podcast-item">{{ title }}</div>
       </router-link>
       <router-link
         v-if="!isPodcastmaker"
-        v-bind:to="'/main/pub/productor/' + podcast.organisation.id"
+        :to="{ name: 'productor', params: {productorId:podcast.organisation.id}, query:{productor: $store.state.filter.organisationId}}"
         class="text-dark producer-podcast-item"
       >
         <div>{{ '© ' + podcast.organisation.name }}</div>
@@ -34,7 +34,7 @@
 
 <style lang="scss">
 .podcast-item-container {
-  border-radius: 0.5rem;
+  border-radius: 0.8rem;
   list-style: none;
   position: relative;
   width: 13rem;
@@ -120,6 +120,9 @@ export default {
     date() {
       return moment(this.podcast.pubDate).format('D/MM/YYYY [à] HH[h]mm');
     },
+    displayDate(){
+      return moment(this.podcast.pubDate).format('X');
+    },
     category() {
       const catIds = this.podcast.emission.iabIds;
       return state.generalParameters.allCategories
@@ -153,11 +156,15 @@ export default {
     },
 
     duration() {
-      return humanizeDuration(this.podcast.duration, {
-        language: 'fr',
-        largest: 1,
-        round: true,
-      });
+      if(this.podcast.duration > 1){
+        return humanizeDuration(this.podcast.duration, {
+          language: 'fr',
+          largest: 1,
+          round: true,
+        });
+      }else{
+        return '';
+      }
     },
   },
   methods:{

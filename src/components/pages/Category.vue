@@ -1,7 +1,7 @@
 <template>
   <div class="page-box">
     <h1>{{ title }}</h1>
-    <PodcastList :first="first" :size="size" :iabId="iabId" />
+    <PodcastList :first="first" :size="size" :iabId="iabId" :organisationId='filterOrga' />
   </div>
 </template>
 
@@ -33,6 +33,9 @@ export default {
   computed: {
     categories(){
       return state.generalParameters.allCategories;
+    },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
     }
   },
 

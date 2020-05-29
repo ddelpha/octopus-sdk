@@ -25,8 +25,9 @@
         @ended="onFinished"
         @playing="onPlay"
         @durationChange="onTimeUpdate"
+        @error="onError"
       />
-      <router-link :to=podcastShareUrl v-if="isImage">
+      <router-link :to=podcastShareUrl v-if="isImage && podcastImage">
         <img
           v-bind:src="podcastImage"
           :alt="$t('Podcast image')"
@@ -35,6 +36,7 @@
       </router-link>
       
       <div
+        v-if='!playerError'
         class="play-button-box"
         v-bind:class="{
           'primary-bg': status != 'LOADING',
@@ -44,6 +46,7 @@
       >
         <div
           class="text-light"
+          :aria-label="$t('Play')"
           v-bind:class="{
             saooti: status == 'PLAYING' || status == 'PAUSED',
             'saooti-play2-bounty': status == 'PAUSED',
@@ -54,14 +57,15 @@
       </div>
       <div class="text-light player-grow-content">
         <div class="d-flex">
+          <div class="text-warning player-title ml-2 mr-2" v-if='playerError'>{{ $t('Podcast play error') + " - "}}</div>
           <div class="flex-grow player-title">{{ podcastTitle }}</div>
-          <div v-if="!isBarTop" class="hide-phone">{{ playedTime }} / {{ totalTime }}</div>
+          <div v-if="!playerError" v-show="!isBarTop" class="hide-phone">{{ playedTime }} / {{ totalTime }}</div>
         </div>
-        <div class="progress c-hand" @mouseup="seekTo" style="height: 3px;" v-if="!isBarTop">
+        <div class="progress c-hand" @mouseup="seekTo" style="height: 3px;" v-if="!playerError" v-show="!isBarTop">
           <div class="progress-bar primary-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" :style="'width: '+ percentProgress + '%'"></div>
         </div>
       </div>
-      <router-link :to=podcastShareUrl class="text-light hide-phone">
+      <router-link :to=podcastShareUrl class="text-light hide-phone" v-if='podcastShareUrl !== ""' :aria-label="$t('Podcast')">
         <div class="saooti-export-bounty c-hand m-2" ></div>
       </router-link>
       <div class="d-flex text-light align-items-center hide-phone" v-if="isClock">
@@ -177,6 +181,7 @@ export default {
       downloadId: undefined,
       new : true,
       saveCookie : undefined,
+      playerError: false,
     };
   },
   mounted(){
@@ -221,6 +226,7 @@ export default {
       },
       status: state => state.player.status,
       podcast: state => state.player.podcast,
+      media: state => state.player.media,
       volume: state => state.player.volume,
 
       podcastImage: state => {
@@ -233,22 +239,20 @@ export default {
 
       podcastAudioURL: state => {
         if (state.player.podcast) {
-          let parameters = '?origin=octopus';
-          parameters += "&cookieName=player_"+state.player.podcast.podcastId
-          parameters +=
-            state.authentication && state.authentication.organisationId
-              ? '&distributorId=' + state.authentication.organisationId
-              : '';
-          return state.player.podcast.audioUrl + parameters;
-        } else {
-          return '';
-        }
-      },
-
-      podcastShareUrl: state => {
-        if (state.player.podcast) {
-          return "/main/pub/podcast/"+state.player.podcast.podcastId;
-        } else {
+          if(state.player.podcast.availability.visibility === false){
+            return state.player.podcast.audioStorageUrl;
+          }else{
+             let parameters = '?origin=octopus';
+            parameters += "&cookieName=player_"+state.player.podcast.podcastId
+            parameters +=
+              state.authentication && state.authentication.organisationId
+                ? '&distributorId=' + state.authentication.organisationId
+                : '';
+            return state.player.podcast.audioUrl + parameters;
+          }
+        } else if(state.player.media){
+          return state.player.media.audioUrl;
+        } else{
           return '';
         }
       },
@@ -276,6 +280,14 @@ export default {
       },
     }),
 
+    podcastShareUrl(){
+      if (this.podcast) {
+        return { name: 'podcast', params: {podcastId : this.podcast.podcastId}, query:{productor: this.$store.state.filter.organisationId}};
+      } else {
+        return '';
+      }
+    },
+
     podcastTitle(){
       if (this.podcast) {
         if(this.isEmissionName){
@@ -283,6 +295,8 @@ export default {
         }else{
           return this.podcast.title;
         }
+      }else if(this.media){
+        return this.media.title;
       } else {
         return '';
       }
@@ -298,6 +312,11 @@ export default {
   },
 
   methods: {
+    onError(){
+      if(this.podcast || this.media){
+        this.playerError = true;
+      }
+    },
     switchPausePlay() {
       const audioPlayer = document.querySelector('#audio-player');
       if (audioPlayer.paused) {
@@ -316,16 +335,20 @@ export default {
       const percentPosition = x / barWidth;
       const seekTime = this.$store.state.player.total * percentPosition;
 
-      this.notListenTime = seekTime - this.listenTime;
+      if(this.podcast){
+        this.notListenTime = seekTime - this.listenTime;
+      }
       audioPlayer.currentTime = seekTime;
     },
 
     onTimeUpdate(event) {
-      if(this.new){
-        this.new = false;
-        this.startListeningProgress();
+      if(this.podcast){
+        if(this.new){
+          this.new = false;
+          this.startListeningProgress();
+        }
+        this.listenTime = event.currentTarget.currentTime - this.notListenTime;
       }
-      this.listenTime = event.currentTarget.currentTime - this.notListenTime;
       const duration = event.currentTarget.duration;
       const currentTime = event.currentTarget.currentTime;
       if (duration && currentTime) {
@@ -341,7 +364,9 @@ export default {
     },
 
     onFinished() {
-      this.endListeningProgress();
+      if(this.podcast){
+        this.endListeningProgress();
+      }
       this.$data.forceHide = true;
     },
 
@@ -390,12 +415,13 @@ export default {
       this.$emit('hide', newVal=== 0? true : false);
     },
     podcastAudioURL(newVal){
-      if(newVal !== ""){
+      if(this.podcast && newVal !== ""){
         this.new = true;
+        this.playerError=false;
       }
     },
     listenTime(newVal){
-      if(newVal - this.lastSend >= 10 && this.downloadId){
+      if(this.podcast && newVal - this.lastSend >= 10 && this.downloadId){
         this.lastSend = newVal;
         octopusApi.updatePlayerTime(this.downloadId, Math.round(newVal));
       }

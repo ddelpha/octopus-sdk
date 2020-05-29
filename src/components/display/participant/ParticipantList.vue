@@ -4,6 +4,7 @@
       <div class="spinner-border mr-3"></div>
       <h3 class="mt-2">{{ $t('Loading participants ...') }}</h3>
     </div>
+    <div v-if="showCount && loaded && participants.length > 1" class="text-secondary mb-2">{{$t('Number participants',{nb :totalCount})}}</div>
     <ul class="participant-list" v-show="loaded">
       <ParticipantItem
         v-bind:participant="p"
@@ -16,6 +17,7 @@
       v-bind:href="'/main/pub/participants?first=' + dfirst + '&size=' + dsize"
       @click="displayMore"
       v-show="!allFetched && loaded"
+      :aria-label="$t('See more')"
     >
       <div class="saooti-plus"></div>
     </a>
@@ -54,7 +56,7 @@ import ParticipantItem from './ParticipantItem.vue';
 export default {
   name: 'ParticipantList',
 
-  props: ['first', 'size', 'query', 'organisationId'],
+  props: ['first', 'size', 'query', 'organisationId', 'showCount'],
 
   components: {
     ParticipantItem,
@@ -79,6 +81,18 @@ export default {
     allFetched() {
       return this.dfirst >= this.totalCount;
     },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
+    },
+    organisation(){
+      if(this.organisationId){
+        return this.organisationId;
+      }else if(this.filterOrga){
+        return this.filterOrga;
+      }else {
+        return undefined;
+      }
+    },
   },
 
   methods: {
@@ -95,7 +109,7 @@ export default {
           first: self.dfirst,
           size: self.dsize,
           query: self.query,
-          organisationId: self.organisationId,
+          organisationId: self.organisation,
         })
         .then(function(data) {
           self.$data.loading = false;
@@ -120,7 +134,7 @@ export default {
         this.fetchContent(true);
       },
     },
-    organisationId: {
+    organisation: {
       handler() {
         this.fetchContent(true);
       },

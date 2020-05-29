@@ -10,7 +10,8 @@
         />
       </div>
       <div class="d-flex position-relative small-flex-grow">
-        <input :placeholder="$t('Search')" v-model="searchPattern" class="filter-search-input input-no-outline flex-grow" />
+        <label for="search" class="d-inline" :aria-label="$t('Search')"></label>
+        <input :placeholder="$t('Search')" v-model="searchPattern" class="filter-search-input input-no-outline flex-grow" id="search"/>
         <div class="saooti-search-bounty filter-list-search-icon search-icon-container"></div>
       </div>
     </div>
@@ -23,6 +24,8 @@
         :emissionId="emissionId"
         :organisationId="productorId"
         :reload="reloadList"
+        :includeHidden="editRight"
+        @fetch='fetch'
       />
   </div>
 </template>
@@ -82,7 +85,8 @@ export default {
     'emissionId',
     'categoryFilter',
     'productorId',
-    'reload'
+    'reload',
+    'editRight',
   ],
 
   data() {
@@ -113,6 +117,9 @@ export default {
         this.iabId = undefined;
       }
     },
+    fetch(podcasts){
+      this.$emit('fetch', podcasts);
+    }
   },
 
   watch:{

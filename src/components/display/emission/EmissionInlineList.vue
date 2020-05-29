@@ -1,11 +1,11 @@
 <template>
   <div class="d-flex flex-column p-3 list-episode">
-    <div class="d-flex justify-content-end">
+    <div class="d-flex justify-content-end" v-if="!overflowScroll">
       <div class="hide-phone">
-        <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }">
+        <button class="btn btn-arrow" @click="displayPrevious()" :class="{ disabled: !previousAvailable }" :aria-label="$t('Display previous')">
           <div class="saooti-arrow-left2"></div>
         </button>
-        <button class="btn btn-arrow" @click="displayNext()" :class="{ disabled: !nextAvailable }">
+        <button class="btn btn-arrow" @click="displayNext()" :class="{ disabled: !nextAvailable }" :aria-label="$t('Display next')">
           <div class="saooti-arrow-right2"></div>
         </button>
       </div>
@@ -14,20 +14,42 @@
       <div class="spinner-border mr-3"></div>
       <h3 class="mt-2">{{ $t('Loading emissions ...') }}</h3>
     </div>
-    <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" v-show="loaded">
-      <EmissionPlayerItem class="flex-shrink item-phone-margin" :emission='e'  v-for="e in emissions" v-bind:key="e.emissionId" />
+    <transition-group :name="transitionName" class="podcast-list-inline" tag="ul" 
+    v-show="(displayRubriquage && rubriques) || !(displayRubriquage &&loaded)" :class="[alignLeft? 'justify-content-start':'', overflowScroll ? 'overflowScroll': '']">
+      <EmissionPlayerItem class="flex-shrink item-phone-margin" :emission='e'  v-for="e in emissions" v-bind:key="e.emissionId" :class="[alignLeft? 'mr-3':'', mainRubriquage(e)]" :nbPodcasts="nbPodcasts" :rubriqueName="rubriquesId(e)"/>
     </transition-group>
-    <router-link v-bind:to="href" class="btn btn-link">{{buttonText}}</router-link>
+    <router-link v-bind:to="href" class="btn btn-link" v-if="!overflowScroll">{{buttonText}}</router-link>
   </div>
 </template>
 
 <style lang="scss">
+  .podcast-list-inline.overflowScroll{
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-y: hidden;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+    padding-bottom:1rem;
+    width: 100%;
+    .item-phone-margin{
+      margin: 0 0.5rem !important;
+      &:first-of-type{
+        margin-left: auto !important;
+      }
+      &:last-of-type{
+        margin-right: auto !important;
+      }
+    }
+  }
+
 </style>
 
 <script>
 import octopusApi from "@saooti/octopus-api";
 import domHelper from "../../../helper/dom";
 import EmissionPlayerItem from "./EmissionPlayerItem.vue";
+import {state} from "../../../store/paramStore.js";
 
 const PHONE_WIDTH = 960;
 
@@ -38,6 +60,10 @@ export default {
     "organisationId",
     "href",
     "buttonText",
+    "rubriqueId",
+    "rubriquageId",
+    "nbPodcasts",
+    'itemSize',
   ],
 
   components: {
@@ -55,6 +81,9 @@ export default {
   mounted() {
     this.handleResize();
     this.fetchNext();
+    if(this.displayRubriquage){
+      this.fetchRubriques();
+    }
   },
 
   data() {
@@ -67,7 +96,9 @@ export default {
       totalCount: 0,
       popularSort: true,
       allEmissions: [],
-      direction: 1
+      direction: 1,
+      alignLeft : false,
+      rubriques:undefined,
     };
   },
 
@@ -75,12 +106,17 @@ export default {
     emissions() {
       return this.allEmissions.slice(this.index, this.index + this.size);
     },
-
+    overflowScroll(){
+      return state.emissionsPage.overflowScroll;
+    },
     previousAvailable() {
       return this.index > 0;
     },
     nextAvailable() {
       return this.index + this.size < this.totalCount;
+    },
+    displayRubriquage(){
+      return state.emissionsPage.rubriquage;
     },
     transitionName: ({ direction }) =>
       direction > 0 ? "out-left" : "out-right"
@@ -93,16 +129,30 @@ export default {
           first: this.first,
           size: this.size + 1,
           organisationId: this.organisationId,
+          rubriqueId: this.rubriqueId,
+          rubriquageId: this.rubriquageId,
         })
         .then(data => {
           this.loading = false;
           this.loaded = true;
           this.totalCount = data.count;
+          /* if(this.first === 0 && this.displayRubriquage && state.emissionsPage.mainRubrique){
+            data.result.sort((a, b)=>{
+              if (a.rubriqueIds[0] === state.emissionsPage.mainRubrique)
+                return 1;
+              if (b.rubriqueIds[0] === state.emissionsPage.mainRubrique)
+                return -1;
+              return 0;
+            });
+          } */
           if (this.allEmissions.length + data.result.length < this.totalCount) {
             let nexEl = data.result.pop();
             this.preloadImage(nexEl.imageUrl);
           }
           this.allEmissions = this.allEmissions.concat(data.result);
+          if(this.allEmissions.length <= 3){
+            this.alignLeft = true;
+          }
           this.first += this.size;
         });
     },
@@ -131,14 +181,18 @@ export default {
       if (this.$el) {
         if (window.innerWidth <= PHONE_WIDTH) {
           this.size = 10;
-        } else {
+        } else if(this.overflowScroll) {
+          this.size = 20;
+        } else{
           const width = this.$el.offsetWidth;
-          const sixteen = domHelper.convertRemToPixels(13.7);
+          let sixteen = domHelper.convertRemToPixels(13.7);
+          if(this.itemSize){
+            sixteen = domHelper.convertRemToPixels(this.itemSize + .7);
+          }
           this.size = Math.floor(width / sixteen);
         }
       }
     },
-
 
     reset() {
       this.loading = true;
@@ -152,7 +206,27 @@ export default {
     preloadImage(url) {
       let img = new Image();
       img.src = url;
-    }
+    },
+    fetchRubriques(){
+      octopusApi.fetchTopic(this.displayRubriquage).then((data)=>{
+        this.rubriques = data.rubriques; 
+      });
+    },
+    rubriquesId(emission){
+      if(this.displayRubriquage && emission.rubriqueIds && emission.rubriqueIds.length !== 0 && this.rubriques && this.rubriques.length){
+        let rubrique = this.rubriques.find(element => element.rubriqueId === emission.rubriqueIds[0]);
+        return rubrique.name;
+      }else{
+        return undefined;
+      }
+    },
+    mainRubriquage(emission){
+      if(emission.rubriqueIds && emission.rubriqueIds[0] === state.emissionsPage.mainRubrique){
+        return "partenaireRubrique";
+      }else{
+        return "";
+      }
+    },
   },
 };
 </script>

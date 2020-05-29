@@ -3,39 +3,49 @@
     <div class="routes-container h5">
       <router-link @click.native="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone"
-        to="/main/pub/home"
+        :to="{ name: 'home', query:{productor: $store.state.filter.organisationId}}"
         >{{ $t('Home') }}</router-link
       >
       <router-link @click.native="onMenuClick"
         class="text-dark font-weight-bold mb-3"
-        to="/main/pub/podcasts"
+        :to="{ name: 'podcasts', query:{productor: $store.state.filter.organisationId}}"
         >{{ $t('Podcasts') }}</router-link
       >
       <router-link @click.native="onMenuClick"
         class="text-dark font-weight-bold mb-3"
-        to="/main/pub/emissions"
+        :to="{ name: 'emissions', query:{productor: $store.state.filter.organisationId}}"
         >{{ $t('Emissions') }}</router-link
       >
       <router-link @click.native="onMenuClick"
-        v-if="!isPodcastmaker"
+        v-if="!isPodcastmaker && !filterOrga"
         class="text-dark font-weight-bold mb-3"
-        to="/main/pub/productors"
+        :to="{ name: 'productors', query:{productor: $store.state.filter.organisationId}}"
         >{{ $t('Productors') }}</router-link
       >
       <router-link @click.native="onMenuClick"
         class="text-dark font-weight-bold mb-3"
-        to="/main/pub/participants"
+        :to="{ name: 'participants', query:{productor: $store.state.filter.organisationId}}"
         >{{ $t('Speakers') }}</router-link
       >
+      <OrganisationChooser
+        :defaultanswer="$t('No organisation filter')"
+        @selected="onOrganisationSelected"
+        :value='organisationId'
+        :light='true'
+        class="mr-2"
+        :reset='reset'
+        v-if="!isPodcastmaker"
+        />
       <hr class="divided-line show-phone" />
       <router-link @click.native="onMenuClick"
         class="text-dark font-weight-bold mb-3 show-phone"
         v-for="category in categories"
         v-bind:key="category.id"
-        v-bind:to="'/main/pub/category/' + category.id"
+        :to="{ name: 'category', params: {iabId:category.id}, query:{productor: $store.state.filter.organisationId}}"
       >
         {{ category.name }}</router-link
       >
+      <div class="d-flex hostedBy"><span>{{$t('Hosted by')}}</span><span class="ml-1 mr-1 primary-color">Saooti</span></div>
     </div>
   </div>
 </template>
@@ -54,6 +64,12 @@
     display: flex;
     flex-direction: column;
         font-size: 0.9rem;
+  }
+  .hostedBy{
+    font-size: 0.6rem;
+    position: absolute;
+    bottom: 10px;
+    right: 0;
   }
 }
 /** PHONES*/
@@ -86,17 +102,49 @@
 }
 </style>
 <script>
+import OrganisationChooser from '../display/organisation/OrganisationChooser.vue';
 import {state} from "../../store/paramStore.js";
 
 export default {
   name: 'LeftMenu',
 
+  components:{
+    OrganisationChooser
+  },
+
   props: ["displayMenu"],
+
+  mounted(){
+    if(this.filterOrga){
+      this.organisationId = this.filterOrga;
+    }
+  },
+
+  data() {
+    return {
+      organisationId:undefined,
+      reset: false,
+    };
+  },
+
 
   methods: {
     onMenuClick() {
       this.$emit('update:displayMenu', false);
     },
+    onOrganisationSelected(organisation){
+      if (organisation && organisation.id) {
+        if(this.$route.query.productor !== organisation.id){
+          this.$router.push({query: {productor: organisation.id}});
+        }
+        this.$store.commit('filterOrga', {orgaId: organisation.id, imgUrl: organisation.imageUrl});
+      } else {
+        if(this.$route.query.productor){
+          this.$router.push({query: {productor: undefined}});
+        }
+        this.$store.commit('filterOrga', {orgaId: undefined});
+      }
+    }
   },
 
   computed: {
@@ -109,9 +157,22 @@ export default {
           }
         });
     },
-     isPodcastmaker(){
+    isPodcastmaker(){
       return state.generalParameters.podcastmaker;
     },
+    filterOrga(){
+      return this.$store.state.filter.organisationId;
+    }
   },
+
+  watch:{
+    filterOrga(newVal){
+      if(newVal){
+        this.organisationId = newVal;
+      }else{
+        this.reset = !this.reset;
+      }
+    }
+  }
 };
 </script>

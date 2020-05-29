@@ -3,19 +3,37 @@
     <h1 v-if="titlePage === undefined">{{ $t('All emissions') }}</h1>
     <h1 v-else>{{ titlePage }}</h1>
     <ProductorSearch 
-      :organisationId='organisationId' 
+      :organisationId.sync='organisationId' 
       :searchPattern='searchPattern'
       type='emission'
       @updateOrganisationId='updateOrganisationId'
       @updateSearchPattern='updateSearchPattern'
       v-if="isProductorSearch"/>
-    <MonetizableFilter @updateMonetization='updateMonetization' :isEmission='true' v-if="isMonetizableFilter"/>
+      <AdvancedSearch 
+      :resetRubriquage='resetRubriquage'
+      :isEmission='true'
+      @updateRubriquage='updateRubriquage'
+      @updateRubrique='updateRubrique'
+      @updateMonetization='updateMonetization' 
+      @updateFromDate='updateFromDate'
+      @updateToDate='updateToDate'
+      @updateSortEmission='updateSortEmission'
+      @includeHidden='updateHidden'
+      :organisationId='organisationId'/>
     <EmissionList
+      :showCount="true"
       :first="first"
       :size="size"
       :query="searchPattern"
       :organisationId="organisationId"
       :monetization="monetization"
+      :rubriqueId='rubriqueId'
+      :rubriquageId='rubriquageId'
+      :before='toDate'
+      :after='fromDate'
+      :sort='sortEmission'
+      :noRubrique='noRubrique'
+      :includeHidden='includeHidden'
     />
   </div>
 </template>
@@ -25,14 +43,14 @@
 // @ is an alias to /src
 import EmissionList from '../display/emission/EmissionList.vue';
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
-import MonetizableFilter from '../display/filter/MonetizableFilter.vue';
+import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import {state} from "../../store/paramStore.js";
 
 export default {
   components: {
     ProductorSearch,
     EmissionList,
-    MonetizableFilter
+    AdvancedSearch
   },
 
   created() {
@@ -46,10 +64,8 @@ export default {
     } else {
       this.$data.size = 12;
     }
-     if (this.$route.query.productor) {
+    if (this.$route.query.productor) {
       this.$data.organisationId = this.$route.query.productor;
-    } else if (state.filter.organisationId) {
-      this.$data.organisationId = state.filter.organisationId;
     }
   },
 
@@ -59,7 +75,16 @@ export default {
       size: undefined,
       searchPattern: '',
       organisationId: undefined,
-      monetization: undefined
+      monetization: undefined,
+      rubriquageId: undefined,
+      rubriqueId: undefined,
+      emissionId: undefined,
+      fromDate: undefined,
+      toDate: undefined,
+      resetRubriquage: false,
+      includeHidden : false,
+      sortEmission : 'SCORE',
+      noRubrique: false,
     };
   },
 
@@ -76,7 +101,40 @@ export default {
   },
 
   methods:{
+    updateHidden(value){
+      this.includeHidden = value;
+    },
+    updateSortEmission(value){
+      this.sortEmission = value;
+    },
+    updateToDate(value){
+      this.toDate = value;
+    },
+    updateFromDate(value){
+      this.fromDate = value;
+    },
+    updateRubriquage(value){
+      if(value !== -1){
+        this.rubriquageId = value;
+        this.noRubrique = false;
+      }else{
+        this.rubriquageId = undefined;
+        this.noRubrique = true;
+      }
+      this.rubriqueId = undefined;
+    },
+    updateRubrique(value){
+      if(value !== -1){
+        this.rubriqueId = value;
+        this.noRubrique = false;
+      }else{
+        this.noRubrique = true;
+      }
+    },
     updateOrganisationId(value){
+      this.resetRubriquage = !this.resetRubriquage;
+      this.rubriquageId = undefined;
+      this.rubriqueId= undefined;
       this.organisationId = value;
     },
     updateSearchPattern(value){
@@ -85,6 +143,6 @@ export default {
     updateMonetization(value){
       this.monetization = value;
     }
-  }
+  },
 };
 </script>

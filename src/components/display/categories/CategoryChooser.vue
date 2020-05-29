@@ -1,8 +1,9 @@
 <template>
   <div class="w-100" :style="{ width: width }">
+    <label for="categoryChooser" class="d-inline" aria-label="select category"></label>
     <Multiselect
       v-model="category"
-      id="ajax"
+      id="categoryChooser"
       label="name"
       track-by="id"
       :placeholder="$t('Type string to filter by categories')"

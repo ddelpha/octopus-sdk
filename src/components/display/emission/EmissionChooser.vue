@@ -1,8 +1,9 @@
 <template>
   <div class="default-multiselect-width" :class="{'multiselect-hide-arrow' : !displayArrow }" :style="{ width: width }">
+    <label for="emissionChooser" class="d-inline" aria-label="select emission"></label>
     <Multiselect
       v-model="emission"
-      id="ajax"
+      id="emissionChooser"
       label="name"
       track-by="emissionId"
       :placeholder="$t('Type string to filter by emission')"

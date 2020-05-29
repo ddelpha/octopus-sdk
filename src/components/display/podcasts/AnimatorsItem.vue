@@ -1,11 +1,12 @@
 <template>
-  <div class="d-flex align-items-center justify-content-start">
+  <div class="d-flex align-items-center justify-content-start" v-if="animators && animators.length !== 0">
     <router-link
-      v-bind:to="'/main/pub/participant/' + animator.participantId"
+      :to="{ name: 'participant', params: {participantId:animator.participantId}, query:{productor: $store.state.filter.organisationId}}"
       class="animator-item"
       v-for="(animator, index) in animators"
       v-bind:key="animator.participantId"
       v-show="index == visibleIndex"
+      :aria-label="$t('Participant')"
     >
       <div class="podcast-item-animator text-dark">{{ getAnimatorName(animator) }}</div>
     </router-link>

@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "0.13.30",
+  "version": "0.15.58",
   "description": "Javascript SDK for using octopus",
   "main": "./dist/octopus.common.js",
   "private": false,
@@ -21,20 +21,23 @@
     "build_bundle": "vue-cli-service build --target lib --name octopus ./index.js"
   },
   "dependencies": {
-    "@saooti/octopus-api": "0.0.9",
+    "@saooti/octopus-api": "0.0.15",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.4.0",
     "core-js": "^3.6.4",
     "humanize-duration": "^3.21.0",
+    "luxon": "^1.22.0",
     "moment": "^2.24.0",
     "portal-vue": "^2.1.7",
     "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
     "vue": "^2.6.11",
+    "vue-datetime": "^0.7.1",
     "vue-i18n": "^8.15.3",
     "vue-multiselect": "^2.1.6",
     "vue-router": "^3.1.5",
+    "vue-swatches": "^1.0.4",
     "vuex": "^3.1.2"
   },
   "devDependencies": {

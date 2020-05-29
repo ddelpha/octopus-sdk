@@ -11,8 +11,30 @@
       @updateOrganisationId='updateOrganisationId'
       @updateSearchPattern='updateSearchPattern'
       v-if="isProductorSearch" />
-    <MonetizableFilter @updateMonetization='updateMonetization' :isEmission='false' v-if="isMonetizableFilter"/>
-    <PodcastList :first="first" :size="size" :organisationId='organisationId' :query='searchPattern' :monetization="monetization" :emissionId='emissionId'/>
+    <AdvancedSearch 
+    :isEmission='false'
+    :resetRubriquage='resetRubriquage'
+    @updateRubriquage='updateRubriquage'
+    @updateRubrique='updateRubrique'
+    @updateMonetization='updateMonetization' 
+    @updateFromDate='updateFromDate'
+    @updateToDate='updateToDate'
+    @includeHidden='updateHidden'
+    :organisationId='organisationId'/>
+    <PodcastList 
+    :showCount="true"
+    :first="first" 
+    :size="size" 
+    :organisationId='organisationId' 
+    :query='searchPattern' 
+    :monetization="monetization" 
+    :emissionId='emissionId'
+    :rubriqueId='rubriqueId'
+    :rubriquageId='rubriquageId'
+    :before='toDate'
+    :after='fromDate'
+    :includeHidden='includeHidden'
+    :noRubrique='noRubrique'/>
   </div>
 </template>
 <style lang="scss">
@@ -22,15 +44,15 @@
 import PodcastList from '../display/podcasts/PodcastList.vue';
 import {state} from "../../store/paramStore.js";
 import ProductorSearch from '../display/filter/ProductorSearch.vue';
-import MonetizableFilter from '../display/filter/MonetizableFilter.vue';
+import AdvancedSearch from '../display/filter/AdvancedSearch.vue';
 import EmissionChooser from '../display/emission/EmissionChooser.vue';
 
 export default {
   components: {
     PodcastList,
     ProductorSearch,
-    MonetizableFilter,
-    EmissionChooser
+    EmissionChooser,
+    AdvancedSearch
   },
 
   created() {
@@ -46,8 +68,8 @@ export default {
     }
     if (this.$route.query.productor) {
       this.$data.organisationId = this.$route.query.productor;
-    } else if (state.filter.organisationId) {
-      this.$data.organisationId = state.filter.organisationId;
+    } else if (this.$store.state.filter.organisationId) {
+      this.$data.organisationId = this.$store.state.filter.organisationId;
     }
   },
 
@@ -58,16 +80,20 @@ export default {
       searchPattern: '',
       organisationId: undefined,
       monetization: undefined,
+      rubriquageId: undefined,
+      rubriqueId: undefined,
       emissionId: undefined,
+      fromDate: undefined,
+      toDate: undefined,
+      resetRubriquage: false,
+      includeHidden : false,
+      noRubrique: false,
     };
   },
 
   computed:{
     isProductorSearch(){
       return state.podcastsPage.ProductorSearch;
-    },
-    isMonetizableFilter(){
-      return state.podcastsPage.MonetizableFilter;
     },
     titlePage(){
       return state.podcastsPage.titlePage;
@@ -78,7 +104,37 @@ export default {
   },
 
   methods:{
+    updateHidden(value){
+      this.includeHidden = value;
+    },
+    updateToDate(value){
+      this.toDate = value;
+    },
+    updateFromDate(value){
+      this.fromDate = value;
+    },
+    updateRubriquage(value){
+      if(value !== -1){
+        this.rubriquageId = value;
+        this.noRubrique = false;
+      }else{
+        this.rubriquageId = undefined;
+        this.noRubrique = true;
+      }
+      this.rubriqueId = undefined;
+    },
+    updateRubrique(value){
+      if(value !== -1){
+        this.rubriqueId = value;
+        this.noRubrique = false;
+      }else{
+        this.noRubrique = true;
+      }
+    },
     updateOrganisationId(value){
+      this.resetRubriquage = !this.resetRubriquage;
+      this.rubriquageId = undefined;
+      this.rubriqueId= undefined;
       this.organisationId = value;
     },
     updateSearchPattern(value){

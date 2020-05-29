@@ -3,11 +3,21 @@
     <div id="footer" class="d-flex p-3 secondary-bg border-top footer-display-phone">
         <div class="d-flex flex-grow align-items-center flex-column">
           <div class="d-flex flex-column">
-            <router-link class="linkHover" to="/main/pub/home">{{ $t('Home') }}</router-link>
-            <router-link class="linkHover" to="/main/pub/podcasts">{{$t('Podcasts')}}</router-link>
-            <router-link class="linkHover" to="/main/pub/emissions">{{$t('Emissions')}}</router-link>
-            <router-link class="linkHover" to="/main/pub/productors" v-if="!isPodcastmaker">{{$t('Productors')}}</router-link>
-            <router-link class="linkHover" to="/main/pub/participants">{{$t('Speakers')}}</router-link>
+            <router-link 
+            :to="{ name: 'home', query:{productor: $store.state.filter.organisationId}}"
+            class="linkHover">{{ $t('Home') }}</router-link>
+            <router-link 
+            :to="{ name: 'podcasts', query:{productor: $store.state.filter.organisationId}}"
+            class="linkHover" >{{$t('Podcasts')}}</router-link>
+            <router-link 
+            :to="{ name: 'emissions', query:{productor: $store.state.filter.organisationId}}"
+            class="linkHover">{{$t('Emissions')}}</router-link>
+            <router-link  
+            :to="{ name: 'productors', query:{productor: $store.state.filter.organisationId}}"
+            class="linkHover" v-if="!isPodcastmaker">{{$t('Productors')}}</router-link>
+            <router-link 
+            :to="{ name: 'participants', query:{productor: $store.state.filter.organisationId}}"
+            class="linkHover">{{$t('Speakers')}}</router-link>
           </div>
         </div>
         <hr class="divided-line show-phone" />
@@ -32,9 +42,9 @@
 
 #footer {
   font-size: 0.7rem;
-  a, .text-dark{
-    color: #888 !important;
-  }
+    a{
+      color: #666;
+    }
 }
 .border-round {
   border-radius: 0 0 2rem 2rem;
