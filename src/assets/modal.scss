@@ -23,6 +23,7 @@
 	padding: 0 .8rem;
 	width: 100%;
 	background: white;
+	overflow-x: auto;
 	@media (max-width: 500px){
 		width: 95%;
 		margin: 2.5% !important;
