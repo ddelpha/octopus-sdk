@@ -165,6 +165,19 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.56 Un petit peu de margin siouplait !
  * 0.15.57 Correction podcastmaker
  * 0.15.58 Padding modal
+ 
+ * 0.16.0 Nouveau sprint
+ * 0.16.1 Merge de staging
+ * 0.16.2 Merge de staging
+ * 0.16.3 Merge de staging
+ * 0.16.4 Merge de staging
+ * 0.16.5 Merge de staging
+ * 0.16.6 Modification du z-index du player
+ * 0.16.7 Padding modal
+ * 0.16.8 Player bouton stop
+ * 0.16.9 Player bouton stop
+ 
+
 
 
 

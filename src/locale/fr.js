@@ -440,5 +440,6 @@ export default {
     'Help': 'Aide',
     "Podcast play error":"Erreur à la lecture de cette ressource",
     "More episodes":"Plus d’épisodes",
+    'Stop': 'Stop',
   };
   
