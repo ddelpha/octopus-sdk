@@ -32,8 +32,14 @@
     scroll-behavior: smooth;
     padding-bottom:1rem;
     width: 100%;
+    @media (max-width: 960px) {
+      overflow-y: auto;
+      overflow-x: hidden;
+      height: 20rem;
+      flex-direction: column;
+    }
     .item-phone-margin{
-      margin: 0 0.5rem !important;
+      margin: 1rem 0.5rem !important;
       &:first-of-type{
         margin-left: auto !important;
       }
