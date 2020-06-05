@@ -131,7 +131,7 @@ export default {
           organisationId: this.organisationId,
           rubriqueId: this.rubriqueId,
           rubriquageId: this.rubriquageId,
-          sort: "DATE",
+          sort: "LAST_PODCAST_DESC",
         })
         .then(data => {
           this.loading = false;

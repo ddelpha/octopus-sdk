@@ -166,6 +166,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.57 Correction podcastmaker
  * 0.15.58 Padding modal
  * 0.15.59 Cherry pick 0.16.10
+ * 0.15.60 Cherry pick 0.16.10
 
 
 
