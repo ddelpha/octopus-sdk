@@ -131,6 +131,7 @@ export default {
           organisationId: this.organisationId,
           rubriqueId: this.rubriqueId,
           rubriquageId: this.rubriquageId,
+          sort: "DATE",
         })
         .then(data => {
           this.loading = false;
