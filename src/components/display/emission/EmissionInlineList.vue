@@ -35,7 +35,7 @@
     @media (max-width: 960px) {
       overflow-y: auto;
       overflow-x: hidden;
-      height: 20rem;
+      height: 80vh;
       flex-direction: column;
     }
     .item-phone-margin{
