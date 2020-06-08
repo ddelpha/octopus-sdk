@@ -42,7 +42,7 @@
           </div> 
         </div>
         <div class="d-flex flex-column align-items-center flex-grow" v-if="!podcast || iFrameModel === 'emission' || iFrameModel === 'largeEmission' || iFrameModel === 'largeSuggestion'">
-        <div class="d-flex align-items-center mt-3">
+        <div class="d-flex align-items-center mt-3 flex-wrap">
           <span class="flex-shrink">{{ $t('Show') }}</span>
           <input
             id="number-input"

@@ -169,6 +169,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.60 Cherry pick 0.16.10
  * 0.15.61 Nouvelles demandes sudpresse
  * 0.15.62 Nouvelles demandes sudpresse
+ * 0.15.63 Sélecteur de nombre d'épisodes dans les miniplayers "suggestion" ou "émission" trop large sure firefox
 
 
 
