@@ -23,29 +23,21 @@
 </template>
 
 <style lang="scss">
-  .podcast-list-inline.overflowScroll{
+ .podcast-list-inline.overflowScroll{
     display: flex;
-    flex-wrap: nowrap;
-    overflow-y: hidden;
-    overflow-x: auto;
+    flex-wrap: wrap;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     padding-bottom:1rem;
     width: 100%;
+    height: 80vh;
+    overflow-y: auto;
     @media (max-width: 960px) {
-      overflow-y: auto;
       overflow-x: hidden;
-      height: 80vh;
       flex-direction: column;
     }
     .item-phone-margin{
       margin: 1rem 0.5rem !important;
-      &:first-of-type{
-        margin-left: auto !important;
-      }
-      &:last-of-type{
-        margin-right: auto !important;
-      }
     }
   }
 
