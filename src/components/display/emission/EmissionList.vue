@@ -18,7 +18,7 @@
         v-for="e in emissions"
         v-bind:key="e.emissionId"
         class="m-3 flex-shrink"
-        :class="mainRubriquage(e.rubriqueIds[0])" 
+        :class="mainRubriquage(e)" 
         :rubriqueName="rubriquesId(e)"
       />
     </ul>
@@ -197,8 +197,8 @@ export default {
         this.rubriques = data.rubriques; 
       });
     },
-    mainRubriquage(rubriqueId){
-      if(rubriqueId === state.emissionsPage.mainRubrique){
+    mainRubriquage(emission){
+      if(emission.rubriqueIds && emission.rubriqueIds[0] === state.emissionsPage.mainRubrique){
         return "partenaireRubrique";
       }else{
         return "";
