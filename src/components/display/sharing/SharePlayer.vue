@@ -79,12 +79,12 @@
 <style lang="scss">
 @import "../../../sass/_variables.scss";
 
-.input-share-player {
+.input-share-player{
   border: 1px solid #ddd;
   border-radius: 50px;
-  input[type="number"] {
+  &#number-input{
     margin: 0 1rem;
-    width: 100px;
+    width: 60px;
   }
 }
 .sticker {
