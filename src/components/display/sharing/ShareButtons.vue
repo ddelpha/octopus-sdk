@@ -1,8 +1,8 @@
 <template>
   <div class="module-box text-center-mobile share-button-page">
-    <div class="d-flex">
-      <h3 v-if="!bigRound && (authenticated || participantId || organisationId)">{{ $t('Share') }}</h3>
-      <span class="saooti-help m-1" id="popover-share-help" :aria-label="$t('Help')" v-if="authenticated"></span>
+    <div class="d-flex align-items-center mb-3">
+      <h3 class="mb-0" v-if="!bigRound && (authenticated || participantId || organisationId)">{{ $t('Share') }}</h3>
+      <span class="saooti-help ml-2" id="popover-share-help" :aria-label="$t('Help')" v-if="authenticated"></span>
       <b-popover target="popover-share-help" triggers="hover" placement="right" custom-class="wizard-help">
         {{$t('Share this page without edit and share blocks')}}
 			</b-popover>

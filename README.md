@@ -173,6 +173,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.64 Nouvelles demandes sudpresse (encore...)
  * 0.15.65 Sélecteur de nombre d'épisodes dans les miniplayers "suggestion" ou "émission" trop large sure firefox
  * 0.15.66 URGENT "Partage cette page" versus "Intégration Player"
+ * 0.15.67 URGENT "Partage cette page" versus "Intégration Player"
 
 
 
