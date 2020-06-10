@@ -175,6 +175,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.66 URGENT "Partage cette page" versus "Intégration Player"
  * 0.15.67 URGENT "Partage cette page" versus "Intégration Player"
  * 0.15.68 Correction podcastmaker
+ * 0.15.69 Correction podcastmaker
 
 
 

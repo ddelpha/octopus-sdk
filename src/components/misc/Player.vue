@@ -415,9 +415,9 @@ export default {
       this.$emit('hide', newVal=== 0? true : false);
     },
     podcastAudioURL(newVal){
+      this.playerError=false;
       if(this.podcast && newVal !== ""){
         this.new = true;
-        this.playerError=false;
       }
     },
     listenTime(newVal){
