@@ -35,8 +35,8 @@ var initialize = function initialize(initObject){
     if(initObject.generalParameters){
       let param = initObject.generalParameters;
       state.generalParameters.organisationId = (typeof param.organisationId !== "undefined") ? param.organisationId : 'ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c';
-      state.generalParameters.authenticated = (typeof param.authenticated !== "undefined") ? param.authenticated : true;
-      state.generalParameters.isAdmin =(typeof param.isAdmin !== "undefined") ? param.isAdmin : true;
+      state.generalParameters.authenticated = (typeof param.authenticated !== "undefined") ? param.authenticated : false;
+      state.generalParameters.isAdmin =(typeof param.isAdmin !== "undefined") ? param.isAdmin : false;
       state.generalParameters.ApiUri = (typeof param.ApiUri !== "undefined") ? param.ApiUri : 'https://api.staging.saooti.org/';
       state.generalParameters.isIE11 = (typeof param.isIE11 !== "undefined") ? param.isIE11 : false;
       state.generalParameters.podcastmaker =(typeof param.podcastmaker !== "undefined") ? param.podcastmaker : false;
