@@ -179,7 +179,7 @@ export default {
 			isNotVisible: false,
 			showFilters : false,
 			reset: false,
-			emissionSort: 'SCORE',
+			emissionSort: 'LAST_PODCAST_DESC',
     };
   },
 
