@@ -165,6 +165,19 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.56 Un petit peu de margin siouplait !
  * 0.15.57 Correction podcastmaker
  * 0.15.58 Padding modal
+ * 0.15.59 Cherry pick 0.16.10
+ * 0.15.60 Cherry pick 0.16.10
+ * 0.15.61 Nouvelles demandes sudpresse
+ * 0.15.62 Nouvelles demandes sudpresse
+ * 0.15.63 Sélecteur de nombre d'épisodes dans les miniplayers "suggestion" ou "émission" trop large sure firefox
+ * 0.15.64 Nouvelles demandes sudpresse (encore...)
+ * 0.15.65 Sélecteur de nombre d'épisodes dans les miniplayers "suggestion" ou "émission" trop large sure firefox
+ * 0.15.66 URGENT "Partage cette page" versus "Intégration Player"
+ * 0.15.67 URGENT "Partage cette page" versus "Intégration Player"
+ * 0.15.68 Correction podcastmaker
+ * 0.15.69 Correction podcastmaker
+ * 0.15.70 Probleme podcastmaker barre de recherche
+ * 0.15.71 Pétouilles diverses sur le front octopus
  
  * 0.16.0 Nouveau sprint
  * 0.16.1 Merge de staging
@@ -176,7 +189,20 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.16.7 Padding modal
  * 0.16.8 Player bouton stop
  * 0.16.9 Player bouton stop
+ * 0.16.10 EmissionInlineList ordre antechronologique
+ * 0.16.11 Merge de Fabien
+ * 0.16.12 Après avoir commencé un épisode, vous ne pouvez pas cliquer sur un autre épisode
+ * 0.16.13 Réparation Merge de Fabien
+ * 0.16.14 Merge de prod
+ * 0.16.15 Les durées sont arrondies
+ * 0.16.16 Player en erreur
  
+ * 0.17.0 Nouveau sprint
+ * 0.17.1 Selenium : attributs d'élément
+ * 0.17.2 Merge de staging
+ * 0.17.3 Amélioration modale
+
+
 
 
 

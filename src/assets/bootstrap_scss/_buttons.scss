@@ -206,6 +206,9 @@
   align-items: center;
   justify-content: center;
 }
+.share-btn.m-3 {
+  margin: 0 1rem 0 0!important;
+}
 .btn-rss {
   background: #ddd !important;
   &:hover {

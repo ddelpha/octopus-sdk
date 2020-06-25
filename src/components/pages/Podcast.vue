@@ -12,7 +12,7 @@
             v-else>
               <h1>{{ this.podcast.emission.name }}</h1>
             </router-link>
-            <div class="mb-5 d-flex">
+            <div class="mb-5 mt-3 d-flex">
               <div>
               <PodcastImage
                 :class="isOuestFrance? '':'shadow-element'"
@@ -242,11 +242,23 @@ export default {
     },
 
     duration() {
-      return humanizeDuration(this.podcast.duration, {
-        language: "fr",
-        largest: 1,
-        round: true
-      });
+      if(this.podcast.duration > 1){
+        if(this.podcast.duration > 600000){
+          return humanizeDuration(this.podcast.duration, {
+            language: 'fr',
+            largest: 1,
+            round: true,
+          });
+        }else{
+          return humanizeDuration(this.podcast.duration, {
+            language: 'fr',
+            largest: 2,
+            round: true,
+          });
+        }
+      }else{
+        return '';
+      }
     },
 
     editRight() {

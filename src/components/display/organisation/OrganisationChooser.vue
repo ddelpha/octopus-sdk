@@ -46,7 +46,7 @@
         </div>
       </template>
       <template slot="option" slot-scope="props">
-        <div class="multiselect-octopus-proposition">
+        <div class="multiselect-octopus-proposition" :data-selenium='"organisation-chooser-"+seleniumFormat(props.option.name)'>
           <img
             v-if="!light"
             class="option__image"
@@ -82,6 +82,7 @@
 </style>
 
 <script>
+import Vue from "vue";
 import Multiselect from 'vue-multiselect';
 import octopusApi from "@saooti/octopus-api";
 import {state} from "../../../store/paramStore.js";
@@ -161,6 +162,10 @@ export default {
   },
 
   methods: {
+
+    seleniumFormat(string){
+      return Vue.seleniumFormat(string);
+    },
 
     onOpen() {
       this.clearAll();

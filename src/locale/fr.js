@@ -175,8 +175,8 @@ export default {
     'My space': 'Mon espace',
     'Confirm podcast deletion': "Confirmer la suppression de l'épisode",
     'Confirm emission deletion': "Confirmer la suppression de l'émission",
-    'Supress RSS emission': "Supression d'une émision liée à un flux RSS",
-    'Deleting in progress ...': 'Supression en cours ...',
+    'Supress RSS emission': "Suppression d'une émision liée à un flux RSS",
+    'Deleting in progress ...': 'Suppression en cours ...',
     'Error occurs while deleting podcast':
       "Une erreur est survenue lors de la suppression de l'épisode",
     'Confirm podcast deletion text':
@@ -230,6 +230,7 @@ export default {
     'Image size': "Dimensions de l'image",
     Embed: 'Player',
     Share: 'Partager cette page',
+    'Share the player': 'Intégrer le player',
     'Share player': 'Partager le player',
     'Copy code': 'Copier le code',
     'Copy': 'Copier',
@@ -441,5 +442,6 @@ export default {
     "Podcast play error":"Erreur à la lecture de cette ressource",
     "More episodes":"Plus d’épisodes",
     'Stop': 'Stop',
+    'Share this page without edit and share blocks':"Partager cette page sans afficher les blocs d'édition et d'intégration du player"
   };
   

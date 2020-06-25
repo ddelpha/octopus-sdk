@@ -97,7 +97,7 @@
     transition: height 1s;
     display: flex;
     width: 100%;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     height: 5rem;
     position: relative;

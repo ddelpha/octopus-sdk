@@ -23,23 +23,22 @@
 </template>
 
 <style lang="scss">
-  .podcast-list-inline.overflowScroll{
+ .podcast-list-inline.overflowScroll{
     display: flex;
-    flex-wrap: nowrap;
-    overflow-y: hidden;
-    overflow-x: auto;
+    flex-wrap: wrap;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
     padding-bottom:1rem;
     width: 100%;
+    height: 80vh;
+    overflow-y: auto;
+    @media (max-width: 960px) {
+      overflow-x: hidden;
+      flex-direction: column;
+      flex-wrap: nowrap;
+    }
     .item-phone-margin{
-      margin: 0 0.5rem !important;
-      &:first-of-type{
-        margin-left: auto !important;
-      }
-      &:last-of-type{
-        margin-right: auto !important;
-      }
+      margin: 1rem 0.5rem !important;
     }
   }
 
@@ -131,6 +130,7 @@ export default {
           organisationId: this.organisationId,
           rubriqueId: this.rubriqueId,
           rubriquageId: this.rubriquageId,
+          sort: "LAST_PODCAST_DESC",
         })
         .then(data => {
           this.loading = false;

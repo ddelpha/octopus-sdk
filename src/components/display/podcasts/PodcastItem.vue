@@ -157,11 +157,19 @@ export default {
 
     duration() {
       if(this.podcast.duration > 1){
-        return humanizeDuration(this.podcast.duration, {
-          language: 'fr',
-          largest: 1,
-          round: true,
-        });
+        if(this.podcast.duration > 600000){
+          return humanizeDuration(this.podcast.duration, {
+            language: 'fr',
+            largest: 1,
+            round: true,
+          });
+        }else{
+          return humanizeDuration(this.podcast.duration, {
+            language: 'fr',
+            largest: 2,
+            round: true,
+          });
+        }
       }else{
         return '';
       }

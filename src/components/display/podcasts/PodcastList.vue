@@ -127,6 +127,15 @@ export default {
         return undefined;
       }
     },
+    sort(){
+      if(this.popularSort){
+        return "POPULARITY";
+      }else if(this.query && this.query.length){
+        return "SCORE";
+      }else{
+        return "DATE";
+      }
+    }
   },
 
   methods: {
@@ -146,7 +155,7 @@ export default {
         participantId: this.participantId,
         query: this.query,
         monetisable: this.monetization,
-        sort: this.popularSort ? "POPULARITY" : "DATE",
+        sort: this.sort,
         rubriqueId: this.rubriqueId,
         rubriquageId: this.rubriquageId,
         before: this.before,

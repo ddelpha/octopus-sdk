@@ -44,8 +44,8 @@ export default new Vuex.Store({
       } else {
         if (
           state.player.podcast &&
-          (state.player.podcast.podcastId === podcast.podcastId ||
-           state.player.podcast.mediaId === podcast.mediaId)
+          ((state.player.podcast.podcastId === podcast.podcastId && podcast.podcastId)||
+           (state.player.podcast.mediaId === podcast.mediaId && podcast.mediaId))
         ) {
           //Do nothing
         } else {

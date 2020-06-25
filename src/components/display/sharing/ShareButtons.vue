@@ -1,6 +1,12 @@
 <template>
   <div class="module-box text-center-mobile share-button-page">
-    <h3 v-if="!bigRound && (authenticated || participantId || organisationId)">{{ $t('Share') }}</h3>
+    <div class="d-flex align-items-center mb-3">
+      <h3 class="mb-0" v-if="!bigRound && (authenticated || participantId || organisationId)">{{ $t('Share') }}</h3>
+      <span class="saooti-help ml-2" id="popover-share-help" :aria-label="$t('Help')" v-if="authenticated"></span>
+      <b-popover target="popover-share-help" triggers="hover" placement="right" custom-class="wizard-help">
+        {{$t('Share this page without edit and share blocks')}}
+			</b-popover>
+    </div>
     <div class="d-flex" :class="[bigRound && !audioUrl?'justify-content-center':'', countLink >1? 'flex-wrap':'', !authenticated && !participantId && !organisationId ? 'flex-column':'']">
       <a class="btn btn-bigRound" :title="$t('Downloading')" :href="audioUrl"  target="_blank" download  v-if="audioUrl" :aria-label="$t('Downloading')">
         <div class="saooti-download-bounty"></div>
@@ -21,7 +27,7 @@
         <span class="saooti-rss-bounty" v-if="!bigRound"></span>
         <div class="saooti-rss-bounty" v-else></div>
       </a>
-      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2']" aria-label="copy" @click="onCopyCode" v-if="!authenticated">
+      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2']" aria-label="copy" @click="onCopyCode">
         <span class="saooti-link" v-if="!bigRound"></span>
         <div class="saooti-link" v-else></div>
       </a>

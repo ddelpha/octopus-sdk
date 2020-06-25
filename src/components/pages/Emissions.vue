@@ -83,7 +83,7 @@ export default {
       toDate: undefined,
       resetRubriquage: false,
       includeHidden : false,
-      sortEmission : 'SCORE',
+      sortEmission : 'LAST_PODCAST_DESC',
       noRubrique: false,
     };
   },
