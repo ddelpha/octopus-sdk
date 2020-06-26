@@ -178,6 +178,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.69 Correction podcastmaker
  * 0.15.70 Probleme podcastmaker barre de recherche
  * 0.15.71 Pétouilles diverses sur le front octopus
+ * 0.15.72 PB espacement boutons de distribution dans la page émission
 
 
 

@@ -27,20 +27,20 @@
         <span class="saooti-rss-bounty" v-if="!bigRound"></span>
         <div class="saooti-rss-bounty" v-else></div>
       </a>
-      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2']" aria-label="copy" @click="onCopyCode">
+      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2', !authenticated && !participantId && !organisationId? '' :'mr-3']" aria-label="copy" @click="onCopyCode">
         <span class="saooti-link" v-if="!bigRound"></span>
         <div class="saooti-link" v-else></div>
       </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="applePodcast" v-if="applePodcast && !bigRound" aria-label="Apple">
+      <a target="_blank" class="btn btn-circle mb-2 share-btn" :class="[!authenticated && !participantId && !organisationId? '' :'mr-3']" :href="applePodcast" v-if="applePodcast && !bigRound" aria-label="Apple">
         <span class="saooti-apple"></span>
       </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="deezer" v-if="deezer && !bigRound" aria-label="Deezer">
+      <a target="_blank" class="btn btn-circle mb-2 share-btn" :class="[!authenticated && !participantId && !organisationId? '' :'mr-3']" :href="deezer" v-if="deezer && !bigRound" aria-label="Deezer">
         <span class="saooti-deezer"></span>
       </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="spotify" v-if="spotify && !bigRound" aria-label="Spotify">
+      <a target="_blank" class="btn btn-circle mb-2 share-btn" :class="[!authenticated && !participantId && !organisationId? '' :'mr-3']" :href="spotify" v-if="spotify && !bigRound" aria-label="Spotify">
         <span class="saooti-spotify"></span>
       </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="tunein" v-if="tunein && !bigRound" aria-label="Tunin">
+      <a target="_blank" class="btn btn-circle mb-2 share-btn" :class="[!authenticated && !participantId && !organisationId? '' :'mr-3']" :href="tunein" v-if="tunein && !bigRound" aria-label="Tunin">
         <span class="saooti-tunin"></span>
       </a>
       <a target="_blank" class="btn btn-circle mr-3 mb-2 btn-tootak share-btn" :href="tootak" v-if="tootak && !bigRound" aria-label="Tootak">
