@@ -102,12 +102,17 @@
     height: 5rem;
     position: relative;
 
+    .main-button-dropdown {
+          padding-bottom: 0.4rem;
+    }
+
     .top-bar-logo{
       margin: 1rem 2rem 1rem 1rem !important;
       img{
         max-width: 160px !important;
         max-height: 80px;
         height: 80px;
+        border-radius: 0.8rem;
       }
     }
     .multiselect__tags {
