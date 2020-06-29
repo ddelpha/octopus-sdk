@@ -182,6 +182,7 @@ export default {
       new : true,
       saveCookie : undefined,
       playerError: false,
+      listenError: false,
     };
   },
   mounted(){
@@ -236,27 +237,6 @@ export default {
           return '';
         }
       },
-
-      podcastAudioURL: state => {
-        if (state.player.podcast) {
-          if(state.player.podcast.availability.visibility === false){
-            return state.player.podcast.audioStorageUrl;
-          }else{
-             let parameters = '?origin=octopus';
-            parameters += "&cookieName=player_"+state.player.podcast.podcastId
-            parameters +=
-              state.authentication && state.authentication.organisationId
-                ? '&distributorId=' + state.authentication.organisationId
-                : '';
-            return state.player.podcast.audioUrl + parameters;
-          }
-        } else if(state.player.media){
-          return state.player.media.audioUrl;
-        } else{
-          return '';
-        }
-      },
-
       playedTime: state => {
         if (state.player.elapsed > 0 && state.player.total > 0) {
           return DurationHelper.formatDuration(
@@ -279,7 +259,29 @@ export default {
         }
       },
     }),
-
+    podcastAudioURL(){
+      if (this.podcast) {
+        if(this.podcast.availability.visibility === false){
+          return this.podcast.audioStorageUrl;
+        }else{
+          if(this.listenError){
+            return this.podcast.audioStorageUrl;
+          }else{
+            let parameters = '?origin=octopus';
+            parameters += "&cookieName=player_"+this.podcast.podcastId
+            parameters +=
+              this.$store.state.authentication && this.$store.state.authentication.organisationId
+                ? '&distributorId=' + this.$store.state.authentication.organisationId
+                : '';
+            return this.podcast.audioUrl + parameters;
+          }
+        }
+      } else if(this.media){
+        return this.media.audioUrl;
+      } else{
+        return '';
+      }
+    },
     podcastShareUrl(){
       if (this.podcast) {
         return { name: 'podcast', params: {podcastId : this.podcast.podcastId}, query:{productor: this.$store.state.filter.organisationId}};
@@ -313,7 +315,9 @@ export default {
 
   methods: {
     onError(){
-      if(this.podcast || this.media){
+      if(this.podcast && !this.listenError){
+        this.listenError = true;
+      }else if(this.podcast || this.media){
         this.playerError = true;
       }
     },
@@ -413,6 +417,9 @@ export default {
   watch: {
     playerHeight(newVal){
       this.$emit('hide', newVal=== 0? true : false);
+    },
+    podcast(){
+      this.listenError=false;
     },
     podcastAudioURL(newVal){
       this.playerError=false;
