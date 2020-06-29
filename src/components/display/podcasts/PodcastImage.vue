@@ -175,8 +175,7 @@ export default {
           return "/img/novisible.png";
         }
       }else if(this.podcast.processingStatus === "PLANNED" || this.podcast.processingStatus === "PROCESSING"){
-        /* return '/img/hourglass.png'; */
-        return undefined;
+        return '/img/hourglass.png';
       }else{
         return '/img/caution.png';
       }
