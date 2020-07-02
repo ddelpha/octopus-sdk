@@ -26,7 +26,7 @@
                   <div class="mr-5" v-if="!isOuestFrance && date.length !==0">{{ date }}</div>
                   <div><span class="saooti-clock3" v-if="isOuestFrance"></span>{{ $t('Duration', { duration: duration }) }}</div>
                 </div>
-                <div class="descriptionText" v-html="this.podcast.description">{{ this.podcast.description }}</div>
+                <div class="descriptionText" v-html="urlify(this.podcast.description)"></div>
                 <div class="mt-3 mb-3">
                   <div class="comma" v-if="podcast.animators">{{ $t('Animated by : ') }}
                     <router-link
@@ -327,6 +327,13 @@ export default {
     playPodcast(podcast){
       this.$emit('playPodcast', podcast);
     },
+
+    urlify(text) {
+      let urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, (url) =>{
+        return '<a href="' + url + '">' + url + '</a>';
+      });
+    }
   }
 };
 </script>

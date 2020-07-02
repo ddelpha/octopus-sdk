@@ -13,7 +13,7 @@
                 :src="imageUrl" 
                 :alt="$t('Emission name image', { name: name })" 
                 class="img-box shadow-element float-left mr-3 mb-3"
-                v-if="!isOuestFrance" v-html="description"/>{{description}}
+                v-if="!isOuestFrance"/><p v-html="urlify(description)"></p>
             </div>
             <ShareButtons :emission="emission" :bigRound='true' v-if="isRssButton"></ShareButtons>
           </div>
@@ -165,6 +165,12 @@ export default {
           this.error = true;
           this.loaded = true;
         });
+    },
+    urlify(text) {
+      let urlRegex = /(https?:\/\/[^\s]+)/g;
+      return text.replace(urlRegex, (url) =>{
+        return '<a href="' + url + '">' + url + '</a>';
+      });
     },
     fetch(/* podcasts */){
       // Interdire supression si podcast en process
