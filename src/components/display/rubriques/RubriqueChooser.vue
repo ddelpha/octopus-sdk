@@ -32,7 +32,7 @@
         </div>
       </template>
       <template slot="option" slot-scope="props">
-        <div class="multiselect-octopus-proposition" :class="props.option.rubriqueId <=0 ? 'primary-dark':''">
+        <div class="multiselect-octopus-proposition" :class="props.option.rubriqueId <=0 ? 'primary-dark':''" :data-selenium='"rubric-chooser-"+seleniumFormat(props.option.name)'>
           <span class="option__title">{{ props.option.name }}</span>
         </div>
       </template>
@@ -48,6 +48,7 @@
 <style lang="scss">
 </style>
 <script>
+import Vue from "vue";
 import Multiselect from 'vue-multiselect';
 
 const getDefaultRubrique = defaultName => {
@@ -94,6 +95,9 @@ export default {
   },
 
   methods: {
+    seleniumFormat(string){
+      return Vue.seleniumFormat(string);
+    },
     clearAll() {
       if(this.rubriqueArray === undefined) {
         this.rubrique = '';

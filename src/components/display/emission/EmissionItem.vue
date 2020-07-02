@@ -36,6 +36,9 @@
   display: flex;
   width: 100%;
   margin: 1rem 0;
+  .img-box {
+    border-radius: 2rem !important;
+  }
 }
 .emission-light-max-size{
   width: 300px;

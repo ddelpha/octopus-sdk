@@ -23,16 +23,16 @@
 	padding: 0 .8rem;
 	width: 100%;
 	background: white;
-	overflow-x: auto;
 	@media (max-width: 500px){
 		width: 95%;
 		margin: 2.5% !important;
-		overflow-x: auto;
 	}
 }
 .modal-body{
+	overflow-x: auto;
 	@media (max-width: 500px){
 		padding: 0;
+		overflow-x: auto;
 	}
 }
 .modal-content{
@@ -40,6 +40,8 @@
 	.close{
 		outline: none !important;
 	}
+	height: auto !important;
+    max-height: calc(100vh - 250px) !important;
 }
 .modal-header{
 	border: 0;

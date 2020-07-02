@@ -12,7 +12,7 @@
     <div class='d-contents' @mouseenter="showDescription" @mouseleave="hideDescription">
       <div class="d-flex justify-content-between flex-wrap text-secondary mb-3">
         <div class="mr-3 small-Text">{{ date }}</div>
-        <div class="small-Text" v-if="duration.length !== 0"><span class="saooti-clock3"></span>{{ duration }}</div>
+        <div class="small-Text" v-if="duration.length !== 0"><!-- <span class="saooti-clock3"></span> -->{{ duration }}</div>
       </div>
       <AnimatorsItem v-bind:animators="podcast.animators"/>
       <router-link
@@ -157,11 +157,38 @@ export default {
 
     duration() {
       if(this.podcast.duration > 1){
-        return humanizeDuration(this.podcast.duration, {
-          language: 'fr',
-          largest: 1,
-          round: true,
-        });
+        if(this.podcast.duration > 600000){
+          return humanizeDuration(this.podcast.duration, {
+            language: 'shortFr',
+            largest: 1,
+            round: true,
+            languages: {
+              shortFr: {
+                y: () => "années",
+                mo: () => "mois",
+                w: () => "semaines",
+                d: () => "jours",
+                h: () => "h",
+                m: () => "min",
+                s: () => "sec",
+                ms: () => "ms",
+              },
+            },
+          });
+        }else{
+          return humanizeDuration(this.podcast.duration, {
+            language: 'shortFr',
+            largest: 2,
+            round: true,
+            languages: {
+              shortFr: {
+                m: () => "min",
+                s: () => "sec",
+                ms: () => "ms",
+              },
+            },
+          });
+        }
       }else{
         return '';
       }

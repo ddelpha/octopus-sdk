@@ -441,6 +441,8 @@ export default {
     'Help': 'Aide',
     "Podcast play error":"Erreur à la lecture de cette ressource",
     "More episodes":"Plus d’épisodes",
-    'Share this page without edit and share blocks':"Partager cette page sans afficher les blocs d'édition et d'intégration du player"
+    'Stop': 'Stop',
+    'Share this page without edit and share blocks':"Partager cette page sans afficher les blocs d'édition et d'intégration du player",
+    'Podcast in cancelled status':'Épisode avec un traitement qui a été annulé',
   };
   

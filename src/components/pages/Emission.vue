@@ -8,7 +8,7 @@
           <div class="module-box">
             <h2 v-if="!isOuestFrance">{{ name }}</h2>
             <h1 v-else>{{ name }}</h1>
-            <div class="mb-5 descriptionText">
+            <div class="mb-5 mt-3 descriptionText">
               <img 
                 :src="imageUrl" 
                 :alt="$t('Emission name image', { name: name })" 

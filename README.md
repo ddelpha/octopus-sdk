@@ -181,5 +181,37 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.15.72 PB espacement boutons de distribution dans la page émission
  * 0.15.73 Image sablier
  * 0.15.74 Si erreur de lecture, lecture du lien direct vers le storage
+ 
+ * 0.16.0 Nouveau sprint
+ * 0.16.1 Merge de staging
+ * 0.16.2 Merge de staging
+ * 0.16.3 Merge de staging
+ * 0.16.4 Merge de staging
+ * 0.16.5 Merge de staging
+ * 0.16.6 Modification du z-index du player
+ * 0.16.7 Padding modal
+ * 0.16.8 Player bouton stop
+ * 0.16.9 Player bouton stop
+ * 0.16.10 EmissionInlineList ordre antechronologique
+ * 0.16.11 Merge de Fabien
+ * 0.16.12 Après avoir commencé un épisode, vous ne pouvez pas cliquer sur un autre épisode
+ * 0.16.13 Réparation Merge de Fabien
+ * 0.16.14 Merge de prod
+ * 0.16.15 Les durées sont arrondies
+ * 0.16.16 Player en erreur
+ 
+ * 0.17.0 Nouveau sprint
+ * 0.17.1 Selenium : attributs d'élément
+ * 0.17.2 Merge de staging
+ * 0.17.3 Amélioration modale
+ * 0.17.4 Merge de staging-fabien
+ * 0.17.5 Nouveau status (canceled)
+ * 0.17.6 Durée trop longues
+
+
+
+
+
+
 
 

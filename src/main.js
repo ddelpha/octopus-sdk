@@ -41,5 +41,8 @@ paramStore.initialize({
     router,
     render: h => h(App),
   }).$mount('#app')
+  Vue.seleniumFormat = function(string){
+    return string.toLowerCase().replace(/\s/g, "");
+  };
 });
 
