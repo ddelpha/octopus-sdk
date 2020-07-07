@@ -330,9 +330,13 @@ export default {
 
     urlify(text) {
       let urlRegex = /(https?:\/\/[^\s]+)/g;
-      return text.replace(urlRegex, (url) =>{
-        return '<a href="' + url + '">' + url + '</a>';
-      });
+      if(text){
+        return text.replace(urlRegex, (url) =>{
+          return '<a href="' + url + '">' + url + '</a>';
+        });
+      }else{
+        return '';
+      }
     }
   }
 };
