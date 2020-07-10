@@ -34,7 +34,7 @@
   .champs-searchPage {
     margin: 0 auto;
     input {
-      margin: 1rem 0 !important;
+      margin: 1rem 0;
       padding-right: 40px!important;
     }  
     .search-icon-container {
