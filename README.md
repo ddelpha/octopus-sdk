@@ -209,7 +209,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.17.6 Durée trop longues
  * 0.17.7 Rendre les liens cliquables dans les descriptions des émissions et des épisodes
  * 0.17.8 Rendre les liens cliquables dans les descriptions des émissions et des épisodes
-
+ * 0.17.9 Mon espace / téléverser Octopus
+ * 0.17.10 Miniplayers émissions et suggestions : permettre plus de 10 épisodes 
+ * 0.17.11 Problème de podcast nuls renvoyés par l'api 
 
 
 

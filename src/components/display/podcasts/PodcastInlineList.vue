@@ -217,7 +217,7 @@ export default {
             let nexEl = data.result.pop();
             this.preloadImage(nexEl.imageUrl);
           }
-          this.allPodcasts = this.allPodcasts.concat(data.result);
+          this.allPodcasts = this.allPodcasts.concat(data.result.filter(pod => pod !== null));
           if(this.allPodcasts.length <= 3){
             this.alignLeft = true;
           }else{

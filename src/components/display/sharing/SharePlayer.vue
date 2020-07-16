@@ -42,14 +42,19 @@
           </div> 
         </div>
         <div class="d-flex flex-column align-items-center flex-grow" v-if="!podcast || iFrameModel === 'emission' || iFrameModel === 'largeEmission' || iFrameModel === 'largeSuggestion'">
-        <div class="d-flex align-items-center mt-3 flex-wrap">
+        <div class="d-flex align-items-center w-100 flex-wrap mt-3" v-if="!podcast || iFrameModel === 'emission' || iFrameModel === 'largeEmission'">
+          <b-form-radio v-model="episodeNumbers" name="episodeNumbers" value="all" ></b-form-radio>
+          <span class="flex-shrink">{{ $t('Show every episode') }}</span>
+        </div>
+        <div class="d-flex align-items-center flex-wrap" :class="!podcast || iFrameModel === 'emission' || iFrameModel === 'largeEmission'? '':'mt-3'">
+          <b-form-radio v-model="episodeNumbers" name="episodeNumbers" value="number" v-if="!podcast || iFrameModel === 'emission' || iFrameModel === 'largeEmission'"></b-form-radio>
           <span class="flex-shrink">{{ $t('Show') }}</span>
           <input
             id="number-input"
             type="number"
             v-model="iFrameNumber"
             min="1"
-            max="10"
+            max="50"
             class="input-share-player input-no-outline text-center m-2"
           />
           <label for="number-input" class="d-inline" :aria-label="$t('Number of player podcasts')"></label>
@@ -78,7 +83,9 @@
 
 <style lang="scss">
 @import "../../../sass/_variables.scss";
-
+.custom-radio .custom-control-label{
+  cursor: pointer;
+}
 .input-share-player{
   border: 1px solid #ddd;
   border-radius: 50px;
@@ -162,6 +169,7 @@ export default {
       color: "#40a372",
       theme: "#ffffff",
       proceedReading: true,
+      episodeNumbers: 'number'
     };
   },
   computed: {
@@ -184,26 +192,31 @@ export default {
     },
     iFrameSrc() {
       let url = "";
+      let iFrameNumber = "/"+this.iFrameNumberPriv;
+      if((!this.podcast || this.iFrameModel === "emission" || this.iFrameModel === "largeEmission") && this.episodeNumbers === "all"){
+        iFrameNumber = "";
+      }
       if (!this.podcast) {
         if (this.iFrameModel === "default") {
-          url = `${state.podcastPage.MiniplayerUri}miniplayer/emission/${this.emission.emissionId}/${this.iFrameNumberPriv}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/emission/${this.emission.emissionId}${iFrameNumber}`;
         } else {
-          url = `${state.podcastPage.MiniplayerUri}miniplayer/emissionLarge/${this.emission.emissionId}/${this.iFrameNumberPriv}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/emissionLarge/${this.emission.emissionId}${iFrameNumber}`;
         }
       } else {
         if (
           this.iFrameModel === "emission" ||
           this.iFrameModel === "largeEmission"
         ) {
-          url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.emission.emissionId}/${this.iFrameNumberPriv}/${this.podcast.podcastId}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.emission.emissionId}${iFrameNumber}/${this.podcast.podcastId}`;
         } else if (this.iFrameModel === "largeSuggestion") {
-          url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}/${this.iFrameNumberPriv}`;
+          url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}${iFrameNumber}`;
         } else {
           url = `${state.podcastPage.MiniplayerUri}miniplayer/${this.iFrameModel}/${this.podcast.podcastId}`;
         }
       }
       url += "?distributorId=" + this.organisationId;
       url += "&color=" + this.color.substring(1) + "&theme=" +this.theme.substring(1);
+      
       if(!this.proceedReading){
         url += "&proceed=false";
       }
@@ -267,6 +280,6 @@ export default {
     }
   },
 
-  methods: {}
+  methods: {},
 };
 </script>

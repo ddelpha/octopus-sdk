@@ -444,5 +444,6 @@ export default {
     'Stop': 'Stop',
     'Share this page without edit and share blocks':"Partager cette page sans afficher les blocs d'édition et d'intégration du player",
     'Podcast in cancelled status':'Épisode avec un traitement qui a été annulé',
+    'Show every episode':'Afficher tous les épisodes',
   };
   

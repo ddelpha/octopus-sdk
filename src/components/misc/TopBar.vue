@@ -103,7 +103,11 @@
     position: relative;
 
     .main-button-dropdown {
-          padding-bottom: 0.4rem;
+      padding-bottom: 0.4rem;
+      width: 140px;
+      text-align: left;
+      padding-left: 25px;
+      margin-right: 30px;
     }
 
     .top-bar-logo{
@@ -120,8 +124,20 @@
     }
 
     .btn-group .dropdown-toggle-split {
-      background: #389452;
       align-items: center;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      right: 5px;
+      border: 4px solid white;
+      z-index: 2;
+      @media (max-width: 650px) {
+        position: relative;
+        right: auto;
+      }
     }
    
     .hamburger-menu {
