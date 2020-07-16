@@ -217,7 +217,14 @@ export default {
             let nexEl = data.result.pop();
             this.preloadImage(nexEl.imageUrl);
           }
-          this.allPodcasts = this.allPodcasts.concat(data.result.filter(pod => pod !== null));
+          this.allPodcasts = this.allPodcasts.concat(data.result.filter((pod) =>{
+            if(pod !== null){
+              return true;
+            }else{
+              this.totalCount--;
+              return false;
+            }
+          }));
           if(this.allPodcasts.length <= 3){
             this.alignLeft = true;
           }else{
