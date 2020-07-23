@@ -194,7 +194,7 @@ export default {
       let url = "";
       let iFrameNumber = "/"+this.iFrameNumberPriv;
       if((!this.podcast || this.iFrameModel === "emission" || this.iFrameModel === "largeEmission") && this.episodeNumbers === "all"){
-        iFrameNumber = "";
+        iFrameNumber = "/0";
       }
       if (!this.podcast) {
         if (this.iFrameModel === "default") {
@@ -229,7 +229,7 @@ export default {
       },
       set(value) {
         let val = parseInt(value, 10);
-        if (!isNaN(val) && val >= 1 && val <= 10) {
+        if (!isNaN(val) && val >= 1 && val <= 50) {
           this.iFrameNumberPriv = value;
         }
       }
