@@ -1,5 +1,6 @@
 <template>
   <div class="page-box">
+    <!-- <audio ref="audioRef" src="" id="audio-hls" width="100%" controls></audio> -->
     <PodcastInlineList
       v-for="c in categories"
       :key="c.id"
@@ -15,12 +16,26 @@
 <script>
 import PodcastInlineList from '../display/podcasts/PodcastInlineList.vue';
 import {state} from "../../store/paramStore.js";
+/* import Hls from 'hls.js'; */
 
 export default {
   name: 'home',
 
   components: {
     PodcastInlineList,
+  },
+
+  mounted(){
+    /* let audio = document.getElementById('audio-hls');
+    let audioSrc = 'https://hls.dev2.saooti.org/stream/test/index.m3u8';
+    if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(audioSrc);
+      hls.attachMedia(audio);
+      hls.on(Hls.Events.MANIFEST_PARSED, function() {
+        audio.play();
+      });
+    } */
   },
 
   computed: {

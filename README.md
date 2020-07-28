@@ -200,6 +200,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.16.15 Les durées sont arrondies
  * 0.16.16 Player en erreur
  
+ * 16.0.0 Nouvelle version
+
  * 0.17.0 Nouveau sprint
  * 0.17.1 Selenium : attributs d'élément
  * 0.17.2 Merge de staging
@@ -213,7 +215,14 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.17.10 Miniplayers émissions et suggestions : permettre plus de 10 épisodes 
  * 0.17.11 Problème de podcast nuls renvoyés par l'api 
  * 0.17.12 PB de chargement des podcasts les + populaires de Politique & Information sur octopus.saooti.com
- * 16.0.0 Nouvelle version
+ * 0.17.13 Permettre l'accès anonyme aux players de certaines émissions
+ * 0.17.14 Permettre l'accès anonyme aux players de certaines émissions
+ * 0.17.15 Permettre l'accès anonyme aux players de certaines émissions
+ * 0.17.16 Miniplayers émissions et suggestions : permettre plus de 10 épisodes 
+ * 0.17.17 Boutons d'abonnement à l'émission
+ * 0.17.18 Bouton de partage dans la bande de lecture bas de page Octopus
+ * 0.17.19 Menu aide 
+ * 0.17.20 Word break
 
 
 

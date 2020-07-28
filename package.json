@@ -1,6 +1,6 @@
 {
   "name": "@saooti/octopus-sdk",
-  "version": "16.0.0",
+  "version": "0.17.20",
   "description": "Javascript SDK for using octopus",
   "main": "./dist/octopus.common.js",
   "private": false,
@@ -26,6 +26,7 @@
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.4.0",
     "core-js": "^3.6.4",
+    "hls.js": "^0.13.2",
     "humanize-duration": "^3.21.0",
     "luxon": "^1.22.0",
     "moment": "^2.24.0",

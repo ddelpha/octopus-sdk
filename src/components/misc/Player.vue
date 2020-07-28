@@ -75,9 +75,6 @@
           <div class="progress-bar primary-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" :style="'width: '+ percentProgress + '%'"></div>
         </div>
       </div>
-      <router-link :to=podcastShareUrl class="text-light hide-phone" v-if='podcastShareUrl !== ""' :aria-label="$t('Podcast')">
-        <div class="saooti-export-bounty c-hand m-2" ></div>
-      </router-link>
       <div class="d-flex text-light align-items-center hide-phone" v-if="isClock">
         <div class="saooti-clock-stud m-2" ></div>
         <div>{{actualTime}}</div>

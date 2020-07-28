@@ -59,6 +59,7 @@
     -webkit-box-orient: vertical;
     min-height: 3rem;
     line-height: 1rem;
+    word-break: break-word;
   }
   .description-podcast-item{
     padding: 1rem;
@@ -70,6 +71,7 @@
     font-size: 0.9em;
     position: absolute;
     width: 13rem;
+    word-break: break-word;
   }
   .producer-podcast-item{
     margin: 0.2rem 0.5rem 0.5rem;

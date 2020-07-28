@@ -17,10 +17,11 @@
             </div>
             <ShareButtons :emission="emission" :bigRound='true' v-if="isRssButton"></ShareButtons>
           </div>
+          <SubscribeButtons :emission="emission" v-if="isShareButtons && countLink >= 1"></SubscribeButtons>
         </div>
         <div class="d-flex flex-column share-container">
-          <SharePlayer :emission="emission" :exclusive="exclusive" :organisationId='organisationId' v-if="isSharePlayer && authenticated"></SharePlayer>
-          <ShareButtons :emission="emission" v-if="isShareButtons"></ShareButtons>
+          <SharePlayer :emission="emission" :exclusive="exclusive" :notExclusive="notExclusive" :organisationId='organisationId' v-if="isSharePlayer && (authenticated || notExclusive)"></SharePlayer>
+          <ShareButtons :emission="emission" :notExclusive="notExclusive" v-if="isShareButtons"></ShareButtons>
         </div>
       </div>
       <div v-if="editRight">
@@ -45,6 +46,7 @@
 import EditBox from "@/components/display/edit/EditBox.vue";
 import SharePlayer from '../display/sharing/SharePlayer.vue';
 import ShareButtons from "../display/sharing/ShareButtons.vue";
+import SubscribeButtons from "../display/sharing/SubscribeButtons.vue";
 import ShareDistribution from '../display/sharing/ShareDistribution.vue';
 import PodcastFilterList from '../display/podcasts/PodcastFilterList.vue';
 import PodcastList from '../display/podcasts/PodcastList.vue';
@@ -58,7 +60,8 @@ export default {
     ShareButtons,
     ShareDistribution,
     EditBox,
-    PodcastList
+    PodcastList,
+    SubscribeButtons
   },
 
   mounted() {
@@ -75,6 +78,7 @@ export default {
       error: false,
       rssEmission: false,
       exclusive: false,
+      notExclusive: false,
       isReady: true,
     };
   },
@@ -131,6 +135,18 @@ export default {
       }
       return false;
     },
+    countLink(){
+      let count = 0;
+      if(this.emission && this.emission.annotations){
+        if (this.emission.annotations.applePodcast !== undefined) count++;
+        if (this.emission.annotations.deezer !== undefined) count++;
+        if (this.emission.annotations.spotify !== undefined) count++;
+        if (this.emission.annotations.tunein !== undefined) count++;
+        if (this.emission.annotations.tootak !== undefined) count++;
+        if (this.emission.annotations.radioline !== undefined) count++;
+      }
+      return count;
+    },
   },
 
   watch: {
@@ -158,6 +174,9 @@ export default {
                 this.emission.annotations.exclusive == "true" ? true : false;
               this.exclusive =
                 this.exclusive && this.organisationId !== this.emission.orga.id;
+            }
+            if (this.emission.annotations.notExclusive) {
+              this.notExclusive = this.emission.annotations.notExclusive == "true" ? true : false;
             }
           }
         })

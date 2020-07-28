@@ -68,6 +68,7 @@
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
+    word-break: break-word;
   }
 
   .emission-description{
@@ -79,10 +80,12 @@
     white-space: pre-wrap;
     font-size: 0.8em;
     margin-top: 0.5em;
+    word-break: break-word;
   }
   .emission-small-description{
     -webkit-line-clamp: 2;
     border-top: 1px solid #ddd;
+    word-break: break-word;
   }
 
   .emission-producer{
