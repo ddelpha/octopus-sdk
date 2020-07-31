@@ -84,7 +84,7 @@
 			<div class="primary-color mb-2 padding-left-custom-radio">{{$t('Sort')}}</div>
 			<b-form-group>
 				<b-form-radio-group v-model="emissionSort" class="d-flex flex-column">
-					<b-form-radio value="SCORE">{{$t('Sort score')}}</b-form-radio>
+					<b-form-radio value="SCORE" v-if="isSearchBar">{{$t('Sort score')}}</b-form-radio>
 					<b-form-radio value="LAST_PODCAST_DESC">{{$t('Sort last')}}</b-form-radio>
 					<b-form-radio value="NAME">{{$t('Sort name')}}</b-form-radio>
 				</b-form-radio-group>
@@ -150,7 +150,7 @@ export default {
 		Datetime
 	},
 	
-	props: ['organisationId', 'isEmission', 'resetRubriquage'],
+	props: ['organisationId', 'isEmission', 'resetRubriquage', 'isSearchBar'],
 
   created() {
 		this.fetchTopics();

@@ -12,6 +12,7 @@
       <AdvancedSearch 
       :resetRubriquage='resetRubriquage'
       :isEmission='true'
+      :isSearchBar="isProductorSearch"
       @updateRubriquage='updateRubriquage'
       @updateRubrique='updateRubrique'
       @updateMonetization='updateMonetization' 
