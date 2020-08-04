@@ -49,7 +49,9 @@ h1,h2,h3,h4,h5,h6{
 .primary-dark{
   color: $octopus-primary-dark;
 }
-
+.text-secondary{
+  color: #646D73 !important;
+}
 .primary-bg{
   background: $octopus-primary-color;
 }

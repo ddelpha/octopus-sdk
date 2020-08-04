@@ -17,7 +17,7 @@
       :aria-label="$t('See more')"
     >
       <template v-slot:button-content>
-        <i class="saooti-plus"></i>
+        <i :aria-label="$t('See more')" class="saooti-plus"></i>
       </template>
       <template>
         <b-dropdown-item
