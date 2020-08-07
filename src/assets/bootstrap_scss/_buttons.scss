@@ -133,7 +133,6 @@
     &.active {
       background: darken($octopus-secondary-color, 5%);
       color: $octopus-primary-color;
-      border-bottom: 2px solid transparent;
     }
     @media (max-width: 500px){
       margin: 0.3rem;
