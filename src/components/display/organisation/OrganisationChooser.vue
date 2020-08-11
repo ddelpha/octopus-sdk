@@ -194,12 +194,15 @@ export default {
           size: ELEMENTS_COUNT,
         })
         .then(response => {
+          let notNull =response.result.filter((o)=>{
+            return o!== null;
+          });
           if (this.defaultanswer) {
             this.organisations = [
               getDefaultOrganistion(this.defaultanswer),
-            ].concat(response.result);
+            ].concat(notNull);
           } else {
-            this.organisations = response.result;
+            this.organisations = notNull;
           }
           if(this.myOrganisation){
             if(query === undefined){
