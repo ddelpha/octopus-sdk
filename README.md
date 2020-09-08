@@ -247,3 +247,4 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.18.18 Page participant ne s'affiche plus
  * 0.18.19 Demandes d'évolution sur les fils RSS
  * 0.18.20 Merge de staging fabien
+ * 0.18.21 Merge de staging fabien
