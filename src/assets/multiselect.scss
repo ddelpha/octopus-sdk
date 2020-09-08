@@ -169,7 +169,6 @@ fieldset[disabled] .multiselect {
     min-height: 40px;
     text-align: left;
     color: #35495e;
-    top: 2px;
 }
 
 .multiselect.light-multiselect {
@@ -266,7 +265,7 @@ fieldset[disabled] .multiselect {
     display: block;
     padding: 8px 40px 0 20px;
     border-radius: 0.8em;
-    border: 2px solid #eee;
+    border: 0.1rem solid #dee2e6;
     background: #fff;
     font-size: 14px;
     @media (max-width: 960px) {

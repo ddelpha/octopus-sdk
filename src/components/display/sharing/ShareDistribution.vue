@@ -30,7 +30,7 @@
 </template>
 <style lang="scss">
 .sharing-distribution-container {
-  border: 0.05rem solid #eee;
+  border: 0.05rem solid #dee2e6;
   border-radius: 0.3rem;
   padding: 0.4rem;
   margin: 0.2rem 1rem;

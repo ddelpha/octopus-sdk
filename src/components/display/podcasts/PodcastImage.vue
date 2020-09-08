@@ -45,7 +45,7 @@
   width: 3rem;
   height: 3rem;
   border-radius: 50%;
-  padding: 0.5em;
+  padding: 0.7em;
   background: rgba(0,0,0,.31);
 }
 .transparent-background{

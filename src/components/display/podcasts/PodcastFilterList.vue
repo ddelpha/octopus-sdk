@@ -42,6 +42,7 @@
 }
 .list-episodes {
   padding: 2rem 0rem 1rem !important;
+  margin: 0 0.5rem;
   h2 {
     margin-bottom: 0.5rem;
   }
