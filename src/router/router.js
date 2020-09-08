@@ -14,6 +14,7 @@ import ParticipantPage from '@/components/pages/Participant.vue';
 import SearchPage from '@/components/pages/Search.vue';
 import CategoryPage from '@/components/pages/Category.vue';
 import RubriquePage from '@/components/pages/Rubrique.vue';
+import LivesPage from '@/components/pages/Lives.vue';
 
 Vue.use(VueRouter);
 
@@ -86,6 +87,11 @@ const routes = [
       rubriqueId: parseInt(route.params.rubriqueId, 10),
       productor: route.params.productor,
     }),
+  },
+  { path: '/main/pub/lives/:productor?', name:'lives', component: LivesPage,
+    props: route => ({
+      productor: route.params.productor,
+    }) 
   },
   {
     path: '/main/pub/home', name:'productor', component: Home,

@@ -133,16 +133,17 @@ export default {
   },
 
   methods: {
-    getParticipantDetails() {
-      octopusApi.fetchParticipant(this.participantId).then(data => {
+    async getParticipantDetails() {
+      this.loaded = false;
+      try {
+        const data = await octopusApi.fetchParticipant(this.participantId);
         this.participant = data;
         this.$emit('participantTitle', this.name);
         this.loaded = true;
-      })
-      .catch(() =>{
+      } catch {
         this.error = true;
         this.loaded = true;
-      });
+      }
     },
   },
   watch:{

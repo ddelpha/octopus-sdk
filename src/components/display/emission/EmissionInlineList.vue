@@ -122,8 +122,8 @@ export default {
   },
 
   methods: {
-    fetchNext() {
-      octopusApi
+    async fetchNext() {
+      const data = await octopusApi
         .fetchEmissions({
           first: this.first,
           size: this.size + 1,
@@ -131,30 +131,28 @@ export default {
           rubriqueId: this.rubriqueId,
           rubriquageId: this.rubriquageId,
           sort: "LAST_PODCAST_DESC",
-        })
-        .then(data => {
-          this.loading = false;
-          this.loaded = true;
-          this.totalCount = data.count;
-          /* if(this.first === 0 && this.displayRubriquage && state.emissionsPage.mainRubrique){
-            data.result.sort((a, b)=>{
-              if (a.rubriqueIds[0] === state.emissionsPage.mainRubrique)
-                return 1;
-              if (b.rubriqueIds[0] === state.emissionsPage.mainRubrique)
-                return -1;
-              return 0;
-            });
-          } */
-          if (this.allEmissions.length + data.result.length < this.totalCount) {
-            let nexEl = data.result.pop();
-            this.preloadImage(nexEl.imageUrl);
-          }
-          this.allEmissions = this.allEmissions.concat(data.result);
-          if(this.allEmissions.length <= 3){
-            this.alignLeft = true;
-          }
-          this.first += this.size;
         });
+      this.loading = false;
+      this.loaded = true;
+      this.totalCount = data.count;
+      /* if(this.first === 0 && this.displayRubriquage && state.emissionsPage.mainRubrique){
+        data.result.sort((a, b)=>{
+          if (a.rubriqueIds[0] === state.emissionsPage.mainRubrique)
+            return 1;
+          if (b.rubriqueIds[0] === state.emissionsPage.mainRubrique)
+            return -1;
+          return 0;
+        });
+      } */
+      if (this.allEmissions.length + data.result.length < this.totalCount) {
+        let nexEl = data.result.pop();
+        this.preloadImage(nexEl.imageUrl);
+      }
+      this.allEmissions = this.allEmissions.concat(data.result);
+      if(this.allEmissions.length <= 3){
+        this.alignLeft = true;
+      }
+      this.first += this.size;
     },
 
     displayPrevious() {
@@ -207,10 +205,9 @@ export default {
       let img = new Image();
       img.src = url;
     },
-    fetchRubriques(){
-      octopusApi.fetchTopic(this.displayRubriquage).then((data)=>{
-        this.rubriques = data.rubriques; 
-      });
+    async fetchRubriques(){
+      const data = await octopusApi.fetchTopic(this.displayRubriquage);
+      this.rubriques = data.rubriques; 
     },
     rubriquesId(emission){
       if(this.displayRubriquage && emission.rubriqueIds && emission.rubriqueIds.length !== 0 && this.rubriques && this.rubriques.length){

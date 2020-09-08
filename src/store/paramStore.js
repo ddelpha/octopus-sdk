@@ -37,22 +37,25 @@ var initialize = function initialize(initObject){
       state.generalParameters.organisationId = (typeof param.organisationId !== "undefined") ? param.organisationId : 'ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c';
       state.generalParameters.authenticated = (typeof param.authenticated !== "undefined") ? param.authenticated : true;
       state.generalParameters.isAdmin =(typeof param.isAdmin !== "undefined") ? param.isAdmin : true;
+      state.generalParameters.isAnimator =(typeof param.isAnimator !== "undefined") ? param.isAnimator : true;
       state.generalParameters.ApiUri = (typeof param.ApiUri !== "undefined") ? param.ApiUri : 'https://api.staging.saooti.org/';
       state.generalParameters.isIE11 = (typeof param.isIE11 !== "undefined") ? param.isIE11 : false;
       state.generalParameters.podcastmaker =(typeof param.podcastmaker !== "undefined") ? param.podcastmaker : false;
       state.generalParameters.buttonPlus =(typeof param.buttonPlus !== "undefined") ? param.buttonPlus : true;
       state.generalParameters.allCategories =(typeof param.allCategories !== "undefined") ? param.allCategories : [];
+      state.generalParameters.isLiveTab =(typeof param.isLiveTab !== "undefined") ? param.isLiveTab : true;
     }
     if(initObject.podcastPage){
       let param = initObject.podcastPage;
       state.podcastPage.EditBox = (typeof param.EditBox !== "undefined") ? param.EditBox : false;
       state.podcastPage.SharePlayer = (typeof param.SharePlayer !== "undefined") ? param.SharePlayer : true;
       state.podcastPage.ShareButtons = (typeof param.ShareButtons !== "undefined") ? param.ShareButtons : true;
-      state.podcastPage.ShareDistribution = (typeof param.ShareDistribution !== "undefined")? param.ShareDistribution : false;
+      state.podcastPage.ShareDistribution = (typeof param.ShareDistribution !== "undefined")? param.ShareDistribution : true;
       state.podcastPage.MiniplayerUri = (typeof param.MiniplayerUri !== "undefined") ? param.MiniplayerUri : 'https://player.staging.saooti.org/';
       state.podcastPage.ouestFranceStyle = (typeof param.ouestFranceStyle !== "undefined") ? param.ouestFranceStyle : false;
       state.podcastPage.tagList= (typeof param.tagList !== "undefined") ? param.tagList : false;
       state.podcastPage.downloadButton= (typeof param.downloadButton !== "undefined") ? param.downloadButton : false;
+      state.podcastPage.hlsUri = (typeof param.MiniplayerUri !== "undefined") ? param.hlsUri : 'https://hls.dev2.saooti.org/';
     }
     if(initObject.podcastsPage){
       let param = initObject.podcastsPage;

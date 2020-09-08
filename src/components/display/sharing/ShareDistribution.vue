@@ -5,6 +5,7 @@
       <span class="primary-color">{{rss}}</span>
       <input type="button" :value="$t('Copy')" class="btn btn-primary" @click="onCopyRSSURL()" :aria-label="$t('Copy')" />
     </p>
+    <RssParameters :rssLink="baseRss" :paramRSS.sync='rss'  v-if="baseRss !== ''"/>
     <div class="sharing-distribution-container">
       <router-link v-bind:to="'/main/priv/distribution/deezer/' + emissionId" class="text-dark">
         <span class="saooti-deezer"/>Deezer
@@ -29,6 +30,7 @@
   </div>
 </template>
 <style lang="scss">
+
 .sharing-distribution-container {
   border: 0.05rem solid #dee2e6;
   border-radius: 0.3rem;
@@ -38,6 +40,15 @@
   font-weight: 500;
   align-items: center;
   justify-content: space-between;
+  .saooti-tunin{
+    color: #36b4a7;
+  }
+  .saooti-radioline{
+    color: #2273b9;
+  }
+  .saooti-tootak{
+    color: #ff4d53;
+  }
   a {
     display: flex;
     align-items: center;
@@ -65,16 +76,18 @@
 <script>
 import octopusApi from "@saooti/octopus-api";
 import Snackbar from '../../misc/Snackbar.vue';
+import RssParameters from './RssParameters.vue';
 
 export default {
 
   components:{
-    Snackbar
+    Snackbar,
+    RssParameters
   },
 
   mounted() {
     this.getEmissionDetails(this.emissionId);
-    this.fetchRss();
+    this.getRSS();
   },
 
   props: ['emissionId'],
@@ -83,13 +96,15 @@ export default {
     return {
       emission: undefined,
       error: false,
+      baseRss: "",
       rss: "",
     };
   },
 
   methods: {
-    getEmissionDetails(emissionId) {
-      octopusApi.fetchEmission(emissionId).then(data => {
+    async getEmissionDetails(emissionId) {
+      try {
+        const data = await octopusApi.fetchEmission(emissionId);
         this.emission = data;
         this.loaded = true;
         if(this.emission.annotations){
@@ -101,16 +116,16 @@ export default {
             this.exclusive = this.exclusive && (this.organisationId !== this.emission.orga.id);
           }
         }
-      })
-      .catch(()=> {
+      } catch {
         this.error = true;
         this.loaded = true;
-      });
+      }
     },
-    fetchRss() {
+    getRSS(){
       if (this.$props.emissionId && this.$props.emissionId > 0) {
-        this.emissionPage=octopusApi.fetchEmissionPath(this.emissionId);
-        this.rss = octopusApi.fetchRSS(this.emissionId);
+        /* this.emissionPage=octopusApi.fetchEmissionPath(this.emissionId); */
+        this.baseRss = octopusApi.fetchRSS(this.emissionId);
+        this.rss = this.baseRss;
       }
     },
     onCopyRSSURL() {

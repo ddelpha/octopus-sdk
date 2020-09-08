@@ -48,7 +48,7 @@ const getStyle = (baseSize, position) => {
   }
 }
 export default {
-  name: 'SnackBar',
+  name: 'Snackbar',
   props: {
     colors: {
       default() {

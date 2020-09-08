@@ -27,15 +27,17 @@ export default {
     CategoryList,
     Footer
   },
-  created(){
+  async created(){
+    let orgaId = "";
     if (this.$route.query.productor) {
-      octopusApi.fetchOrganisation(this.$route.query.productor)
-      .then(data => {
-          this.$store.commit('filterOrga', {orgaId: this.$route.query.productor, imgUrl: data.imageUrl});
-      });
-    }else if(state.generalParameters.authenticated){
-      this.$store.commit('filterOrga', {orgaId: state.generalParameters.organisationId});
+      orgaId = this.$route.query.productor;
+    }else{
+      orgaId = state.generalParameters.authenticated;
     }
+    const response = await octopusApi.fetchOrganisation(orgaId);
+    this.$store.commit('filterOrga', {orgaId: orgaId, imgUrl: response.imageUrl});
+    const isLive = await octopusApi.liveEnabledOrganisation(orgaId);
+    this.$store.commit('filterOrgaLive', isLive);
   },
 
   data() {

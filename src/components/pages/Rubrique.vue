@@ -35,10 +35,9 @@ export default {
 
 
   methods: {
-    extractTitle() {
-        octopusApi.fetchRubric(this.rubriqueId).then((data)=>{
-            this.title = data.name;
-        });
+    async extractTitle() {
+      const data = await octopusApi.fetchRubric(this.rubriqueId);
+      this.title = data.name;
     },
   },
 

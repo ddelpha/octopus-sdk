@@ -1,4 +1,5 @@
 //Pages
+import Lives from "./src/components/pages/Lives.vue";
 import Podcast from "./src/components/pages/Podcast.vue";
 import Podcasts from "./src/components/pages/Podcasts.vue";
 import Emission from "./src/components/pages/Emission.vue";
@@ -39,6 +40,7 @@ import EmissionInlineList from "./src/components/display/emission/EmissionInline
 import RubriqueChooser from "./src/components/display/rubriques/RubriqueChooser.vue";
 
 const components = {
+    Lives,
     Podcast,
     Podcasts,
     Emission,
@@ -69,6 +71,7 @@ const components = {
 export default components;
 
 export {
+    Lives,
     Podcast,
     Podcasts,
     Emission,

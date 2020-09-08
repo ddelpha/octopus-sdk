@@ -197,34 +197,31 @@ export default {
   },
 
   methods: {
-    fetchNext() {
-      octopusApi
-        .fetchPodcasts({
-          first: this.first,
-          size: this.size + 1,
-          organisationId: this.organisation,
-          emissionId: this.emissionId,
-          iabId: this.iabId,
-          rubriqueId: this.rubriqueId,
-          rubriquageId: this.rubriquageId,
-          sort: this.popularSort ? "POPULARITY" : "DATE"
-        })
-        .then(data => {
-          this.loading = false;
-          this.loaded = true;
-          this.totalCount = data.count;
-          if (this.allPodcasts.length + data.result.length < this.totalCount) {
-            let nexEl = data.result.pop();
-            this.preloadImage(nexEl.imageUrl);
-          }
-          this.allPodcasts = this.allPodcasts.concat(data.result);
-          if(this.allPodcasts.length <= 3){
-            this.alignLeft = true;
-          }else{
-            this.alignLeft = false;
-          }
-          this.first += this.size;
-        });
+    async fetchNext() {
+      const data = await octopusApi.fetchPodcasts({
+        first: this.first,
+        size: this.size + 1,
+        organisationId: this.organisation,
+        emissionId: this.emissionId,
+        iabId: this.iabId,
+        rubriqueId: this.rubriqueId,
+        rubriquageId: this.rubriquageId,
+        sort: this.popularSort ? "POPULARITY" : "DATE"
+      });
+      this.loading = false;
+      this.loaded = true;
+      this.totalCount = data.count;
+      if (this.allPodcasts.length + data.result.length < this.totalCount) {
+        let nexEl = data.result.pop();
+        this.preloadImage(nexEl.imageUrl);
+      }
+      this.allPodcasts = this.allPodcasts.concat(data.result.filter(pod => pod !== null));
+      if(this.allPodcasts.length <= 3){
+        this.alignLeft = true;
+      }else{
+        this.alignLeft = false;
+      }
+      this.first += this.size;
     },
 
     displayPrevious() {

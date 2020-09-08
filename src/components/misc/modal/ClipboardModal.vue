@@ -9,11 +9,12 @@
           </button>
         </div>
         <div class="modal-body">
-          <p class="d-flex justify-content-between">
+          <p class="d-flex justify-content-between align-items-center">
             {{$t('Rss feed:')}}
-            <span id="LINK">{{link}}</span>
-            <input type="button" value="Copier" class="btn btn-primary" @click="onCopyLINK()" :aria-label="$t('Copy')" />
+            <span id="LINK">{{rss}}</span>
+            <input type="button" :value="$t('Copy')" class="btn btn-primary" @click="onCopyLINK()" :aria-label="$t('Copy')" />
           </p>
+          <RssParameters :rssLink="link" :paramRSS.sync='rss'  v-if="link !== ''"/>
         </div>
         <div class="modal-footer" v-if="validatetext">
           <button class="btn btn-primary" @click="onValid">
@@ -29,10 +30,25 @@
 </style>
 
 <script>
+import RssParameters from '../../display/sharing/RssParameters.vue';
 export default {
   name: 'ClipboardModal',
 
+  components:{
+    RssParameters
+  },
+
   props: ['title', 'active', 'closable', 'validatetext','link'],
+
+  created(){
+    this.rss = this.link;
+  },
+
+  data() {
+    return {
+      rss: "",
+    };
+  },
 
   methods: {
     closePopup(event) {
@@ -44,7 +60,7 @@ export default {
       this.$emit('validate');
     },
     onCopyLINK() {
-      navigator.clipboard.writeText(this.link);
+      navigator.clipboard.writeText(this.rss);
     }
   },
 };

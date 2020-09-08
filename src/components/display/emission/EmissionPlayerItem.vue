@@ -104,19 +104,16 @@ export default {
   },
 
    methods:{
-    loadPodcasts(){
+    async loadPodcasts(){
       let nb = this.nbPodcasts? this.nbPodcasts: 2;
-      octopusApi
-      .fetchPodcasts({
+      const data = await octopusApi.fetchPodcasts({
         emissionId: this.emission.emissionId,
         size: nb
-      })
-      .then((data) => {
-        if(data.count === 0 && this.editRight){
-          this.activeEmission = false;
-        }
-        this.podcasts=data.result;
       });
+      if(data.count === 0 && this.editRight){
+        this.activeEmission = false;
+      }
+      this.podcasts=data.result;
     },
     play(podcast){
       if(podcast === this.$store.state.player.podcast){

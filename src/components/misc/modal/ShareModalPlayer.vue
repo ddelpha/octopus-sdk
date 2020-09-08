@@ -71,7 +71,7 @@
 <script>
 import Snackbar from '../../misc/Snackbar.vue';
 export default {
-  name: 'MessageModal',
+  name: 'ShareModalPlayer',
 
   props: ['embedLink', 'embedlyLink', 'directLink'],
 

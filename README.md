@@ -201,9 +201,46 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.17.1 Selenium : attributs d'élément
  * 0.17.2 Merge de staging
  * 0.17.3 Amélioration modale
+ * 0.17.4 Merge de staging-fabien
+ * 0.17.5 Nouveau status (canceled)
+ * 0.17.6 Durée trop longues
+ * 0.17.7 Rendre les liens cliquables dans les descriptions des émissions et des épisodes
+ * 0.17.8 Rendre les liens cliquables dans les descriptions des émissions et des épisodes
+ * 0.17.9 Mon espace / téléverser Octopus
+ * 0.17.10 Miniplayers émissions et suggestions : permettre plus de 10 épisodes 
+ * 0.17.11 Problème de podcast nuls renvoyés par l'api 
+ * 0.17.12 PB de chargement des podcasts les + populaires de Politique & Information sur octopus.saooti.com
+ * 0.17.13 Permettre l'accès anonyme aux players de certaines émissions
+ * 0.17.14 Permettre l'accès anonyme aux players de certaines émissions
+ * 0.17.15 Permettre l'accès anonyme aux players de certaines émissions
+ * 0.17.16 Miniplayers émissions et suggestions : permettre plus de 10 épisodes 
+ * 0.17.17 Boutons d'abonnement à l'émission
+ * 0.17.18 Bouton de partage dans la bande de lecture bas de page Octopus
+ * 0.17.19 Menu aide 
+ * 0.17.20 Word break
+ * 0.17.21 Podcastmaker cacher le tri par pertinence
+ * 0.17.22 Accessibilité Octopus
+ * 0.17.23 Placer l'icône de la certification ACPM sur Octopus
+ * 0.17.24 Problème organisation chooser
 
-
-
-
-
-
+ * 0.18.0 Nouveau sprint
+ * 0.18.1 Mise en place du live
+ * 0.18.2 Page intervenant
+ * 0.18.3 Accessibilité Octopus
+ * 0.18.4 Partage pour newsletter
+ * 0.18.5 Partage pour newsletter -image en local
+ * 0.18.6 Début du live
+ * 0.18.7 Amélioration du live
+ * 0.18.8 Amélioration du live
+ * 0.18.9 Amélioration du live
+ * 0.18.10 Amélioration du live
+ * 0.18.11 Amélioration du live
+ * 0.18.12 RecordingItemButton false component
+ * 0.18.13 Amélioration du live
+ * 0.18.14 async/await et Récupération de l'information "accès aux lives"
+ * 0.18.15 Amélioration du live
+ * 0.18.16 Problème modal avec emissionChooser
+ * 0.18.17 Problème modal avec categoryChooser et orgaChooser
+ * 0.18.18 Page participant ne s'affiche plus
+ * 0.18.19 Demandes d'évolution sur les fils RSS
+ * 0.18.20 Merge de staging fabien

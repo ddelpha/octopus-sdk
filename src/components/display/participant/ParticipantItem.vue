@@ -114,16 +114,13 @@ export default {
     }
   },
   methods:{
-    hasPodcast(){
-      octopusApi
-        .fetchPodcasts({
-          participantId: this.participant.participantId,
-        })
-        .then((data) => {
-          if(data.count === 0 && this.editRight){
-            this.activeParticipant = false;
-          }
-        });
+    async hasPodcast(){
+      const data = await octopusApi.fetchPodcasts({
+        participantId: this.participant.participantId,
+      });
+      if(data.count === 0 && this.editRight){
+        this.activeParticipant = false;
+      }
     }
   },
 };

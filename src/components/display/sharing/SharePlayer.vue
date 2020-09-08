@@ -66,13 +66,13 @@
       >{{ $t('Only organisation members can share the content') }}</div>
       <div v-if="!authenticated">{{ $t('Only authenticated members can share the content') }}</div>
     </div>
-    <ShareModal
+    <ShareModalPlayer
       v-if="isShareModal"
       @close="isShareModal=false;"
       :embedLink="iFrame"
       :embedlyLink="iFrameSrc"
       :directLink="podcast"
-    ></ShareModal>
+    ></ShareModalPlayer>
   </div>
 </template>
 
@@ -118,7 +118,7 @@
 </style>
 
 <script>
-import ShareModal from "../../misc/modal/ShareModal.vue";
+import ShareModalPlayer from "../../misc/modal/ShareModalPlayer.vue";
 import { state } from "../../../store/paramStore.js";
 import Swatches from "vue-swatches";
 import "vue-swatches/dist/vue-swatches.min.css";
@@ -128,16 +128,29 @@ export default {
   props: ["podcast", "emission", "organisationId", "exclusive"],
 
   components: {
-    ShareModal,
+    ShareModalPlayer,
     Swatches
   },
 
-  created() {
+  async created() {
     let orgaId = undefined;
-    if(this.podcast){
-      orgaId= this.podcast.organisation.id;
-    }else{
-      orgaId= this.emission.orga.id;
+    if(this.authenticated){
+      if(this.podcast){
+        orgaId= this.podcast.organisation.id;
+      }else{
+        orgaId= this.emission.orga.id;
+      }
+      const data = await profileApi.fetchOrganisationAttibutes(this.$store, orgaId);
+      if(data.hasOwnProperty('COLOR')) {
+        this.color = data.COLOR;
+      } else {
+        this.color = "#40a372";
+      }
+      if(data.hasOwnProperty('THEME')) {
+        this.theme = data.THEME;
+      } else {
+        this.theme = "#ffffff";
+      }
     }
     profileApi.fetchOrganisationAttibutes(this.$store, orgaId)
     .then(data => {

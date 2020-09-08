@@ -289,19 +289,18 @@ export default {
     updateMonetization(value){
       this.$emit('updateMonetization', value);
 		},
-		fetchTopics(){
+		async fetchTopics(){
 			if(this.organisation){
-				octopusApi.fetchTopics(this.organisation).then((data)=>{
-					this.rubriquageData = data;
-					if(data.length !== 0){
-						for (let index = 0; index < this.rubriquageData.length; index++) {
-							if(this.rubriquageData[index].rubriques.length !== 0){
-								this.rubriquageId = this.rubriquageData[index].rubriquageId;
-								break;
-							}
+				const data = await octopusApi.fetchTopics(this.organisation);
+				this.rubriquageData = data;
+				if(data.length !== 0){
+					for (let index = 0; index < this.rubriquageData.length; index++) {
+						if(this.rubriquageData[index].rubriques.length !== 0){
+							this.rubriquageId = this.rubriquageData[index].rubriquageId;
+							break;
 						}
 					}
-				});
+				}
 			}
 		},
 	},

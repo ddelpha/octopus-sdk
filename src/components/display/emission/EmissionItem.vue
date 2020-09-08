@@ -95,7 +95,7 @@ button.btn.btn-primary.share-btn.m-3 {
   font-size: 1rem;
   width: 2.5rem;
   height: 2.5rem !important;
-  margin: 0 1rem 0 0 !important;
+  margin: 0 0.5rem 0 0.5rem !important;
 }
 /** PHONES*/
 @media (max-width: 680px) {
@@ -181,16 +181,11 @@ export default {
   },
 
    methods:{
-    hasPodcast(){
-      octopusApi
-        .fetchPodcasts({
-          emissionId: this.emission.emissionId,
-        })
-        .then((data) => {
-          if(data.count === 0 && this.editRight){
-            this.activeEmission = false;
-          }
-        });
+    async hasPodcast(){
+      const data = await octopusApi.fetchPodcasts({emissionId: this.emission.emissionId,});
+      if(data.count === 0 && this.editRight){
+        this.activeEmission = false;
+      }
     }
   },
 };

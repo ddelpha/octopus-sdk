@@ -141,7 +141,7 @@ export default {
   },
 
   methods: {
-    fetchContent(reset) {
+    async fetchContent(reset) {
       var self = this;
       if (reset) {
         self.$data.emissions = [];
@@ -164,16 +164,11 @@ export default {
       }
       if(this.includeHidden){
         param.includeHidden = this.includeHidden;
-        emissionApi
-        .fetchEmissionsAdmin(this.$store, param).then((data)=> {
-          this.afterFetching(reset, data);
-        });
+        const data = await emissionApi.fetchEmissionsAdmin(this.$store, param);
+        this.afterFetching(reset, data);
       }else{
-        octopusApi
-        .fetchEmissions(param)
-        .then((data)=> {
-          this.afterFetching(reset, data);
-        });
+        const data = await octopusApi.fetchEmissions(param);
+        this.afterFetching(reset, data);
       }
     },
     
@@ -195,10 +190,9 @@ export default {
       event.preventDefault();
       this.fetchContent(false);
     },
-    fetchRubriques(){
-      octopusApi.fetchTopic(this.displayRubriquage).then((data)=>{
-        this.rubriques = data.rubriques; 
-      });
+    async fetchRubriques(){
+      const data = await octopusApi.fetchTopic(this.displayRubriquage);
+      this.rubriques = data.rubriques; 
     },
     mainRubriquage(emission){
       if(emission.rubriqueIds && emission.rubriqueIds[0] === state.emissionsPage.mainRubrique){

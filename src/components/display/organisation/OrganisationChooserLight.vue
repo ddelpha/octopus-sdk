@@ -57,13 +57,11 @@ export default {
 				this.$emit('selected', this.organisation);
 			}
     },
-    fetchOrganisation(){
-      octopusApi.fetchOrganisation(this.value)
-      .then(data => {
-				this.organisation = data;
-				this.actual = data.id;
-				this.init = true;
-      })
+    async fetchOrganisation(){
+      const data = await octopusApi.fetchOrganisation(this.value);
+      this.organisation = data;
+      this.actual = data.id;
+      this.init = true;
     },
   },
 

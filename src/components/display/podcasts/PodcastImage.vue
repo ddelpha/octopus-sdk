@@ -4,8 +4,10 @@
     :style="{ 'background-image': 'url(\'' + podcast.imageUrl +'?dummy='+dummyParam+  '\')' }"
     v-if="podcast"
   >
-  <template v-if="podcast && podcast.availability.visibility">
-    <div class="podcast-image-play-button" v-on:click="play" v-if="hidePlay">
+  <div class="live-image-status" :class="fetchConference && fetchConference!=='null' ? fetchConference.status.toLowerCase()+'-bg' : ''" v-if="fetchConference">{{statusText}}</div>
+  <div class="live-image-status recording-bg" v-if="isRecordedInLive">{{"Enregistré en live"}}</div>
+  <template v-if="podcast && (podcast.availability.visibility || (podcast.processingStatus === 'READY_TO_RECORD'))&& !isLiveToBeRecorded">
+    <div class="podcast-image-play-button" v-on:click="play" v-if="hidePlay || recordingLive">
       <div class="icon-container">
         <div
           :aria-label="$t('Play')"
@@ -153,22 +155,30 @@ import { mapState } from 'vuex';
 export default {
   name: 'PodcastImage',
 
-  props: ['podcast', 'hidePlay', 'displayDescription', 'arrowDirection'],
-
+  props: ['podcast', 'hidePlay', 'displayDescription', 'arrowDirection', "fetchConference", "isAnimatorLive"],
   computed: {
     ...mapState({
       playingPodcast(state) {
         return (
-          state.player.podcast &&
-          state.player.podcast.podcastId == this.podcast.podcastId
+          (state.player.podcast &&
+          state.player.podcast.podcastId == this.podcast.podcastId) || 
+          (this.fetchConference && this.fetchConference!=='null' && state.player.live && state.player.live.conferenceId === this.fetchConference.conferenceId)
         );
       },
     }),
     isMobile(){
       return window.matchMedia( "(hover: none)" ).matches;
     },
+    isRecordedInLive(){
+      return this.fetchConference === undefined && this.podcast.conferenceId !== undefined && this.podcast.processingStatus !== "READY_TO_RECORD";
+    },
+    isLiveToBeRecorded(){
+      return this.fetchConference === undefined && this.podcast.conferenceId !== undefined && this.podcast.processingStatus === "READY_TO_RECORD";
+    },
     imgUrl(){
-      if(this.podcast.processingStatus === "READY"){
+      if(this.isLiveToBeRecorded){
+        return "/img/clock.png";
+      }else if(this.podcast.processingStatus === "READY" || this.fetchConference){
         if(!this.podcast.availability.visibility && this.podcast.availability.date){
           return "/img/clock.png";
         }else{
@@ -182,7 +192,9 @@ export default {
       }
     },
     textVisible(){
-      if(this.podcast.processingStatus === "READY"){
+      if(this.isLiveToBeRecorded){
+        return this.$t("Podcast linked to waiting live");
+      }else if(this.podcast.processingStatus === "READY" || this.fetchConference){
         if(!this.podcast.availability.visibility && this.podcast.availability.date){
           return this.$t('Podcast publish in future');
         }else{
@@ -193,8 +205,37 @@ export default {
       }else{
         return this.$t('Podcast in error');
       }
+    },
+    statusText(){
+			if(this.fetchConference){
+				switch (this.fetchConference.status) {
+					case "PENDING":
+             if(this.isAnimatorLive){
+              return this.$t("Open studio");
+            }else{
+              return this.$t('live upcoming');
+            }
+					case "RECORDING":
+						return this.$t("In live");
+					case "DEBRIEFING":
+            if(this.isAnimatorLive){
+              if(this.podcast.processingStatus === "READY_TO_RECORD"){
+                return this.$t("Not recording");
+              }else{
+                return this.$t("Debriefing");
+              }
+            }else{
+              return "";
+            }
+					default:
+						return "";
+				}
+			}
+			return "";
+    },
+    recordingLive(){
+      return this.fetchConference && this.fetchConference!=='null' && this.fetchConference.status === 'RECORDING';
     }
-    
   },
 
   data() {
@@ -206,7 +247,11 @@ export default {
 
   methods: {
     play() {
-      this.$store.commit('playerPlayPodcast', this.podcast);
+      if(this.recordingLive){
+        this.$store.commit('playerPlayPodcast', {title: this.podcast.title, conferenceId: this.fetchConference.conferenceId});
+      }else{
+        this.$store.commit('playerPlayPodcast', this.podcast);
+      }
     },
     showDescription(){
       if(this.isDescription){

@@ -6,6 +6,10 @@
         :to="{ name: 'home', query:{productor: $store.state.filter.organisationId}}"
         >{{ $t('Home') }}</router-link
       >
+      <router-link @click.native="onMenuClick" v-if="isLiveTab && !isPodcastmaker && filterOrga && filterOrgaLive"
+        class="text-dark font-weight-bold mb-3"
+        :to="{ name: 'lives', query:{productor: $store.state.filter.organisationId}}"
+        >{{ $t('Live') }}</router-link>
       <router-link @click.native="onMenuClick"
         class="text-dark font-weight-bold mb-3"
         :to="{ name: 'podcasts', query:{productor: $store.state.filter.organisationId}}"
@@ -27,12 +31,13 @@
         :to="{ name: 'participants', query:{productor: $store.state.filter.organisationId}}"
         >{{ $t('Speakers') }}</router-link
       >
-      <OrganisationChooser
+        <OrganisationChooserLight
+        width="auto"
         :defaultanswer="$t('No organisation filter')"
         @selected="onOrganisationSelected"
         :value='organisationId'
         :light='true'
-        class="mr-2"
+        class="mr-2 hide-top-bar"
         :reset='reset'
         v-if="!isPodcastmaker"
         />
@@ -102,14 +107,15 @@
 }
 </style>
 <script>
-import OrganisationChooser from '../display/organisation/OrganisationChooser.vue';
+import OrganisationChooserLight from '../display/organisation/OrganisationChooserLight.vue';
 import {state} from "../../store/paramStore.js";
+import octopusApi from "@saooti/octopus-api";
 
 export default {
   name: 'LeftMenu',
 
   components:{
-    OrganisationChooser
+    OrganisationChooserLight
   },
 
   props: ["displayMenu"],
@@ -132,12 +138,14 @@ export default {
     onMenuClick() {
       this.$emit('update:displayMenu', false);
     },
-    onOrganisationSelected(organisation){
+    async onOrganisationSelected(organisation){
       if (organisation && organisation.id) {
         if(this.$route.query.productor !== organisation.id){
           this.$router.push({query: {productor: organisation.id}});
         }
         this.$store.commit('filterOrga', {orgaId: organisation.id, imgUrl: organisation.imageUrl});
+        const isLive = await octopusApi.liveEnabledOrganisation(organisation.id);
+        this.$store.commit('filterOrgaLive', isLive);
       } else {
         if(this.$route.query.productor){
           this.$router.push({query: {productor: undefined}});
@@ -148,6 +156,9 @@ export default {
   },
 
   computed: {
+    isLiveTab(){
+      return state.generalParameters.isLiveTab;
+    },
     categories(){
       return state.generalParameters.allCategories.filter(c => {
           if(this.isPodcastmaker){
@@ -162,7 +173,10 @@ export default {
     },
     filterOrga(){
       return this.$store.state.filter.organisationId;
-    }
+    },
+    filterOrgaLive(){
+      return this.$store.state.filter.live;
+    },
   },
 
   watch:{

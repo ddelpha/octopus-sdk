@@ -1,7 +1,7 @@
 <template>
   <div class="bg-dark">
     <div id="footer" class="d-flex p-3 secondary-bg border-top footer-display-phone">
-        <div class="d-flex flex-grow align-items-center flex-column">
+        <div class="d-flex flex-grow align-items-end flex-column">
           <div class="d-flex flex-column">
             <router-link 
             :to="{ name: 'home', query:{productor: $store.state.filter.organisationId}}"
@@ -29,6 +29,12 @@
             <router-link class="linkHover" to="/main/pub/libraries">{{$t('Used libraries')}}</router-link>
           </div>
         </div>
+        <hr class="divided-line show-phone" />
+        <div class="flex-grow">
+          <a href="https://www.acpm.fr/L-ACPM/Certifications-et-Labels/Les-Podcasts" target="_blank" :aria-label="$t('Octopus is ACPM Podcast accredited')">
+            <img class="acpm_image" src="/img/ACPM.PNG" :title="$t('Octopus is ACPM Podcast accredited')" :alt="$t('Octopus is ACPM Podcast accredited')"/>
+          </a>
+        </div>
         <div class="d-flex flex-grow align-items-center flex-column" v-if="isPodcastmaker && isContactLink">
           <div class="d-flex flex-column">
             <a class="linkHover" id="footer-contact" :href='isContactLink' target="_blank">{{$t('Contact')}}</a>
@@ -45,6 +51,10 @@
     a{
       color: #666;
     }
+    .acpm_image{
+      width: 70px;
+      height: 70px;
+    }
 }
 .border-round {
   border-radius: 0 0 2rem 2rem;
@@ -53,7 +63,7 @@
 @media (max-width: 960px) {
   .footer-display-phone{
     flex-direction: column;
-    .align-items-center{
+    .align-items-center, .align-items-end{
       align-items: flex-start !important;
     }
   }

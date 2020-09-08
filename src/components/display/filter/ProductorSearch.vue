@@ -85,6 +85,7 @@
 // @ is an alias to /src
 import OrganisationChooser from '../organisation/OrganisationChooser.vue';
 import {state} from "../../../store/paramStore.js";
+import octopusApi from "@saooti/octopus-api";
 
 export default {
   components: {
@@ -97,9 +98,11 @@ export default {
     type: { default: 'podcast' },
   },
 
-  created() {
+  async created() {
     if (this.organisationId) {
       this.$store.commit('filterOrga', {orgaId: this.organisationId});
+      const isLive = await octopusApi.liveEnabledOrganisation(this.organisationId);
+      this.$store.commit('filterOrgaLive', isLive);
       this.keepOrganisation = true;
       if(!this.$route.query.productor){
         this.$router.replace({query: {productor: this.organisationId}});
@@ -157,12 +160,14 @@ export default {
         this.$emit('updateOrganisationId', undefined);
       }
     },
-    onKeepOrganisation(){
+    async onKeepOrganisation(){
       if(!this.keepOrganisation){
         if(this.$route.query.productor !== this.organisationId){
           this.$router.push({query: {productor: this.organisationId}});
         }
         this.$store.commit('filterOrga', {orgaId: this.organisationId, imgUrl: this.imgUrl});
+        const isLive = await octopusApi.liveEnabledOrganisation(this.organisationId);
+        this.$store.commit('filterOrgaLive', isLive);
       }else {
         if(this.$route.query.productor){
           this.$router.push({query: {productor: undefined}});

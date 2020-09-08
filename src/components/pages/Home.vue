@@ -23,6 +23,9 @@ export default {
     PodcastInlineList,
   },
 
+  mounted(){
+  },
+
   computed: {
     isPodcastmaker(){
       return state.generalParameters.podcastmaker;

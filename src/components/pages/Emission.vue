@@ -142,29 +142,30 @@ export default {
   },
 
   methods: {
-    getEmissionDetails(emissionId) {
-      octopusApi
-        .fetchEmission(emissionId)
-        .then(data => {
-          this.emission = data;
-          this.$emit('emissionTitle', this.name);
-          this.loaded = true;
-          if (this.emission.annotations) {
-            if (this.emission.annotations.RSS) {
-              this.rssEmission = true;
-            }
-            if (this.emission.annotations.exclusive) {
-              this.exclusive =
-                this.emission.annotations.exclusive == "true" ? true : false;
-              this.exclusive =
-                this.exclusive && this.organisationId !== this.emission.orga.id;
-            }
+    async getEmissionDetails(emissionId) {
+      try {
+        const data = await octopusApi.fetchEmission(emissionId);
+        this.emission = data;
+        this.$emit('emissionTitle', this.name);
+        this.loaded = true;
+        if (this.emission.annotations) {
+          if (this.emission.annotations.RSS) {
+            this.rssEmission = true;
           }
-        })
-        .catch(() => {
-          this.error = true;
-          this.loaded = true;
-        });
+          if (this.emission.annotations.exclusive) {
+            this.exclusive =
+              this.emission.annotations.exclusive == "true" ? true : false;
+            this.exclusive =
+              this.exclusive && this.organisationId !== this.emission.orga.id;
+          }
+          if (this.emission.annotations.notExclusive) {
+            this.notExclusive = this.emission.annotations.notExclusive == "true" ? true : false;
+          }
+        }
+      } catch {
+        this.error = true;
+        this.loaded = true;
+      }
     },
     fetch(/* podcasts */){
       // Interdire supression si podcast en process

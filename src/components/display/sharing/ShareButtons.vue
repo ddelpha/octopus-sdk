@@ -11,43 +11,29 @@
       <a class="btn btn-bigRound" :title="$t('Downloading')" :href="audioUrl"  target="_blank" download  v-if="audioUrl" :aria-label="$t('Downloading')">
         <div class="saooti-download-bounty"></div>
       </a>
-      <a target="_blank" :href="facebookURL" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-facebook share-btn mb-2', !authenticated && !participantId && !organisationId? '' :'mr-3']" aria-label="Facebook">
+      <a target="_blank" :href="facebookURL" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-facebook share-btn mb-2', verticalDisplay? '' :'mr-2 ml-2']" aria-label="Facebook">
         <span class="saooti-facebook-bounty" v-if="!bigRound"></span>
         <div class="saooti-facebook-bounty" v-else></div>
       </a>
-      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-twitter share-btn mb-2', !authenticated && !participantId && !organisationId? '' :'mr-3']" :href="twitterURL" aria-label="Twitter">
+      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-twitter share-btn mb-2', verticalDisplay? '' :'mr-2 ml-2']" :href="twitterURL" aria-label="Twitter">
         <span class="saooti-twitter-bounty" v-if="!bigRound"></span>
         <div class="saooti-twitter-bounty" v-else></div>
       </a>
-      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-linkedin share-btn mb-2', !authenticated && !participantId && !organisationId? '' :'mr-3']" :href="linkedinURL" aria-label="Linkedin">
+      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-linkedin share-btn mb-2', verticalDisplay? '' :'mr-2 ml-2']" :href="linkedinURL" aria-label="Linkedin">
         <span class="saooti-linkedin1" v-if="!bigRound"></span>
         <div class="saooti-linkedin1" v-else></div>
       </a>
-      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2', !authenticated && !participantId && !organisationId? '' :'mr-3']" @click.prevent="openPopup()" :href="rssUrl" :title="$t('Subscribe to this emission')" aria-label="RSS" v-if="rssUrl">
+      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2', verticalDisplay? '' :'mr-2 ml-2']" @click.prevent="openPopup()" :href="rssUrl" :title="$t('Subscribe to this emission')" aria-label="RSS" v-if="rssUrl">
         <span class="saooti-rss-bounty" v-if="!bigRound"></span>
         <div class="saooti-rss-bounty" v-else></div>
       </a>
-      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2']" aria-label="copy" @click="onCopyCode">
+      <a target="_blank" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2', verticalDisplay? '' :'mr-2 ml-2']" aria-label="copy" @click="onCopyCode">
         <span class="saooti-link" v-if="!bigRound"></span>
         <div class="saooti-link" v-else></div>
       </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="applePodcast" v-if="applePodcast && !bigRound" aria-label="Apple">
-        <span class="saooti-apple"></span>
-      </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="deezer" v-if="deezer && !bigRound" aria-label="Deezer">
-        <span class="saooti-deezer"></span>
-      </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="spotify" v-if="spotify && !bigRound" aria-label="Spotify">
-        <span class="saooti-spotify"></span>
-      </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="tunein" v-if="tunein && !bigRound" aria-label="Tunin">
-        <span class="saooti-tunin"></span>
-      </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 btn-tootak share-btn" :href="tootak" v-if="tootak && !bigRound" aria-label="Tootak">
-        <span class="saooti-tootak"></span>
-      </a>
-      <a target="_blank" class="btn btn-circle mr-3 mb-2 btn-radioline share-btn" :href="radioline" v-if="radioline && !bigRound" aria-label="Radioline">
-        <span class="saooti-radioline"></span>
+      <a target="_blank" v-if="podcast" :class="[bigRound?'btn btn-bigRound':'btn btn-circle btn-rss share-btn mb-2', verticalDisplay? '' :'mr-2 ml-2']" :aria-label="$t('Share newsletter')" @click="newsletter=true;">
+        <span class="saooti-mail-bounty" v-if="!bigRound"></span>
+        <div class="saooti-mail-bounty" v-else></div>
       </a>
     </div>
     <ClipboardModal
@@ -56,6 +42,12 @@
       @close="closeModal()"
       :link="rssUrl"
       :title="$t('RSS Link')"
+    />
+    <NewsletterModal
+      v-if="newsletter"
+      :closable="true"
+      :podcast="podcast"
+      @close="newsletter=false"
     />
     <Snackbar ref="snackbar" position="bottom-left"></Snackbar>
   </div>
@@ -85,11 +77,12 @@
 
 <script>
 import {state} from "../../../store/paramStore.js";
-import ClipboardModal from '../../misc/modal/ClipboardModal.vue'
+import ClipboardModal from '../../misc/modal/ClipboardModal.vue';
+import NewsletterModal from '../../misc/modal/NewsletterModal.vue';
 import Snackbar from '../../misc/Snackbar.vue';
 export default {
   props: [
-    "podcastId",
+    "podcast",
     "emission",
     "participantId",
     "organisationId",
@@ -99,6 +92,7 @@ export default {
 
   components: {
     ClipboardModal,
+    NewsletterModal,
     Snackbar
   },
 
@@ -116,15 +110,8 @@ export default {
       facebookURL: `https://www.facebook.com/sharer/sharer.php?u=${window.location.href}`,
       twitterURL: `https://twitter.com/intent/tweet?text=${window.location.href}`,
       linkedinURL: `https://www.linkedin.com/sharing/share-offsite/?url=${window.location.href}`,
-      iFrameModel: this.podcastId ? "default" : "emission",
-      iFrameNumberPriv: "1",
-      applePodcast:this.emission && this.emission.annotations ? this.emission.annotations.applePodcast : undefined,
-      deezer: this.emission && this.emission.annotations ? this.emission.annotations.deezer : undefined,
-      spotify: this.emission && this.emission.annotations ? this.emission.annotations.spotify : undefined,
-      tunein: this.emission && this.emission.annotations ? this.emission.annotations.tunein : undefined,
-      tootak: this.emission && this.emission.annotations ? this.emission.annotations.tootak : undefined,
-      radioline: this.emission && this.emission.annotations ? this.emission.annotations.radioline : undefined,
-      dataRSSSave:false
+      dataRSSSave:false,
+      newsletter: false,
     };
   },
 

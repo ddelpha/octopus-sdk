@@ -96,7 +96,7 @@ export default {
   },
 
   methods: {
-    fetchContent(reset) {
+    async fetchContent(reset) {
       var self = this;
       if (reset) {
         self.$data.participants = [];
@@ -104,22 +104,19 @@ export default {
         self.$data.loading = true;
         self.$data.loaded = false;
       }
-      octopusApi
-        .fetchParticipants({
-          first: self.dfirst,
-          size: self.dsize,
-          query: self.query,
-          organisationId: self.organisation,
-        })
-        .then(function(data) {
-          self.$data.loading = false;
-          self.$data.loaded = true;
-          self.$data.participants = self.$data.participants.concat(data.result).filter((p)=>{
-            return p!== null;
-          });
-          self.$data.dfirst += self.$data.dsize;
-          self.$data.totalCount = data.count;
-        });
+      const data = await octopusApi.fetchParticipants({
+        first: self.dfirst,
+        size: self.dsize,
+        query: self.query,
+        organisationId: self.organisation,
+      });
+      self.$data.loading = false;
+      self.$data.loaded = true;
+      self.$data.participants = self.$data.participants.concat(data.result).filter((p)=>{
+        return p!== null;
+      });
+      self.$data.dfirst += self.$data.dsize;
+      self.$data.totalCount = data.count;
     },
 
     displayMore(event) {

@@ -137,10 +137,9 @@ export default {
         ).style.justifyContent = "center";
       }
     },
-    fetchCategories(organisationId){
-      octopusApi.fetchCategoriesOrga(organisationId, { lang: 'fr'}).then((data)=>{
-        this.$store.commit('categoriesOrgaSet', data);
-      });
+    async fetchCategories(organisationId){
+      const data = await octopusApi.fetchCategoriesOrga(organisationId, { lang: 'fr'});
+      this.$store.commit('categoriesOrgaSet', data);
     }
   },
 

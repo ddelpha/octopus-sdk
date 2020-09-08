@@ -40,7 +40,9 @@
       <span slot="noResult">
         {{ $t('No elements found. Consider changing the search query.') }}
       </span>
-      <span class="saooti-arrow_down octopus-arrow-down octopus-arrow-down-top" slot="caret"></span>
+      <div class="position-relative" slot="caret">
+        <span class="saooti-arrow_down octopus-arrow-down-2 octopus-arrow-down-top"></span>
+      </div>
     </Multiselect>
   </div>
 </template>

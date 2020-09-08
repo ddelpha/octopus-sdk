@@ -139,7 +139,7 @@ export default {
   },
 
   methods: {
-    fetchContent(reset) {
+    async fetchContent(reset) {
       if (reset) {
         this.podcasts = [];
         this.dfirst = 0;
@@ -164,16 +164,11 @@ export default {
       }
       if(this.includeHidden){
         param.includeHidden = this.includeHidden;
-        podcastApi
-        .fetchPodcastsAdmin(this.$store, param).then((data)=> {
-          this.afterFetching(reset, data);
-        });
+        const data = await podcastApi.fetchPodcastsAdmin(this.$store, param);
+        this.afterFetching(reset, data);
       }else{
-        octopusApi
-        .fetchPodcasts(param)
-        .then((data)=> {
-          this.afterFetching(reset, data);
-        });
+        const data = await octopusApi.fetchPodcasts(param);
+        this.afterFetching(reset, data);
       }
      
     },
