@@ -227,7 +227,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.17.22 Accessibilité Octopus
  * 0.17.23 Placer l'icône de la certification ACPM sur Octopus
  * 0.17.24 Problème organisation chooser
-
+ * 0.17.25 Add dummy param (cache issues)
 
 
 
