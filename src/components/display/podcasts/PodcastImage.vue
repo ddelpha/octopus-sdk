@@ -1,7 +1,7 @@
 <template>
   <div
     class="img-box d-flex flex-column justify-content-start align-items-start position-relative justify rounded-lg flex-shrink float-left"
-    :style="{ 'background-image': 'url(\'' + podcast.imageUrl +'?dummy='+dummyParam+  '\')' }"
+    :style="{ 'background-image': 'url(\'' + podcast.imageUrl +  '\')' }"
     v-if="podcast"
   >
   <div class="live-image-status" :class="fetchConference && fetchConference!=='null' ? fetchConference.status.toLowerCase()+'-bg' : ''" v-if="fetchConference">{{statusText}}</div>
@@ -244,14 +244,19 @@ export default {
   data() {
     return {
       isDescription : false,
-      dummyParam : new Date().getTime().toString(),
     };
   },
 
   methods: {
     play() {
       if(this.recordingLive){
-        this.$store.commit('playerPlayPodcast', {title: this.podcast.title, conferenceId: this.fetchConference.conferenceId});
+        this.$store.commit('playerPlayPodcast', {
+          title: this.podcast.title,
+          audioUrl:this.podcast.audioUrl,
+          duration : this.podcast.duration,
+          conferenceId: this.fetchConference.conferenceId,
+          livePodcastId: this.podcast.podcastId
+        });
       }else{
         this.$store.commit('playerPlayPodcast', this.podcast);
       }

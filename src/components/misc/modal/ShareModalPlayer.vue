@@ -1,6 +1,6 @@
 <template>
   <div>
-    <b-modal id="share-modal" @close="closePopup" @hide="closePopup"  @cancel="closePopup"  :title="$t('Share player')">
+    <b-modal id="share-modal" @close="closePopup" @hide="closePopup"  @cancel="closePopup"  :title="$t('Share the player')">
       <template v-slot:default>
         <b-tabs content-class="p-2 share-modal-border">
           <b-tab :title="$t('Embed link')" class="tab-pane" active>

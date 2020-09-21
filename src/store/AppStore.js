@@ -47,40 +47,40 @@ export default new Vuex.Store({
           live:undefined,
           elapsed: 0,
         };
-      } else {
-        if (
-          state.player.podcast &&
-          ((state.player.podcast.podcastId === podcast.podcastId && podcast.podcastId)||
-           (state.player.podcast.mediaId === podcast.mediaId && podcast.mediaId))
-        ) {
-          //Do nothing
-        } else {
-          if(podcast.podcastId){
-            state.player = {
-              status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
-              podcast: podcast,
-              media: undefined,
-              live:undefined,
-              elapsed: 0,
-            };
-          }else if(podcast.mediaId){
-            state.player = {
-              status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
-              podcast: undefined,
-              media: podcast,
-              live:undefined,
-              elapsed: 0,
-            };
-          }else{
-            state.player = {
-              status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
-              podcast: undefined,
-              media: undefined,
-              live:podcast,
-              elapsed: 0,
-            };
-          }
-        }
+        return;
+      }
+      if (
+          (state.player.podcast && (state.player.podcast.podcastId === podcast.podcastId)) ||
+          (state.player.media && (state.player.media.mediaId === podcast.mediaId)) ||
+          (state.player.live && (state.player.live.conferenceId === podcast.conferenceId))
+      ) {
+        //Do nothing
+        return;
+      }
+      if(podcast.conferenceId && (!podcast.podcastId || podcast.processingStatus !== "READY")){
+        state.player = {
+          status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
+          podcast: undefined,
+          media: undefined,
+          live:podcast,
+          elapsed: 0,
+        };
+      }else if(podcast.podcastId){
+        state.player = {
+          status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
+          podcast: podcast,
+          media: undefined,
+          live:undefined,
+          elapsed: 0,
+        };
+       }else if(podcast.mediaId){
+        state.player = {
+          status: 'LOADING', //STOPPED, LOADING, PLAYING, PAUSED
+          podcast: undefined,
+          media: podcast,
+          live:undefined,
+          elapsed: 0,
+        };
       }
     },
 

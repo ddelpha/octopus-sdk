@@ -186,7 +186,7 @@ export default {
         }
       }else{
         let data = await studioApi.getRealConferenceStatus(this.$store, this.podcast.conferenceId);
-        this.fetchConference = {status : data.data};
+        this.fetchConference = {status : data.data, conferenceId: this.podcast.conferenceId};
       }
     }
   },
