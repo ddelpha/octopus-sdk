@@ -91,14 +91,14 @@
             >{{ playedTime }} / {{ totalTime }}</div>
           </div>
           <div
-            class="progress c-hand"
+            class="progress c-hand custom-bg-darkgrey"
             @mouseup="seekTo"
             style="height: 3px;"
             v-if="!playerError"
             v-show="!isBarTop"
           >
             <div
-              class="progress-bar bg-warning"
+              class="progress-bar custom-bg-grey"
               role="progressbar"
               aria-valuenow="0"
               aria-valuemin="0"
@@ -143,6 +143,9 @@
     flex-shrink: 0;
     cursor: pointer;
 }
+
+
+
 .player-container {
   position: fixed;
   overflow: hidden;
@@ -450,13 +453,17 @@ export default {
       if(!streamDuration){
         return;
       }
+
       const playerCurrentTime = event.currentTarget.currentTime;
       if(!playerCurrentTime) {
         return;
       }
+
       if(!this.live){
+        this.percentLiveProgress = 100;
         this.$store.commit('playerTotalTime', streamDuration);
         this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
+        return;
       }
 
       const scheduledDuration = this.live.duration / 1000

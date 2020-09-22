@@ -259,6 +259,7 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.18.25 Bug-Fix : Wrong hls url used Cédric Clavier
  * 0.18.26 Amélioration du fonctionnement de la barre de défilement du player dans le cas des lives
  * 0.18.27 A la fin de la lecture d'un live il y a une erreur de lecture
+ * 0.18.28 Mise en place de nouvelles couleur pour la progression. Remise à zero de la barre de loading lors de la lecture d'un podcast.
  
 
 
