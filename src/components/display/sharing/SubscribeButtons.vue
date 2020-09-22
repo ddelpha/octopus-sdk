@@ -1,7 +1,7 @@
 <template>
   <div class="module-box flex-no-grow">
     <div class="d-flex align-items-center mb-3">
-      <h3 class="mb-0">{{ $t('Subscribe emission') }}</h3>
+      <h3 class="mb-0 share-button-title">{{ $t('Subscribe emission') }}</h3>
     </div>
     <div class="d-flex">
       <a target="_blank" class="btn btn-circle mr-3 mb-2 share-btn" :href="applePodcast" v-if="applePodcast" aria-label="Apple">

@@ -94,11 +94,11 @@
 </div>
 </template>
 <style lang="scss">
-input {
+/* input {
     border: 0.1rem solid #dee2e6;
     border-radius: 0.3rem;
     padding: 0.5rem;
-}
+} */
 .saooti-arrow_down-margin {
 	margin: 3px 0 0;
 }

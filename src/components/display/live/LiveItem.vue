@@ -143,7 +143,6 @@ export default {
   
   data() {
     return {
-			dummyParam : new Date().getTime().toString(),
 			live: undefined,
     };
   },

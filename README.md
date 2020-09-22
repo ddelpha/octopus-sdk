@@ -197,6 +197,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.16.15 Les durées sont arrondies
  * 0.16.16 Player en erreur
  
+ * 16.0.0 Nouvelle version
+
  * 0.17.0 Nouveau sprint
  * 0.17.1 Selenium : attributs d'élément
  * 0.17.2 Merge de staging
@@ -222,7 +224,10 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.17.22 Accessibilité Octopus
  * 0.17.23 Placer l'icône de la certification ACPM sur Octopus
  * 0.17.24 Problème organisation chooser
-
+ * 0.17.25 Add dummy param (cache issues)
+ * 0.17.26 Renomer la popup "Partager le player" en "Integrer le player"
+ * 0.17.27 Erreur trim
+ 
  * 0.18.0 Nouveau sprint
  * 0.18.1 Mise en place du live
  * 0.18.2 Page intervenant
@@ -244,3 +249,17 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.18.18 Page participant ne s'affiche plus
  * 0.18.19 Demandes d'évolution sur les fils RSS
  * 0.18.20 Merge de staging fabien
+ * 0.18.21 Merge de staging fabien
+ * 0.18.22 Modif de style
+ * 0.18.23 Enlever dummy parameters
+ * 0.18.24 Merge de prod
+ * 0.18.25 Bug-Fix : Wrong hls url used Cédric Clavier
+ * 0.18.26 Amélioration du fonctionnement de la barre de défilement du player dans le cas des lives
+ * 0.18.27 A la fin de la lecture d'un live il y a une erreur de lecture
+ * 0.18.28 Mise en place de nouvelles couleur pour la progression. Remise à zero de la barre de loading lors de la lecture d'un podcast.
+ 
+
+
+
+
+

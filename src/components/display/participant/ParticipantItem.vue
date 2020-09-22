@@ -4,7 +4,7 @@
     :to="{ name: 'participant', params: {participantId:participant.participantId}, query:{productor: $store.state.filter.organisationId}}"
     class="mt-3"
     :aria-label="$t('Participant')">
-      <div class="img-box-circle" :style="{ 'background-image': 'url(\'' + participant.imageUrl +'?dummy='+dummyParam+ '\')' }"></div>
+      <div class="img-box-circle" :style="{ 'background-image': 'url(\'' + participant.imageUrl + '\')' }"></div>
     </router-link>
     <router-link 
     :to="{ name: 'participant', params: {participantId:participant.participantId}, query:{productor: $store.state.filter.organisationId}}"
@@ -61,7 +61,6 @@ export default {
   data() {
     return {
       activeParticipant: true,
-      dummyParam : new Date().getTime().toString(),
     };
   },
 

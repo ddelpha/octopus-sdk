@@ -37,7 +37,7 @@
       @durationChange="onTimeUpdate"
       @error="onError"
       v-else/>
-      <router-link :to=podcastShareUrl v-if="isImage && podcastImage">
+      <router-link :to="podcastShareUrl" v-if="isImage && podcastImage">
         <img
           v-bind:src="podcastImage"
           :alt="$t('Podcast image')"
@@ -46,7 +46,7 @@
       </router-link>
       
       <div
-        v-if='!playerError'
+        v-if="!playerError"
         class="play-button-box"
         v-bind:class="{
           'primary-bg': status != 'LOADING',
@@ -66,7 +66,9 @@
         ></div>
       </div>
       <div
-        v-if="(status=== 'PLAYING' || status=== 'PAUSED')&& media"
+          v-if="
+            (status === 'PLAYING' || status === 'PAUSED') && (media || isStop)
+          "
         class="play-button-box primary-bg text-light"
         @click="stopPlayer"
       >
@@ -77,12 +79,45 @@
       </div>
       <div class="text-light player-grow-content">
         <div class="d-flex">
-          <div class="text-warning player-title ml-2 mr-2" v-if='playerError'>{{ $t('Podcast play error') + " - "}}</div>
+            <div
+              class="text-warning player-title ml-2 mr-2"
+              v-if="playerError"
+            >{{ $t('Podcast play error') + " - "}}</div>
           <div class="flex-grow player-title">{{ podcastTitle }}</div>
-          <div v-if="!playerError" v-show="!isBarTop" class="hide-phone">{{ playedTime }} / {{ totalTime }}</div>
-        </div>
-        <div class="progress c-hand" @mouseup="seekTo" style="height: 3px;" v-if="!playerError" v-show="!isBarTop">
-          <div class="progress-bar primary-bg" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" :style="'width: '+ percentProgress + '%'"></div>
+            <div
+              v-if="!playerError"
+              v-show="!isBarTop"
+              class="hide-phone"
+            >{{ playedTime }} / {{ totalTime }}</div>
+          </div>
+          <div
+            class="progress c-hand custom-bg-darkgrey"
+            @mouseup="seekTo"
+            style="height: 3px;"
+            v-if="!playerError"
+            v-show="!isBarTop"
+          >
+            <div
+              class="progress-bar custom-bg-grey"
+              role="progressbar"
+              aria-valuenow="0"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              :style="'width: ' + percentLiveProgress + '%'"
+            ></div>
+            <div
+              class="progress-bar primary-bg"
+              role="progressbar"
+              aria-valuenow="0"
+              aria-valuemin="0"
+              aria-valuemax="100"
+              :style="'width: ' + percentProgress + '%'"
+            ></div>
+            <div
+              class="progress-bar progress-bar-duration bg-danger"
+              v-if="percentLiveProgress === 100"
+              :style="'left: ' + durationLivePosition + '%'"
+            ></div>
         </div>
       </div>
       <router-link :to=podcastShareUrl class="text-light hide-phone" v-if='podcastShareUrl !== ""' :aria-label="$t('Podcast')">
@@ -97,7 +132,7 @@
   </div>
 </template>
 <style lang="scss">
-@import '../../sass/_variables.scss';
+@import "../../sass/_variables.scss";
 
 .play-button-box {
     height: 2.5rem;
@@ -111,6 +146,9 @@
     flex-shrink: 0;
     cursor: pointer;
 }
+
+
+
 .player-container {
   position: fixed;
   overflow: hidden;
@@ -137,9 +175,14 @@
   .progress{
     align-items: flex-end;
     height: 10px;
+    position: relative;
+  }
+  .progress-bar-duration {
+    width: 10px;
   }
   .progress-bar{
     height: 4px;
+    position: absolute;
   }
   .player-title, .hide-phone {
     font-size: 0.8rem;
@@ -182,20 +225,20 @@
 </style>
 
 <script>
-import { mapState } from 'vuex';
-import {state} from "../../store/paramStore.js";
-import DurationHelper from '../../helper/duration';
+import { mapState } from "vuex";
+import { state } from "../../store/paramStore.js";
+import DurationHelper from "../../helper/duration";
 import octopusApi from "@saooti/octopus-api";
-import Hls from 'hls.js';
-const moment = require('moment');
+import Hls from "hls.js";
+const moment = require("moment");
 
 export default {
-  name: 'Player',
+  name: "Player",
 
   data() {
     return {
       forceHide: false,
-      actualTime: '',
+      actualTime: "",
       listenTime: 0,
       notListenTime: 0,
       lastSend:0,
@@ -205,28 +248,33 @@ export default {
       playerError: false,
       listenError: false,
       nbTry: 0,
+      percentLiveProgress: 0,
+      durationLivePosition: 0,
     };
   },
 
 
   mounted(){
-    moment.locale('fr');
+    moment.locale("fr");
     if(this.isClock){
       setInterval(() => {
         this.actualTime = moment(new Date()).format("HH:mm:ss");
-      }, 1000)
+      }, 1000);
     }
-    window.addEventListener('beforeunload', this.endListeningProgress);
-    this.$store.watch((state) => state.player.status, (newValue) => {
-      const audioPlayer = document.querySelector('#audio-player');
+    window.addEventListener("beforeunload", this.endListeningProgress);
+    this.$store.watch(
+      (state) => state.player.status,
+      (newValue) => {
+        const audioPlayer = document.querySelector("#audio-player");
       if(audioPlayer){
-        if(newValue === 'PAUSED'){
+          if (newValue === "PAUSED") {
           audioPlayer.pause();
         } else{
           audioPlayer.play();
         }
       }
-    })
+      }
+    );
   },
 
   computed: {
@@ -243,83 +291,91 @@ export default {
       return state.player.barTop;
     },
     ...mapState({
-      display: state => state.player.status != 'STOPPED',
+      display: (state) => state.player.status != "STOPPED",
       playerHeight(state) {
-        if (state.player.status == 'STOPPED' || this.forceHide) {
+        if (state.player.status == "STOPPED" || this.forceHide) {
           return 0;
         } else {
-          return '5rem';
+          return "5rem";
         }
       },
-      status: state => state.player.status,
-      podcast: state => state.player.podcast,
-      media: state => state.player.media,
-      live: state => state.player.live,
-      volume: state => state.player.volume,
+      status: (state) => state.player.status,
+      podcast: (state) => state.player.podcast,
+      media: (state) => state.player.media,
+      live: (state) => state.player.live,
+      volume: (state) => state.player.volume,
+      isStop: (state) => state.player.stop,
 
-      podcastImage: state => {
+      podcastImage: (state) => {
         if (state.player.podcast) {
           return state.player.podcast.imageUrl;
         } else {
-          return '';
+          return "";
         }
       },
 
-      podcastAudioURL: state => {
-        if (state.player.podcast) {
-          if(state.player.podcast.availability.visibility === false){
-            return state.player.podcast.audioStorageUrl;
-          }else{
-             let parameters = '?origin=octopus';
-            parameters += "&cookieName=player_"+state.player.podcast.podcastId
-            parameters +=
-              state.authentication && state.authentication.organisationId
-                ? '&distributorId=' + state.authentication.organisationId
-                : '';
-            return state.player.podcast.audioUrl + parameters;
-          }
-        } else if(state.player.media){
-          return state.player.media.audioUrl;
-        } else{
-          return '';
-        }
-      },
-
-      playedTime: state => {
+      playedTime: (state) => {
         if (state.player.elapsed > 0 && state.player.total > 0) {
           return DurationHelper.formatDuration(
             Math.round(state.player.elapsed * state.player.total)
           );
         } else {
-          return "--':--'";
+          return "--:--";
         }
       },
 
-      percentProgress: state => {
+      percentProgress: (state) => {
         return state.player.elapsed * 100;
       },
 
-      totalTime: state => {
+      totalTime: (state) => {
         if (state.player.elapsed > 0 && state.player.total > 0) {
           return DurationHelper.formatDuration(Math.round(state.player.total));
         } else {
-          return "--':--'";
+          return "--:--";
         }
       },
     }),
 
+    podcastAudioURL(){
+      if (this.podcast) {
+        if(this.podcast.availability.visibility === false){
+          return this.podcast.audioStorageUrl;
+        }else{
+          if(this.listenError){
+            return this.podcast.audioStorageUrl;
+          }else{
+            let parameters = '?origin=octopus';
+            parameters += "&cookieName=player_"+this.podcast.podcastId
+            parameters +=
+              this.$store.state.authentication && this.$store.state.authentication.organisationId
+                ? '&distributorId=' + this.$store.state.authentication.organisationId
+                : '';
+            return this.podcast.audioUrl + parameters;
+          }
+        }
+      } else if(this.media){
+        return this.media.audioUrl;
+      } else{
+        return "";
+      }
+    },
     podcastShareUrl(){
       if (this.podcast) {
-        return { name: 'podcast', params: {podcastId : this.podcast.podcastId}, query:{productor: this.$store.state.filter.organisationId}};
+        return {
+          name: "podcast",
+          params: { podcastId: this.podcast.podcastId },
+          query: { productor: this.$store.state.filter.organisationId },
+        };
       } else {
-        return '';
+        return "";
       }
     },
 
     podcastTitle(){
       if (this.podcast) {
         if(this.isEmissionName){
-          return this.emissionName + ' - ' + this.podcast.title;
+          return this.emissionName + " - " + this.podcast.title;
         }else{
           return this.podcast.title;
         }
@@ -328,7 +384,7 @@ export default {
       } else if(this.live){
         return this.live.title;
       }else{
-        return '';
+        return "";
       }
     },
 
@@ -336,7 +392,7 @@ export default {
       if (this.podcast) {
         return this.podcast.emission.name;
       } else {
-        return '';
+        return "";
       }
     },
   },
@@ -348,66 +404,102 @@ export default {
       }
     },
     switchPausePlay() {
-      const audioPlayer = document.querySelector('#audio-player');
+      const audioPlayer = document.querySelector("#audio-player");
       if (audioPlayer.paused) {
         this.onPlay();
       } else {
         this.onPause();
       }
     },
+
     stopPlayer(){
-      this.$store.commit("playerPlayPodcast");
+      this.$store.commit('playerPlayPodcast');
     },
+
     seekTo(event) {
-      const audioPlayer = document.querySelector('#audio-player');
+      const audioPlayer = document.querySelector("#audio-player");
       const rect = event.currentTarget.getBoundingClientRect();
       const barWidth = event.currentTarget.clientWidth;
       const x = event.clientX - rect.left; //x position within the element.
 
       const percentPosition = x / barWidth;
-      const seekTime = this.$store.state.player.total * percentPosition;
-
-      if(this.podcast){
-        this.notListenTime = seekTime - this.listenTime;
+      if (percentPosition * 100 < this.percentLiveProgress) {
+        const seekTime = this.$store.state.player.total * percentPosition;
+        if (this.podcast || this.live) {
+          this.notListenTime = seekTime - this.listenTime;
+        }
+        audioPlayer.currentTime = seekTime;
       }
-      audioPlayer.currentTime = seekTime;
     },
 
     onTimeUpdate(event) {
-      if(this.podcast){
+      if (this.podcast || this.live) {
         if(this.new){
           this.new = false;
           this.startListeningProgress();
         }
-        this.listenTime = event.currentTarget.currentTime - this.notListenTime;
+        if (
+          this.live &&
+          this.listenTime === 0 &&
+          event.currentTarget.currentTime !== 0
+        ) {
+          this.notListenTime = event.currentTarget.currentTime;
+          this.listenTime = 1;
+        } else {
+          this.listenTime =   event.currentTarget.currentTime - this.notListenTime;
+        }
       }
-      const duration = event.currentTarget.duration;
-      const currentTime = event.currentTarget.currentTime;
-      if (duration && currentTime) {
-        this.$store.commit('playerTotalTime', duration);
-        this.$store.commit('playerElapsed', currentTime / duration);
+
+      const streamDuration = event.currentTarget.duration;
+      if(!streamDuration){
+        return;
+      }
+
+      const playerCurrentTime = event.currentTarget.currentTime;
+      if(!playerCurrentTime) {
+        return;
+      }
+
+      if(!this.live){
+        this.percentLiveProgress = 100;
+        this.$store.commit('playerTotalTime', streamDuration);
+        this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
+        return;
+      }
+
+      const scheduledDuration = this.live.duration / 1000
+      if (scheduledDuration > streamDuration) {
+          this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
+          this.$store.commit('playerTotalTime', scheduledDuration);
+          this.$store.commit('playerElapsed',   playerCurrentTime / scheduledDuration);
+      } else {
+          this.percentLiveProgress = 100;
+          this.durationLivePosition = (scheduledDuration / streamDuration) * 100;
+          this.$store.commit('playerTotalTime', streamDuration);
+          this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
       }
     },
+
     onPlay() {
-      this.$store.commit('playerPause', false);
+      this.$store.commit("playerPause", false);
     },
     onPause() {
-      this.$store.commit('playerPause', true);
+      this.$store.commit("playerPause", true);
     },
 
     onFinished() {
       if(this.podcast){
         this.endListeningProgress();
       }else if(this.live){
-        let audio = document.getElementById('audio-player');
-        audio.src="";
+        let audio = document.getElementById("audio-player");
+        audio.src = "";
       }
       this.$data.forceHide = true;
     },
 
     onHidden() {
       if (this.$data.forceHide) {
-        this.$store.commit('playerPlayPodcast');
+        this.$store.commit("playerPlayPodcast");
         this.$data.forceHide = false;
       }
     },
@@ -418,18 +510,20 @@ export default {
       }
       this.loadDownloadId(0);
       ///Localhost/////////
-      /* this.downloadId = "test"; */
+      /* this.downloadId = 'test'; */
       //////
     },
 
     loadDownloadId(index) {
       if(index < 5){
         setTimeout(()=>{
-          let cookiestring = RegExp("player_"+ this.$store.state.player.podcast.podcastId +"=[^;]+").exec(document.cookie);
-          if(cookiestring !== null){
-            this.downloadId = decodeURIComponent(cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
-          } else{
-            this.loadDownloadId(index + 1);
+          if(this.$store.state.player.podcast){
+            let cookiestring = RegExp("player_"+ this.$store.state.player.podcast.podcastId +"=[^;]+").exec(document.cookie);
+            if(cookiestring !== null){
+              this.downloadId = decodeURIComponent(cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+            } else{
+              this.loadDownloadId(index + 1);
+            }
           }
         }, 500);
       }
@@ -476,14 +570,15 @@ export default {
       }
     },
     playerHeight(newVal){
-      this.$emit('hide', newVal=== 0? true : false);
+      this.$emit("hide", newVal === 0 ? true : false);
     },
     podcastAudioURL(newVal){
       this.playerError=false;
-      if(this.podcast && newVal !== ""){
+      if (this.podcast && newVal !== '') {
         this.new = true;
       }
     },
+
     listenTime(newVal){
       if(this.podcast && newVal - this.lastSend >= 10 && this.downloadId){
         this.lastSend = newVal;

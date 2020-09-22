@@ -55,7 +55,7 @@ var initialize = function initialize(initObject){
       state.podcastPage.ouestFranceStyle = (typeof param.ouestFranceStyle !== "undefined") ? param.ouestFranceStyle : false;
       state.podcastPage.tagList= (typeof param.tagList !== "undefined") ? param.tagList : false;
       state.podcastPage.downloadButton= (typeof param.downloadButton !== "undefined") ? param.downloadButton : false;
-      state.podcastPage.hlsUri = (typeof param.MiniplayerUri !== "undefined") ? param.hlsUri : 'https://hls.dev2.saooti.org/';
+      state.podcastPage.hlsUri = (typeof param.hlsUri !== "undefined") ? param.hlsUri : 'https://hls.dev2.saooti.org/';
     }
     if(initObject.podcastsPage){
       let param = initObject.podcastsPage;

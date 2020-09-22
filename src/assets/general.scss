@@ -279,6 +279,15 @@ a.linkHover:hover{
 .flex-no-wrap{
   flex-wrap: nowrap !important;
 }
+
+.custom-bg-darkgrey{
+  background: #555;
+}
+
+.custom-bg-grey{
+  background: #e9ecef;
+}
+
 @media (max-width: 655px) {
   .description-fade-hid{
     display: none;

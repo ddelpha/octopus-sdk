@@ -4,9 +4,9 @@
     :to="{ name: 'emission', params: {emissionId:emission.emissionId}, query:{productor: $store.state.filter.organisationId}}"
     :aria-label="$t('Emission')"
     class="text-dark">
-      <div class="img-box" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'?dummy='+dummyParam+ '\')' }" v-if="!lightItems"></div>
+      <div class="img-box" :style="{ 'background-image': 'url(\'' + emission.imageUrl + '\')' }" v-if="!lightItems"></div>
       <div class="d-flex" v-else>
-        <div class="img-box-light flex-shrink" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'?dummy='+dummyParam+  '\')' }"></div>
+        <div class="img-box-light flex-shrink" :style="{ 'background-image': 'url(\'' + emission.imageUrl +'\')' }"></div>
         <div class="emission-light-title">{{ name }}</div>
       </div>
     </router-link>
@@ -124,7 +124,6 @@ export default {
   data() {
     return {
       activeEmission: true,
-      dummyParam : new Date().getTime().toString(),
     };
   },
 
