@@ -71,7 +71,7 @@
           </b-dropdown>
           <b-dropdown right toggle-class="text-decoration-none  m-1 admin-button btn-rounded-icon" no-caret v-else>
             <template v-slot:button-content>
-              <i class="saooti-user text-dark"></i><span class="sr-only">Profile</span>
+              <i class="saooti-user-octopus text-dark"></i><span class="sr-only">Profile</span>
             </template>
               <b-dropdown-item href="/sso/login">{{ $t('Login') }}</b-dropdown-item>
               <b-dropdown-item to="/main/pub/create" v-if="!isPodcastmaker">{{$t('Create an account')}}</b-dropdown-item>

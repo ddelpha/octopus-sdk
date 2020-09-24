@@ -1,10 +1,10 @@
 @font-face {
   font-family: 'saooti-ui';
-  src:url('/css/fonts/saooti-ui.eot?v2fm9q');
-  src:url('/css/fonts/saooti-ui.eot?v2fm9q#iefix') format('embedded-opentype'),
-      url('/css/fonts/saooti-ui.ttf?v2fm9q') format('truetype'),
-      url('/css/fonts/saooti-ui.woff?v2fm9q') format('woff'),
-      url('/css/fonts/saooti-ui.svg?v2fm9q#saooti-ui') format('svg');
+  src:url('/css/fonts/saooti-ui.eot?2ftnxd');
+  src:url('/css/fonts/saooti-ui.eot?2ftnxd#iefix') format('embedded-opentype'),
+      url('/css/fonts/saooti-ui.ttf?2ftnxd') format('truetype'),
+      url('/css/fonts/saooti-ui.woff?2ftnxd') format('woff'),
+      url('/css/fonts/saooti-ui.svg?2ftnxd#saooti-ui') format('svg');
   font-weight: normal;
   font-style: normal;
   font-display: block;
@@ -13,7 +13,7 @@
 [class^="saooti-"], [class*=" saooti-"] {
   /* use !important to prevent issues with browser extensions that change fonts */
   font-family: 'saooti-ui' !important;
-  speak: none;
+  speak: never;
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -35,6 +35,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.saooti-user-octopus:before {
+  content: "\ea9b";
+}
+.saooti-listening:before {
+  content: "\ea9a";
+}
+.saooti-google-play-badge:before {
+  content: "\ea99";
+}
+.saooti-appstore-badge:before {
+  content: "\ea98";
+}
+.saooti-scroll-down:before {
+  content: "\ea97";
+}
+.saooti-cartouche:before {
+  content: "\e920";
+}
+.saooti-mic-off:before {
+  content: "\ea96";
+}
 .saooti-apple:before {
   content: "\ea8e";
   color: #999;
@@ -834,9 +855,6 @@
 }
 .saooti-bubbles4:before {
   content: "\e91f";
-}
-.saooti-user:before {
-  content: "\e920";
 }
 .saooti-users:before {
   content: "\e921";
