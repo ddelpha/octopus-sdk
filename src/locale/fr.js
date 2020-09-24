@@ -479,5 +479,6 @@ export default {
     "Not recording":"Non enregistré",
     "Recorded in live":"Enregistré en live",
     "Podcast linked to waiting live":"Épisode associé à un live en attente",
+    "Start in a while":"Démarre dans un instant",
   };
   

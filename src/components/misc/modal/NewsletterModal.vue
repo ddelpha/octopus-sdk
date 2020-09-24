@@ -15,7 +15,7 @@
 							<label class="custom-control-label" for="display-participants-names">{{$t('Display participants list')}}</label>  
 						</div>
 						<div class="d-flex align-items-center mt-2">
-							<swatches v-model="color" class="c-hand input-no-outline mr-2 mt-2"" show-fallback colors="text-advanced" popover-to="right" :data-color="color"></swatches>
+							<swatches v-model="color" class="c-hand input-no-outline mr-2 mt-2" show-fallback colors="text-advanced" popover-to="right" :data-color="color"></swatches>
 							<div>{{$t('Choose main color')}}</div>
 						</div>
 						<div class=" d-flex justify-content-between align-items-center mt-3 mb-2">
@@ -139,10 +139,12 @@ export default {
 			}
 			html+=`
 		<tr>
-				        <td colspan="2" style="vertical-align: middle;padding: 15px 0;display: flex; align-items:center;">
-                <a href="https://staging.saooti.org/main/pub/podcast/9671?productor=ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c" aria-label="Écouter ce podcast" class="saooti-play2-bounty primary-color mr-2" style="font-size: 3em;"></a>
-                <a style="color: #000;text-decoration: none;" href="https://staging.saooti.org/main/pub/podcast/9671?productor=ecbd98d9-79bd-4312-ad5e-fc7c1c4a191c">Écouter ce podcast</a>
-        </td>
+      <td colspan="2" style="vertical-align: middle;padding: 15px 0;display: flex; align-items:center;">
+        <a href="`+window.location.href+`" aria-label="`+this.$t('Listen this episode')+`">
+          <img width="44" height="44" style="display: inline-block;vertical-align: middle" src="`+window.location.origin+`/img/play-podcast.png">
+        </a>
+        <a style="color: #000;text-decoration: none;" href="`+window.location.href+`">`+this.$t('Listen this episode')+`</a>
+      </td>
 		</tr>
 </table>
 		`+this.participantsName;

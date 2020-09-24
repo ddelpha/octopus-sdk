@@ -166,15 +166,19 @@ export default {
         );
       },
     }),
+
     isMobile(){
       return window.matchMedia( "(hover: none)" ).matches;
     },
+
     isRecordedInLive(){
       return this.fetchConference === undefined && this.podcast.conferenceId !== undefined && this.podcast.processingStatus !== "READY_TO_RECORD";
     },
+
     isLiveToBeRecorded(){
       return this.fetchConference === undefined && this.podcast.conferenceId !== undefined && this.podcast.processingStatus === "READY_TO_RECORD";
     },
+
     imgUrl(){
       if(this.isLiveToBeRecorded){
         return "/img/clock.png";
@@ -191,6 +195,7 @@ export default {
         return '/img/caution.png';
       }
     },
+
     textVisible(){
       if(this.isLiveToBeRecorded){
         return this.$t("Podcast linked to waiting live");
@@ -206,6 +211,7 @@ export default {
         return this.$t('Podcast in error');
       }
     },
+
     statusText(){
 			if(this.fetchConference){
 				switch (this.fetchConference.status) {
@@ -233,8 +239,11 @@ export default {
 			}
 			return "";
     },
+
     recordingLive(){
-      return this.fetchConference && this.fetchConference!=='null' && this.fetchConference.status === 'RECORDING';
+      return this.fetchConference &&
+             this.fetchConference!=='null' &&
+             (this.fetchConference.status === 'RECORDING' || this.fetchConference.status === 'PENDING');
     }
   },
 

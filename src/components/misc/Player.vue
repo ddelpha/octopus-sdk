@@ -115,7 +115,7 @@
             ></div>
             <div
               class="progress-bar progress-bar-duration bg-danger"
-              v-if="percentLiveProgress === 100"
+              v-if="displayAlertBar"
               :style="'left: ' + durationLivePosition + '%'"
             ></div>
         </div>
@@ -184,6 +184,15 @@
     height: 4px;
     position: absolute;
   }
+
+  .progress.custom-bg-darkgrey{
+    background: #555;
+  }
+
+  .progress-bar.custom-bg-grey{
+    background: #e9ecef;
+  }
+
   .player-title, .hide-phone {
     font-size: 0.8rem;
     margin: 0 0 5px 0;
@@ -247,9 +256,10 @@ export default {
       saveCookie : undefined,
       playerError: false,
       listenError: false,
-      nbTry: 0,
       percentLiveProgress: 0,
       durationLivePosition: 0,
+      displayAlertBar: false,
+      hlsReady: false,
     };
   },
 
@@ -261,18 +271,27 @@ export default {
         this.actualTime = moment(new Date()).format("HH:mm:ss");
       }, 1000);
     }
+
     window.addEventListener("beforeunload", this.endListeningProgress);
+
     this.$store.watch(
       (state) => state.player.status,
       (newValue) => {
         const audioPlayer = document.querySelector("#audio-player");
-      if(audioPlayer){
-          if (newValue === "PAUSED") {
+        if(!audioPlayer){
+          return;
+        }
+        if(this.live && !this.hlsReady){
+          audioPlayer.pause();
+          this.percentLiveProgress= 0;
+          this.durationLivePosition= 0;
+          return;
+        }
+        if (newValue === "PAUSED") {
           audioPlayer.pause();
         } else{
           audioPlayer.play();
         }
-      }
       }
     );
   },
@@ -382,6 +401,9 @@ export default {
       }else if(this.media){
         return this.media.title;
       } else if(this.live){
+        if(!this.hlsReady) {
+          return this.live.title + " ("+this.$t("Start in a while")+")";
+        }
         return this.live.title;
       }else{
         return "";
@@ -461,6 +483,7 @@ export default {
       }
 
       if(!this.live){
+        this.displayAlertBar = false;
         this.percentLiveProgress = 100;
         this.$store.commit('playerTotalTime', streamDuration);
         this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
@@ -469,11 +492,13 @@ export default {
 
       const scheduledDuration = this.live.duration / 1000
       if (scheduledDuration > streamDuration) {
+          this.displayAlertBar = false;
           this.percentLiveProgress = (streamDuration / scheduledDuration) * 100;
           this.$store.commit('playerTotalTime', scheduledDuration);
           this.$store.commit('playerElapsed',   playerCurrentTime / scheduledDuration);
       } else {
           this.percentLiveProgress = 100;
+          this.displayAlertBar = true;
           this.durationLivePosition = (scheduledDuration / streamDuration) * 100;
           this.$store.commit('playerTotalTime', streamDuration);
           this.$store.commit('playerElapsed', playerCurrentTime / streamDuration);
@@ -538,40 +563,54 @@ export default {
         this.listenTime = 0;
       }
     },
-    initHls(audio, audioSrc){
-      if (Hls.isSupported()) {
+
+    async initHls(audio, audioSrc){
+      return new Promise((resolve, reject) => {
+        if (!Hls.isSupported()) {
+          reject("Hls is not supported ! ");
+        }
+
         var hls = new Hls();
-        hls.loadSource(audioSrc);
-        hls.attachMedia(audio);
-        hls.on(Hls.Events.MANIFEST_PARSED, async() =>{
+        hls.on(Hls.Events.MANIFEST_PARSED, async () =>{
+          this.hlsReady = true;
+          hls.attachMedia(audio);
           await audio.play();
           this.onPlay();
+          resolve();
         });
-      }
+        hls.on(Hls.Events.ERROR, async () => {
+          reject("There is an error while reading media content")
+        });
+        hls.loadSource(audioSrc);
+      })
     },
-    playLive(){
-        let audio = document.getElementById('audio-player');
-        let audioSrc = state.podcastPage.hlsUri+'stream/dev.'+this.live.conferenceId+'/index.m3u8';
-        this.initHls(audio, audioSrc);
-        setTimeout(()=>{
-          if(audio.readyState === 0 && this.nbTry < 5) {
-            this.nbTry++;
-            this.playLive();
+
+    async playLive(){
+        if(this.live){
+          let audio = document.getElementById('audio-player');
+          let audioSrc = state.podcastPage.hlsUri+'stream/dev.'+this.live.conferenceId+'/index.m3u8';
+          try{
+            await this.initHls(audio, audioSrc);
+          } catch(error) {
+            setTimeout(()=>{this.playLive();}, 1000);
           }
-        }, 3000);
-        
+        }
     },
   },
   watch: {
     async live(){
-      if(this.live){
-        this.nbTry = 0;
-        this.playLive();
-      }
+      this.hlsReady = false;
+      this.playLive();
     },
+
     playerHeight(newVal){
       this.$emit("hide", newVal === 0 ? true : false);
     },
+
+    podcast(){
+      this.listenError=false;
+    },
+
     podcastAudioURL(newVal){
       this.playerError=false;
       if (this.podcast && newVal !== '') {
