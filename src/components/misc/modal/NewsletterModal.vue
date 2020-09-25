@@ -84,7 +84,7 @@ export default {
   computed:{
 			emissionName(){
 				if(this.displayEmissionName){
-					return `<tr><td colspan="2" style="font-size: 16px;line-height:24px;font-weight: bold;">`+this.podcast.emission.name+`</td></tr>`;
+					return `<tr><td colspan="2" style="padding-right: 0.5em;font-size: 16px;line-height:24px;font-weight: bold;">`+this.podcast.emission.name+`</td></tr>`;
 				}else{
 					return '';
 				}
@@ -117,7 +117,7 @@ export default {
       newsletterHtml(){
 				let html = `<table width='100%' style="width:100%;background:#f3f3f3;font-family: Arial, sans-serif;font-size: 12px;line-height: 20px;border-top-left-radius: 1.5em;border-top-right-radius: 1.5em;">
 		<tr>
-				<td valign="top" rowspan="4" style="vertical-align: top; padding: 10px;">
+				<td valign="top" rowspan="5" style="vertical-align: top; padding: 10px;">
 						<img width="140" height="140" src="`+this.podcast.imageUrl+`" alt="`+this.$t('Podcast image')+`" style="width: 140px;border-radius: 16px; box-shadow: 0px 12px 48px 6px rgba(64, 163, 114, 0.2);">
 				</td>
 				<td colspan="2" style="height: 1px;color: #666;font-size: 12px;line-height: 16px;padding-top:15px;">
@@ -125,14 +125,14 @@ export default {
 				</td>
 		</tr>
 		<tr>
-				<td colspan="2" valign="top" style="line-height:24px;color: `+this.color+`;font-size: 17px;text-transform: uppercase;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;max-width: 400px;padding-top: 0.5em;">
+				<td colspan="2" valign="top" style="padding-right:0.5em;line-height:24px;color: `+this.color+`;font-size: 17px;text-transform: uppercase;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;max-width: 400px;padding-top: 0.5em;">
 						`+this.podcast.title+`
 				</td>
 		</tr>
 		`+this.emissionName;
 		if(this.podcast.description){
 				html+=`<tr>
-				<td colspan="2" valign="top" style="line-height:24px;font-size: 14px;max-width: 500px;">
+				<td colspan="2" valign="top" style="padding-right:0.5em;line-height:24px;font-size: 14px;max-width: 500px;">
 						`+this.podcast.description+`
 				</td>
 		</tr>`
