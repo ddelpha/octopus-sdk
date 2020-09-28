@@ -87,13 +87,13 @@
           <SubscribeButtons :emission="podcast.emission" v-if="isShareButtons && countLink >= 1"/>
         </div>
         <div class="d-flex flex-column share-container" :class="authenticated || notExclusive ?'flex-grow':''">
-          <SharePlayer
+           <SharePlayer
             :podcast="podcast"
             :emission="podcast.emission"
             :exclusive="exclusive"
             :notExclusive="notExclusive"
             :organisationId='organisationId'
-            v-if="isSharePlayer && (authenticated || notExclusive) && !isLiveReadyToRecord"
+            v-if="isSharePlayer && (authenticated || notExclusive)"
           ></SharePlayer>
           <ShareButtons :podcast="podcast" :notExclusive="notExclusive" v-if="isShareButtons"></ShareButtons>
         </div>
