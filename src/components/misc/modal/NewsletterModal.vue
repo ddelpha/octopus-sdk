@@ -96,14 +96,14 @@ export default {
 					this.podcast.animators.forEach(element => {
 						text +=`<table width='100%' style="width:100%;background: #f3f3f3;font-family: Arial, sans-serif;font-size: 12px;line-height: 20px;border-bottom-left-radius: 1.5em;border-bottom-right-radius: 1.5em;">
 						<tr>
-							<td width="90" rowspan="2" style="text-align:left; vertical-align: top; width: 90px;padding:0 15px 15px 15px">
+							<td width="90" rowspan="2" style="text-align:left; vertical-align: top; width: 90px;padding:0 15px 15px 10px">
 								<img width="72"  style="width: 62px;height: 62px;border-radius: 50%;background-color: #fff;" src="`+element.imageUrl+`" alt="`+this.$t('Animator image')+`">
 							</td>
 							<td height="1" style="height: 1px;text-align:left; font-size: 14px;line-height:20px;vertical-align: top;font-weight: bold;padding-top: 23px;">`+this.getName(element)+`</td>
 						</tr>`;
 						if(element.description){
 							text += `<tr>
-								<td style="height: 100%;text-align:justify;padding-bottom: 15px; font-size: 12px;line-height:16px;vertical-align: top">
+								<td style="height: 100%;text-align:justify;padding-bottom: 15px;padding-right: 15px; font-size: 12px;line-height:16px;vertical-align: top">
 									`+element.description+`
 								</td>
 							</tr>`;
@@ -140,7 +140,7 @@ export default {
 			}
 			html+=`
 		<tr>
-      <td colspan="2" style="vertical-align: middle;padding: 15px 0;display: flex; align-items:center;">
+      <td colspan="2" style="vertical-align: middle;padding: 15px 10px;display: flex; align-items:center;">
         <a href="`+window.location.href+`" aria-label="`+this.$t('Listen this episode')+`">
           <img width="44" height="44" style="display: inline-block;vertical-align: middle" src="`+window.location.origin+`/img/play-podcast.png">
         </a>

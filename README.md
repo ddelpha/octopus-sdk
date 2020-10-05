@@ -262,6 +262,8 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.18.30 Bug-Fix : Correction de bug sur les dernières ameliorations
  * 0.18.31 Le player peut désormais lancer un lecture d'un flux qui n'est pas encore disponible
  * 0.18.32 Bug-Fix Le switch lecture live/podcast ne fonctionne pas bien
+ * 0.18.36 Player live : pb d'arrondis
+ * 0.18.37 Partage pour newsletter
  
  * 0.19.0 Nouveau sprint
  * 0.19.1 Merge de staging
@@ -301,3 +303,9 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
  * 0.19.44 dans dev probleme avec taille de frame pour playlist
  * 0.19.45 problem dans playlists dev
  * 0.19.46 merge de jimmy
+ 
+
+
+
+
+
